@@ -3,5 +3,6 @@
   <qresource prefix="/">
     <file>skin.qss</file>
     <file>mainWidget.png</file>
+    <file>close.png</file>
   </qresource>
 </RCC>

@@ -13,8 +13,11 @@ public:
 
 protected:
 	void paintEvent(QPaintEvent*);
-private:
 
+private slots:
+	void OnCloseBtnClicked();
+private:
+	QPushButton* m_pCloseBtn;
 };
 
 #endif // IOBJECTSDEMO_H

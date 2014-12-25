@@ -7,3 +7,9 @@ QWidget#iObjectsDemo{
 	margin-top:0px;
 	margin-bottom:0px;
 }
+
+/******************closebtn*************************************/
+QPushButton#CloseBtn{
+	border-image: url(:/close.png);
+	border-width:2px 2px 2px 2px;
+}
