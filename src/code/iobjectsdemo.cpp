@@ -2,6 +2,7 @@
 #include "iobjectsdemo.h"
 
 #include <QLabel>
+#include <QWidget>
 
 iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 {

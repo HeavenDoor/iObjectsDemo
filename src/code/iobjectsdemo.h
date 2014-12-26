@@ -2,6 +2,7 @@
 #define IOBJECTSDEMO_H
 
 #include <QtWidgets/QWidget>
+#include <QApplication>
 
 class iObjectsDemo : public QWidget
 {
@@ -10,7 +11,7 @@ class iObjectsDemo : public QWidget
 public:
 	iObjectsDemo(QWidget *parent = 0);
 	~iObjectsDemo();
-
+	void test(){}
 protected:
 	void paintEvent(QPaintEvent*);
 
