@@ -13,3 +13,33 @@ QPushButton#CloseBtn{
 	border-image: url(:/close.png);
 	border-width:2px 2px 2px 2px;
 }
+
+/******************Title*********************************/
+QWidget#Title{
+	border-image:url(:/title.png);
+	border-width:2px 2px 2px 2px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+/******************CollapseBtn*************************************/
+QPushButton#CollapseBtn:!pressed{
+	border-image: url(:/closen.png);
+	border-width:2px 2px 2px 2px;
+}
+QPushButton#CollapseBtn:pressed{
+	border-image: url(:/closep.png);
+	border-width:2px 2px 2px 2px;
+}
+
+/******************PopTitleBtn*************************************/
+QPushButton#PopTitleBtn:!pressed{
+	border-image: url(:/poptitle.png);
+	border-width:2px 2px 2px 2px;
+}
+QPushButton#PopTitleBtn:pressed{
+	border-image: url(:/poptitlep.png);
+	border-width:2px 2px 2px 2px;
+}

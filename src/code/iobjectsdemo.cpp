@@ -13,18 +13,24 @@ iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 	{
 		exit(0);
 	}
-	/*if(!loadToolBoxPlugin())
-	{
-		exit(0);
-	}
-	if (!loadMapTabsPlugin())
-	{
-		exit(0);
-	}*/
+
+	m_pPopBtn = new QPushButton(this);
+	m_pPopBtn->setObjectName("PopTitleBtn");
+	m_pPopBtn->setFixedWidth(40);
+	m_pPopBtn->setFixedHeight(8);
+	m_pPopBtn->setGeometry(width()/2 - m_pPopBtn->width()/2, 0, m_pPopBtn->width(), m_pPopBtn->height());
+	m_pPopBtn->hide();
 	
 
-	m_pToolBox->getWidget()->setParent(this);
 
+	m_pTitle = new Title(this);
+	//m_pTitle->setFixedHeight(85);
+	//m_pTitle->setFixedWidth(530);
+	//m_pTitle->setGeometry(width()/2 - m_pTitle->width()/2, 0, 530, 85 /*m_pTitle->width(), m_pTitle->height()*/);
+	connect(m_pTitle, SIGNAL(collapse()), this, SLOT(OnTitleCollapsed()));
+	connect(m_pPopBtn, SIGNAL(clicked()), m_pTitle, SLOT(expandTitle()));
+
+	m_pToolBox->getWidget()->setParent(this);
 	m_pToolBox->getWidget()->setGeometry(0,height()-50,width(),50);
 	m_pToolBox->getWidget()->show();
 	m_pToolBox->getWidget()->raise();
@@ -55,6 +61,16 @@ void iObjectsDemo::resizeEvent(QResizeEvent* e)
 	{
 		m_pToolBox->getWidget()->setGeometry(0,height()-50,width(),50);
 	}
+
+	if (m_pTitle)
+	{
+		m_pTitle->setGeometry(width()/2 - m_pTitle->width()/2, 0, m_pTitle->width(), m_pTitle->height());
+	}
+	if (m_pPopBtn)
+	{
+		m_pPopBtn->setGeometry(width()/2 - m_pPopBtn->width()/2, 0, m_pPopBtn->width(), m_pPopBtn->height());
+	}
+
 	QWidget::resizeEvent(e);
 }
 
@@ -143,4 +159,20 @@ bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 
 
 	return true;
+}
+
+void iObjectsDemo::OnTitleCollapsed()
+{
+	if (m_pPopBtn)
+	{
+		if (m_pPopBtn->isVisible())
+		{
+			m_pPopBtn->hide();
+		}
+		else
+		{
+			m_pPopBtn->show();
+		}
+		
+	}
 }

@@ -4,7 +4,9 @@
 #include <QtWidgets/QWidget>
 #include <QApplication>
 
+#include "title.h"
 #include "plugin/ToolBox/toolboxinterface.h"
+
 
 class iObjectsDemo : public QWidget
 {
@@ -21,7 +23,7 @@ signals:
 
 private slots:
 	void OnCloseBtnClicked();
-
+	void OnTitleCollapsed();
 private:
 	bool loadControls();
 	bool loadPlugins(const QString& path, const QString& pluginName);
@@ -30,7 +32,9 @@ private:
 	//bool loadIntelligencePlugin();
 private:
 	QPushButton* m_pCloseBtn;
+	QPushButton* m_pPopBtn;
 	ToolBoxInterface* m_pToolBox;
+	Title* m_pTitle;
 };
 
 #endif // IOBJECTSDEMO_H

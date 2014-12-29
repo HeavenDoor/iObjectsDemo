@@ -4,5 +4,10 @@
     <file>skin.qss</file>
     <file>mainWidget.png</file>
     <file>close.png</file>
+    <file>title.png</file>
+    <file>closen.png</file>
+    <file>closep.png</file>
+    <file>poptitle.png</file>
+    <file>poptitlep.png</file>
   </qresource>
 </RCC>
