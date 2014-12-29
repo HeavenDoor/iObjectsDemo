@@ -2,10 +2,12 @@
 #define TOOLBOXINTERFACE_H
 
 #include <QObject>
+#include <QtWidgets/QWidget>
 class ToolBoxInterface
 {
 public:
 	virtual void test() = 0;
+	virtual QWidget* getWidget() = 0;
 };
 
 

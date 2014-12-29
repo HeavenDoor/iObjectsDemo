@@ -8,18 +8,26 @@ iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 {
 	setObjectName("iObjectsDemo");
 	loadControls();
-	if(!loadToolBoxPlugin())
+
+	if (!loadPlugins("../bin/debug", "ToolBox"))
+	{
+		exit(0);
+	}
+	/*if(!loadToolBoxPlugin())
 	{
 		exit(0);
 	}
 	if (!loadMapTabsPlugin())
 	{
 		exit(0);
-	}
-	if (!loadIntelligencePlugin())
-	{
-		exit(0);
-	}
+	}*/
+	
+
+	m_pToolBox->getWidget()->setParent(this);
+
+	m_pToolBox->getWidget()->setGeometry(0,height()-50,width(),50);
+	m_pToolBox->getWidget()->show();
+	m_pToolBox->getWidget()->raise();
 }
 
 iObjectsDemo::~iObjectsDemo()
@@ -36,31 +44,25 @@ void iObjectsDemo::paintEvent(QPaintEvent* e)
 	QWidget::paintEvent(e);
 }
 
+void iObjectsDemo::resizeEvent(QResizeEvent* e)
+{
+	if (m_pCloseBtn)
+	{
+		m_pCloseBtn->setGeometry(width() - 60, 20, m_pCloseBtn->width(), m_pCloseBtn->height());
+	}
+	
+	if (m_pToolBox->getWidget())
+	{
+		m_pToolBox->getWidget()->setGeometry(0,height()-50,width(),50);
+	}
+	QWidget::resizeEvent(e);
+}
+
 void iObjectsDemo::OnCloseBtnClicked()
 {
 	this->close();
 }
 
-bool iObjectsDemo::loadToolBoxPlugin()
-{
-	bool bToolbox = false;
-	QDir path("../bin/debug");
-	foreach( QString filename, path.entryList(QDir::Files) )
-	{
-		qDebug()<<filename;
-		QPluginLoader loader( path.absoluteFilePath( filename ) );
-		QObject *couldBeFilter = loader.instance();
-		if( couldBeFilter )
-		{
-			m_pToolBox = qobject_cast<ToolBoxInterface*>( couldBeFilter );
-			if( m_pToolBox )
-			{
-				//bToolbox = true;
-			}
-		}
-	}
-	return bToolbox;
-}
 
 bool iObjectsDemo::loadControls()
 {
@@ -81,6 +83,29 @@ bool iObjectsDemo::loadControls()
 	return true;
 }
 
+/*
+
+bool iObjectsDemo::loadToolBoxPlugin()
+{
+bool bToolbox = false;
+QDir path("../bin/debug");
+foreach( QString filename, path.entryList(QDir::Files) )
+{
+qDebug()<<filename;
+QPluginLoader loader( path.absoluteFilePath( filename ) );
+QObject *couldBeFilter = loader.instance();
+if( couldBeFilter )
+{
+m_pToolBox = qobject_cast<ToolBoxInterface*>( couldBeFilter );
+if( m_pToolBox )
+{
+bToolbox = true;
+}
+}
+}
+return bToolbox;
+}
+
 bool iObjectsDemo::loadMapTabsPlugin()
 {
 	return true;
@@ -88,5 +113,34 @@ bool iObjectsDemo::loadMapTabsPlugin()
 
 bool iObjectsDemo::loadIntelligencePlugin()
 {
+	return true;
+}
+
+*/
+
+bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
+{
+	bool bToolbox = false;
+	qApp->addLibraryPath(path); // ../bin/debug
+	QPluginLoader loader(pluginName) ;  
+	//QPluginLoader loader(QString("libMyPlugin.so")) ;  
+	QObject* object;
+	if ( (object=loader.instance()) != NULL )  
+	{  
+		qDebug("plugin loaded .");  
+		m_pToolBox = qobject_cast<ToolBoxInterface*>(object) ;  
+		if (m_pToolBox)  
+		{
+			bToolbox = true;
+		}
+	}  
+	else  
+	{  
+		qDebug("failed to load plugin !! ");  
+		QString errorStr = loader.errorString();  
+		qDebug()<<errorStr;  
+	}  
+
+
 	return true;
 }

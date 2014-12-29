@@ -1,0 +1,28 @@
+/******************Main*********************************/
+QWidget#ToolBox{
+	border-image:url(:/toolbox.png);
+	border-width:2px 5px 2px 5px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+QPushButton#search:!pressed{
+	border-image: url(:/search.png);
+	border-width:2px 2px 2px 2px;
+}
+QPushButton#search:pressed{
+	border-image: url(:/searchp.png);
+	border-width:2px 2px 2px 2px;
+}
+
+
+QPushButton#set:!pressed{
+	border-image: url(:/set.png);
+	border-width:2px 2px 2px 2px;
+}
+QPushButton#set:pressed{
+	border-image: url(:/setp.png);
+	border-width:2px 2px 2px 2px;
+}

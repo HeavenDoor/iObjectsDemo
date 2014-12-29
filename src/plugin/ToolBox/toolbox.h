@@ -16,8 +16,14 @@ public:
 	ToolBox(QWidget *parent = 0);
 	~ToolBox();
 	virtual void test();
-private:
+	virtual QWidget* getWidget();
 
+protected:
+	void paintEvent(QPaintEvent*);
+	void resizeEvent(QResizeEvent *);
+private:
+	QPushButton* m_pSearch;
+	QPushButton* m_pSet;
 };
 
 #endif // TOOLBOX_H

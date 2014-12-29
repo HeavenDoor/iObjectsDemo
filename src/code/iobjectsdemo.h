@@ -16,7 +16,7 @@ public:
 	void test(){}
 protected:
 	void paintEvent(QPaintEvent*);
-
+	void resizeEvent(QResizeEvent*);
 signals:
 
 private slots:
@@ -24,9 +24,10 @@ private slots:
 
 private:
 	bool loadControls();
-	bool loadToolBoxPlugin();
-	bool loadMapTabsPlugin();
-	bool loadIntelligencePlugin();
+	bool loadPlugins(const QString& path, const QString& pluginName);
+	//bool loadToolBoxPlugin();
+	//bool loadMapTabsPlugin();
+	//bool loadIntelligencePlugin();
 private:
 	QPushButton* m_pCloseBtn;
 	ToolBoxInterface* m_pToolBox;
