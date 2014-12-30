@@ -4,7 +4,7 @@
 Title::Title(QWidget *parent) : QWidget(parent)
 {
 	setObjectName("Title");
-	setAttribute(Qt::WA_TranslucentBackground);
+	//setAttribute(Qt::WA_TranslucentBackground);
 	QRect rec = parent->rect();
 	setGeometry(parent->width()/2 - width()/2, 0, 530, 85);
 	m_pCollapseBtn = new QPushButton(this);
@@ -18,6 +18,17 @@ Title::Title(QWidget *parent) : QWidget(parent)
 
 	m_pProAnima = new QPropertyAnimation(this, "geometry");
 	connect(m_pProAnima, SIGNAL(finished()), this, SIGNAL(collapse()));
+
+	QLabel* l = new QLabel(this);
+	l->setGeometry(10,5,200,20);
+
+	QPalette pa;
+	pa.setColor(QPalette::WindowText,Qt::red);
+	l->setPalette(pa);
+
+	//l->setTextFormat()
+	l->setText(QStringLiteral("GTHFDSDGSDHGDHXB (¸ßÁÁÉ«)"));
+	l->setWindowOpacity(1);
 }
 
 Title::~Title()

@@ -5,6 +5,7 @@
 #include "toolboxinterface.h"
 
 #include <QtWidgets/QWidget>
+#include <QtWidgets/QPushButton>
 #include <QObject>
 
 class ToolBox : public QWidget , ToolBoxInterface

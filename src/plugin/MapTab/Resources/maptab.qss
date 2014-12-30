@@ -1,0 +1,81 @@
+/******************Main*********************************/
+/*QWidget#MapTab{
+	border-image:url(:/bk.png);
+	border-width:2px 5px 2px 5px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}*/
+
+QPushButton#search:!pressed{
+	border-image: url(:/search.png);
+	border-width:2px 2px 2px 2px;
+}
+QPushButton#search:pressed{
+	border-image: url(:/searchp.png);
+	border-width:2px 2px 2px 2px;
+}
+
+
+QPushButton#set:!pressed{
+	border-image: url(:/set.png);
+	border-width:2px 2px 2px 2px;
+}
+QPushButton#set:pressed{
+	border-image: url(:/setp.png);
+	border-width:2px 2px 2px 2px;
+}
+
+/******************Tab*********************************/
+QWidget#TwoDimension{
+	border-image:url(:/twodimension.png);
+	border-width:2px 2px 2px 2px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+QWidget#ThreeDimension{
+	border-image:url(:/threedimension.png);
+	border-width:2px 2px 2px 2px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+/******************TabBtn*********************************/
+QToolButton[twoselected = "false"]:!pressed{
+	border-image: url(:/uptwo.png);
+	border-width:0px 0px 0px 0px;
+	color: white;
+}
+QToolButton[twoselected = "false"]:pressed{
+	border-image: url(:/downtwo.png);
+	border-width:0px 0px 0px 0px;
+	color: white;
+}
+QToolButton[twoselected = "true"]{
+	border-image: url(:/downtwo.png);
+	border-width:0px 0px 0px 0px;
+	color: white;
+}
+
+
+QToolButton[threeselected = "false"]:!pressed{
+	border-image: url(:/upthree.png);
+	border-width:0px 0px 0px 0px;
+	color: white;
+}
+QToolButton[threeselected = "false"]:pressed{
+	border-image: url(:/downthree.png);
+	border-width:0px 0px 0px 0px;
+	color: white;
+}
+QToolButton[threeselected = "true"]{
+	border-image: url(:/downthree.png);
+	border-width:0px 0px 0px 0px;
+	color: white;
+}

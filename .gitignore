@@ -6,3 +6,4 @@ Debug
 /src/GeneratedFiles
 *.opensdf
 GeneratedFiles
+*.exp

@@ -1,0 +1,27 @@
+/******************TabBtn*********************************/
+QToolButton[twoselected = "false"]:!pressed{
+	border-image: url(:/uptwo.png);
+	border-width:0px 0px 0px 0px;
+}
+QToolButton[twoselected = "false"]:pressed{
+	border-image: url(:/downtwo.png);
+	border-width:0px 0px 0px 0px;
+}
+QToolButton[twoselected = "true"]{
+	border-image: url(:/downtwo.png);
+	border-width:0px 0px 0px 0px;
+}
+
+
+QToolButton[threeselected = "false"]:!pressed{
+	border-image: url(:/upthree.png);
+	border-width:0px 0px 0px 0px;
+}
+QToolButton[threeselected = "false"]:pressed{
+	border-image: url(:/downthree.png);
+	border-width:0px 0px 0px 0px;
+}
+QToolButton[threeselected = "true"]{
+	border-image: url(:/downthree.png);
+	border-width:0px 0px 0px 0px;
+}

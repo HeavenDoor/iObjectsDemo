@@ -1,19 +1,36 @@
 #include "stdafx.h"
 #include "iobjectsdemo.h"
+#include "commom/widgetrect.h"
 
 #include <QLabel>
 #include <QWidget>
 
+
 iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 {
 	setObjectName("iObjectsDemo");
-	loadControls();
+	setGeometry(200,200,1247,766);
+	
+
+	
+	if (!loadPlugins("../bin/debug", "MapTab"))
+	{
+		exit(0);
+	}
 
 	if (!loadPlugins("../bin/debug", "ToolBox"))
 	{
 		exit(0);
 	}
 
+
+	
+
+	m_pMapTab->getWidget()->setParent(this);
+	m_pMapTab->getWidget()->setGeometry(0,0,width(), height());
+	m_pMapTab->getWidget()->show();
+
+	 
 	m_pPopBtn = new QPushButton(this);
 	m_pPopBtn->setObjectName("PopTitleBtn");
 	m_pPopBtn->setFixedWidth(40);
@@ -26,14 +43,18 @@ iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 	m_pTitle = new Title(this);
 	//m_pTitle->setFixedHeight(85);
 	//m_pTitle->setFixedWidth(530);
-	//m_pTitle->setGeometry(width()/2 - m_pTitle->width()/2, 0, 530, 85 /*m_pTitle->width(), m_pTitle->height()*/);
+	//m_pTitle->setGeometry(width()/2 - m_pTitle->width()/2, 0, 530, 85 );
 	connect(m_pTitle, SIGNAL(collapse()), this, SLOT(OnTitleCollapsed()));
 	connect(m_pPopBtn, SIGNAL(clicked()), m_pTitle, SLOT(expandTitle()));
-
+	
 	m_pToolBox->getWidget()->setParent(this);
 	m_pToolBox->getWidget()->setGeometry(0,height()-50,width(),50);
 	m_pToolBox->getWidget()->show();
 	m_pToolBox->getWidget()->raise();
+
+	loadControls();
+	
+
 }
 
 iObjectsDemo::~iObjectsDemo()
@@ -62,6 +83,15 @@ void iObjectsDemo::resizeEvent(QResizeEvent* e)
 		m_pToolBox->getWidget()->setGeometry(0,height()-50,width(),50);
 	}
 
+	if (m_pMapTab->getWidget())
+	{
+		QRect r = this->geometry();
+		
+		m_pMapTab->getWidget()->setGeometry(0,0,width(),height());
+		QRect v = m_pMapTab->getWidget()->geometry();
+		int m = 0;
+	}
+
 	if (m_pTitle)
 	{
 		m_pTitle->setGeometry(width()/2 - m_pTitle->width()/2, 0, m_pTitle->width(), m_pTitle->height());
@@ -82,18 +112,16 @@ void iObjectsDemo::OnCloseBtnClicked()
 
 bool iObjectsDemo::loadControls()
 {
-	QLabel *lable = new QLabel(this);
-	lable->setText(QStringLiteral("我是中文"));
-	setGeometry(200,200,1247,766);
-
-
+	//QLabel *lable = new QLabel(this);
+	//lable->setText(QStringLiteral("我是中文"));
+	
 	m_pCloseBtn = new QPushButton(this);
 	m_pCloseBtn->setObjectName("CloseBtn");
 	m_pCloseBtn->setFixedHeight(48);
 	m_pCloseBtn->setFixedWidth(48);
 	m_pCloseBtn->setGeometry(width() - 60, 20, m_pCloseBtn->width(), m_pCloseBtn->height());
 
-
+	
 	connect(m_pCloseBtn, SIGNAL(clicked()), this, SLOT(OnCloseBtnClicked()));
 
 	return true;
@@ -136,18 +164,30 @@ bool iObjectsDemo::loadIntelligencePlugin()
 
 bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 {
-	bool bToolbox = false;
+	bool bPluginLoaded = false;
 	qApp->addLibraryPath(path); // ../bin/debug
 	QPluginLoader loader(pluginName) ;  
 	//QPluginLoader loader(QString("libMyPlugin.so")) ;  
 	QObject* object;
 	if ( (object=loader.instance()) != NULL )  
 	{  
-		qDebug("plugin loaded .");  
-		m_pToolBox = qobject_cast<ToolBoxInterface*>(object) ;  
-		if (m_pToolBox)  
+
+		QString name = object->objectName();
+		if (object->inherits("ToolBoxInterface"))
 		{
-			bToolbox = true;
+			m_pToolBox = qobject_cast<ToolBoxInterface*>(object) ;  
+			if (m_pToolBox)  
+			{
+				bPluginLoaded = true;
+			}
+		}
+		if (object->inherits("MapTabInterface"))
+		{
+			m_pMapTab = qobject_cast<MapTabInterface*>(object) ;  
+			if (m_pMapTab)  
+			{
+				bPluginLoaded = true;
+			}
 		}
 	}  
 	else  

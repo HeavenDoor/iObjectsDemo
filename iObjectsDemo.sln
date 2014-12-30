@@ -5,6 +5,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iObjectsDemo", "src\iObject
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ToolBox", "src\plugin\ToolBox\ToolBox.vcxproj", "{54F677B2-2BAD-4295-9078-14B491FFD463}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MapTab", "src\plugin\MapTab\MapTab.vcxproj", "{910856DD-B41A-4B83-AF5D-42C2E48B74D8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +21,10 @@ Global
 		{54F677B2-2BAD-4295-9078-14B491FFD463}.Debug|Win32.Build.0 = Debug|Win32
 		{54F677B2-2BAD-4295-9078-14B491FFD463}.Release|Win32.ActiveCfg = Release|Win32
 		{54F677B2-2BAD-4295-9078-14B491FFD463}.Release|Win32.Build.0 = Release|Win32
+		{910856DD-B41A-4B83-AF5D-42C2E48B74D8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{910856DD-B41A-4B83-AF5D-42C2E48B74D8}.Debug|Win32.Build.0 = Debug|Win32
+		{910856DD-B41A-4B83-AF5D-42C2E48B74D8}.Release|Win32.ActiveCfg = Release|Win32
+		{910856DD-B41A-4B83-AF5D-42C2E48B74D8}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

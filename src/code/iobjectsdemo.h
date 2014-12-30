@@ -6,7 +6,7 @@
 
 #include "title.h"
 #include "plugin/ToolBox/toolboxinterface.h"
-
+#include "plugin/MapTab/maptabinterface.h"
 
 class iObjectsDemo : public QWidget
 {
@@ -27,13 +27,11 @@ private slots:
 private:
 	bool loadControls();
 	bool loadPlugins(const QString& path, const QString& pluginName);
-	//bool loadToolBoxPlugin();
-	//bool loadMapTabsPlugin();
-	//bool loadIntelligencePlugin();
 private:
 	QPushButton* m_pCloseBtn;
 	QPushButton* m_pPopBtn;
 	ToolBoxInterface* m_pToolBox;
+	MapTabInterface* m_pMapTab;
 	Title* m_pTitle;
 };
 

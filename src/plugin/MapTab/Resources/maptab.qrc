@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+      <file>maptab.qss</file>
+      <file>tabbar.qss</file>
+      <file>bk.png</file>
+      <file>twodimension.png</file>
+      <file>threedimension.png</file>
+      <file>downthree.png</file>
+      <file>upthree.png</file>
+      <file>downtwo.png</file>
+      <file>uptwo.png</file>
+    </qresource>
+</RCC>
