@@ -1,0 +1,193 @@
+/******************Main*********************************/
+/*QWidget#InteLayers{
+	border-image:url(:/bk.png);
+	border-width:0px 0px 0px 0px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+*/
+
+QWidget#InteLayersHead{
+	border-image:url(:/head.png);
+	border-width:0px 0px 0px 0px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+
+QPushButton#CloseInteLayersBtn{
+	border-image: url(:/closeintelayersbtn.png);
+	border-width:0px 0px 0px 0px;
+}
+
+QWidget#InteLayersTabWidget{
+	border-image:url(:/body.png);
+	border-width:0px 0px 0px 0px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+QWidget#InteLayersTabBar{
+	border-image:url(:/intelayerstabbar.png);
+	border-width:3px 3px 3px 3px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+/**********************QTabWidget**************************************************/
+QTabWidget::pane#InteLayersTabWidget{
+	border-image:url(:/trans.png);
+	border-width:1px 1px 1px 1px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+
+/**********************Item**************************************************/
+QWidget#m_a{
+	border-image:url(:/a.png);
+	border-width:1px 1px 1px 1px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+QWidget#m_b{
+	border-image:url(:/b.png);
+	border-width:1px 1px 1px 1px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+QWidget#m_c{
+	border-image:url(:/c.png);
+	border-width:1px 1px 1px 1px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+
+QWidget#m_d{
+	border-image:url(:/d.png);
+	border-width:1px 1px 1px 1px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+QWidget#m_e{
+	border-image:url(:/e.png);
+	border-width:1px 1px 1px 1px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+QWidget#m_f{
+	border-image:url(:/f.png);
+	border-width:1px 1px 1px 1px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+QWidget#m_g{
+	border-image:url(:/g.png);
+	border-width:1px 1px 1px 1px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+QWidget#m_h{
+	border-image:url(:/h.png);
+	border-width:1px 1px 1px 1px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+QWidget#m_i{
+	border-image:url(:/i.png);
+	border-width:1px 1px 1px 1px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+QWidget#m_j{
+	border-image:url(:/j.png);
+	border-width:1px 1px 1px 1px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+QWidget#m_k{
+	border-image:url(:/k.png);
+	border-width:1px 1px 1px 1px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+QWidget#m_l{
+	border-image:url(:/l.png);
+	border-width:1px 1px 1px 1px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+
+/**********************QToolButton**************************************************/
+QToolButton[ShowTabs_1 = "true"]{
+	border-image: url(:/tb2.png);
+	border-width:0px 0px 0px 0px;
+}
+QToolButton[ShowTabs_1 = "false"]{
+	border-image: url(:/tb1.png);
+	border-width:0px 0px 0px 0px;
+}
+
+QToolButton[ShowTabs_2 = "true"]{
+	border-image: url(:/tb4.png);
+	border-width:0px 0px 0px 0px;
+}
+QToolButton[ShowTabs_2 = "false"]{
+	border-image: url(:/tb3.png);
+	border-width:0px 0px 0px 0px;
+}
+
+QToolButton[ShowTabs_3 = "true"]{
+	border-image: url(:/tb6.png);
+	border-width:0px 0px 0px 0px;
+}
+QToolButton[ShowTabs_3 = "false"]{
+	border-image: url(:/tb5.png);
+	border-width:0px 0px 0px 0px;
+}

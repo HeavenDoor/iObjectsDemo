@@ -15,6 +15,7 @@ public:
 
 protected:
 	void paintEvent(QPaintEvent*);
+	void resizeEvent(QResizeEvent*);
 signals:
 	void changeDimension(bool isTwoDimension);
 	//void changeToThreeDimension();

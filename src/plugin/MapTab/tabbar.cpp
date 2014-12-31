@@ -18,6 +18,8 @@ TabBar::TabBar(QWidget *parent)	: QWidget(parent)
 	m_pTwoBtn = new QToolButton(this);
 	m_pTwoBtn->setObjectName("TwoBtn");
 	m_pTwoBtn->setFixedHeight(this->height());
+
+	int m = this->width();
 	m_pTwoBtn->setFixedWidth(this->width()/2);
 	m_pTwoBtn->setProperty("twoselected", true);
 	m_pTwoBtn->setPalette(pa);
@@ -54,6 +56,22 @@ void TabBar::paintEvent(QPaintEvent* e)
 	style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 	QWidget::paintEvent(e);
 }
+
+
+void TabBar::resizeEvent( QResizeEvent* )
+{
+	if (m_pTwoBtn)
+	{
+		m_pTwoBtn->setFixedHeight(this->height());
+		m_pTwoBtn->setFixedWidth(this->width()/2);
+	}
+	if (m_pThreeBtn)
+	{
+		m_pThreeBtn->setFixedHeight(this->height());
+		m_pThreeBtn->setFixedWidth(this->width()/2);
+	}
+}
+
 
 void TabBar::OnTabButtonClicked()
 {

@@ -1,0 +1,12 @@
+#ifndef INTELAYERS_GLOBAL_H
+#define INTELAYERS_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#ifdef INTELAYERS_LIB
+# define INTELAYERS_EXPORT Q_DECL_EXPORT
+#else
+# define INTELAYERS_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // INTELAYERS_GLOBAL_H

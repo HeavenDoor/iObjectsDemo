@@ -3,7 +3,6 @@
   <qresource prefix="/">
     <file>toolbox.qss</file>
     <file>toolbox.png</file>
-    <file>test.png</file>
     <file>searchp.png</file>
     <file>search.png</file>
     <file>set.png</file>

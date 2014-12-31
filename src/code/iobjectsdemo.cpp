@@ -10,21 +10,29 @@ iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 {
 	setObjectName("iObjectsDemo");
 	setGeometry(200,200,1247,766);
-	
+	QString pluginPath;
+	#if QT_NO_DEBUG
+		pluginPath = "../bin/release";
+	#else
+		pluginPath = "../bin/debug";
+	#endif 
 
-	
-	if (!loadPlugins("../bin/debug", "MapTab"))
+		if (!loadPlugins(pluginPath, "MapTab"))
+		{
+			exit(0);
+		}
+
+	if (!loadPlugins(pluginPath, "ToolBox"))
 	{
 		exit(0);
 	}
 
-	if (!loadPlugins("../bin/debug", "ToolBox"))
+	if (!loadPlugins(pluginPath, "InteLayers"))
 	{
 		exit(0);
 	}
-
-
 	
+
 
 	m_pMapTab->getWidget()->setParent(this);
 	m_pMapTab->getWidget()->setGeometry(0,0,width(), height());
@@ -40,12 +48,20 @@ iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 	
 
 
+
 	m_pTitle = new Title(this);
 	//m_pTitle->setFixedHeight(85);
 	//m_pTitle->setFixedWidth(530);
 	//m_pTitle->setGeometry(width()/2 - m_pTitle->width()/2, 0, 530, 85 );
 	connect(m_pTitle, SIGNAL(collapse()), this, SLOT(OnTitleCollapsed()));
 	connect(m_pPopBtn, SIGNAL(clicked()), m_pTitle, SLOT(expandTitle()));
+
+
+
+	m_pInteLayers->getWidget()->setParent(this);
+	m_pInteLayers->getWidget()->setGeometry(15, height()/2 - 200, 216, 400);
+	m_pInteLayers->getWidget()->show();
+	m_pInteLayers->getWidget()->raise();
 	
 	m_pToolBox->getWidget()->setParent(this);
 	m_pToolBox->getWidget()->setGeometry(0,height()-50,width(),50);
@@ -82,14 +98,14 @@ void iObjectsDemo::resizeEvent(QResizeEvent* e)
 	{
 		m_pToolBox->getWidget()->setGeometry(0,height()-50,width(),50);
 	}
+	if (m_pInteLayers)
+	{
+		m_pInteLayers->getWidget()->setGeometry(15, height()/2 - 200, 216, 400);
+	}
 
 	if (m_pMapTab->getWidget())
 	{
-		QRect r = this->geometry();
-		
 		m_pMapTab->getWidget()->setGeometry(0,0,width(),height());
-		QRect v = m_pMapTab->getWidget()->geometry();
-		int m = 0;
 	}
 
 	if (m_pTitle)
@@ -127,41 +143,6 @@ bool iObjectsDemo::loadControls()
 	return true;
 }
 
-/*
-
-bool iObjectsDemo::loadToolBoxPlugin()
-{
-bool bToolbox = false;
-QDir path("../bin/debug");
-foreach( QString filename, path.entryList(QDir::Files) )
-{
-qDebug()<<filename;
-QPluginLoader loader( path.absoluteFilePath( filename ) );
-QObject *couldBeFilter = loader.instance();
-if( couldBeFilter )
-{
-m_pToolBox = qobject_cast<ToolBoxInterface*>( couldBeFilter );
-if( m_pToolBox )
-{
-bToolbox = true;
-}
-}
-}
-return bToolbox;
-}
-
-bool iObjectsDemo::loadMapTabsPlugin()
-{
-	return true;
-}
-
-bool iObjectsDemo::loadIntelligencePlugin()
-{
-	return true;
-}
-
-*/
-
 bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 {
 	bool bPluginLoaded = false;
@@ -185,6 +166,15 @@ bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 		{
 			m_pMapTab = qobject_cast<MapTabInterface*>(object) ;  
 			if (m_pMapTab)  
+			{
+				bPluginLoaded = true;
+			}
+		}
+
+		if (object->inherits("InteLayersInterface"))
+		{
+			m_pInteLayers = qobject_cast<InteLayersInterface*>(object) ;  
+			if (m_pInteLayers)  
 			{
 				bPluginLoaded = true;
 			}

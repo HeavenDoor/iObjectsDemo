@@ -24,14 +24,15 @@ MapTab::MapTab(QWidget *parent) : QWidget(parent)
 	m_pThreeDimension->setObjectName("ThreeDimension");
 
 	m_pTabWidget->addTab(m_pTwoDimension,"two");
-
 	m_pTabWidget->addTab(m_pThreeDimension,"three");
 
 
 	m_pTabBar = new TabBar(this);
-	m_pTabBar->setFixedHeight(34);
-	m_pTabBar->setFixedWidth(96);
+	m_pTabBar->setFixedHeight(58);
+	m_pTabBar->setFixedWidth(162);
 	connect(m_pTabBar, SIGNAL(changeDimension(bool)), this, SLOT(OnChangeDimension(bool)));
+	int j = m_pTabBar->width();
+
 
 	QFile file(":/maptab.qss");
 	file.open(QFile::ReadOnly);
@@ -75,7 +76,7 @@ void MapTab::resizeEvent( QResizeEvent* e)
 
 	if (m_pTabBar)
 	{
-		m_pTabBar->setGeometry(width() - 160, 25, m_pTabBar->width(), m_pTabBar->height());
+		m_pTabBar->setGeometry(width() - 260, 25, m_pTabBar->width(), m_pTabBar->height());
 	}
 	QWidget::resizeEvent(e);
 }

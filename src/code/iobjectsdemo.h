@@ -7,6 +7,7 @@
 #include "title.h"
 #include "plugin/ToolBox/toolboxinterface.h"
 #include "plugin/MapTab/maptabinterface.h"
+#include "plugin/InteLayers/intelayersinterface.h"
 
 class iObjectsDemo : public QWidget
 {
@@ -32,6 +33,7 @@ private:
 	QPushButton* m_pPopBtn;
 	ToolBoxInterface* m_pToolBox;
 	MapTabInterface* m_pMapTab;
+	InteLayersInterface* m_pInteLayers;
 	Title* m_pTitle;
 };
 
