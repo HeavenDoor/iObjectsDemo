@@ -17,8 +17,20 @@ public:
 	ToolBox(QWidget *parent = 0);
 	~ToolBox();
 	virtual void test();
-	virtual QWidget* getWidget();
-
+	//virtual QWidget* getWidget();
+	virtual QObject* getObject();
+	virtual void setPluginGeometry(const QRect& rect);
+	virtual void setPluginGeometry(int ax, int ay, int aw, int ah);
+	virtual void setPluginParent(QWidget* parentWidget);
+	virtual void showPlugin();
+	virtual void raisePlugin();
+	virtual void resizePlugin(int ax, int ay, int aw, int ah);
+signals:
+	//void resize(const QRect&);
+	void ToolBoxPlugin_SearchBtnClicked();
+	void ToolBoxPlugin_SettingBtnClicked();
+public slots:
+	//void OnResizeEvent(const QRect& rect);
 protected:
 	void paintEvent(QPaintEvent*);
 	void resizeEvent(QResizeEvent *);

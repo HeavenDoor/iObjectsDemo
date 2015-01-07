@@ -17,7 +17,17 @@ public:
 	~MapTab();
 
 	virtual void test();
-	virtual QWidget* getWidget();
+	//virtual QWidget* getWidget();
+
+	virtual QObject* getObject();
+	virtual void setPluginGeometry(const QRect& rect);
+	virtual void setPluginGeometry(int ax, int ay, int aw, int ah);
+	virtual void setPluginParent(QWidget* parentWidget);
+	virtual void showPlugin();
+	virtual void raisePlugin();
+	virtual void resizePlugin(int ax, int ay, int aw, int ah);
+
+
 protected:
 	void paintEvent(QPaintEvent*);
 	void resizeEvent(QResizeEvent*);

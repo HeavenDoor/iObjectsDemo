@@ -3,11 +3,21 @@
 
 #include <QObject>
 #include <QtWidgets/QWidget>
-class ToolBoxInterface
+#include "..\\widgetplugininterface.h"
+
+class ToolBoxInterface : public WidgetPluginInterface
 {
 public:
 	virtual void test() = 0;
-	virtual QWidget* getWidget() = 0;
+	//virtual QWidget* getWidget() = 0;  主界面应该不需要获得plugin widget
+
+// 	virtual void setPluginParent(QWidget* parentWidget) = 0;
+// 	virtual QObject* getObject() = 0;  // 通过object connect signal
+// 	virtual void setPluginGeometry(const QRect& rect) = 0;
+// 	virtual void setPluginGeometry(int ax, int ay, int aw, int ah) = 0;
+// 	virtual void showPlugin() = 0;
+// 	virtual void raisePlugin() = 0;
+// 	virtual void resizePlugin(int ax, int ay, int aw, int ah) = 0;
 };
 
 

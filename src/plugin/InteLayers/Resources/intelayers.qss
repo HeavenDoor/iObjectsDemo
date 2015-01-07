@@ -1,13 +1,13 @@
 /******************Main*********************************/
-/*QWidget#InteLayers{
-	border-image:url(:/bk.png);
+QWidget#InteLayers{
+	border-image:url(:/body.png);
 	border-width:0px 0px 0px 0px;
 	margin-left:0px;
 	margin-right:0px;
 	margin-top:0px;
 	margin-bottom:0px;
 }
-*/
+
 
 QWidget#InteLayersHead{
 	border-image:url(:/head.png);
@@ -52,6 +52,11 @@ QTabWidget::pane#InteLayersTabWidget{
 	margin-bottom:0px;
 }
 
+/**********************CollapseBtn**************************************************/
+QPushButton#CollapseBtn{
+	border-image: url(:/colles.png);
+	border-width:0px 0px 0px 0px;
+}
 
 /**********************Item**************************************************/
 QWidget#m_a{

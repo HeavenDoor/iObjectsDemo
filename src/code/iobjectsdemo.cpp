@@ -4,23 +4,33 @@
 
 #include <QLabel>
 #include <QWidget>
+#include <QUrl>
+
+#include <QQuickWidget>
+#include <QtQuick/QQuickView>
+#include <QtQml/QQmlEngine>
+#include <QtQuick/QtQuick>
+
 
 
 iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 {
 	setObjectName("iObjectsDemo");
 	setGeometry(200,200,1247,766);
-	QString pluginPath;
-	#if QT_NO_DEBUG
-		pluginPath = "../bin/release";
-	#else
-		pluginPath = "../bin/debug";
-	#endif 
+	
 
-		if (!loadPlugins(pluginPath, "MapTab"))
-		{
-			exit(0);
-		}
+
+	QString pluginPath;
+#if QT_NO_DEBUG
+	pluginPath = "../bin/release";
+#else
+	pluginPath = "../bin/debug";
+#endif 
+
+	if (!loadPlugins(pluginPath, "MapTab"))
+	{
+		exit(0);
+	}
 
 	if (!loadPlugins(pluginPath, "ToolBox"))
 	{
@@ -31,12 +41,12 @@ iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 	{
 		exit(0);
 	}
-	
 
 
-	m_pMapTab->getWidget()->setParent(this);
-	m_pMapTab->getWidget()->setGeometry(0,0,width(), height());
-	m_pMapTab->getWidget()->show();
+
+	m_pMapTab->setPluginParent(this);
+	m_pMapTab->setPluginGeometry(0, 0, width(), height());
+	m_pMapTab->showPlugin();
 
 	 
 	m_pPopBtn = new QPushButton(this);
@@ -58,18 +68,58 @@ iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 
 
 
-	m_pInteLayers->getWidget()->setParent(this);
-	m_pInteLayers->getWidget()->setGeometry(15, height()/2 - 200, 216, 400);
-	m_pInteLayers->getWidget()->show();
-	m_pInteLayers->getWidget()->raise();
+	m_pInteLayers->setPluginParent(this);
+	m_pInteLayers->setPluginGeometry(15, height()/2 - 200, 216, 400);
+	m_pInteLayers->showPlugin();
+	m_pInteLayers->raisePlugin();
+	connect(m_pInteLayers->getObject(), SIGNAL(refeshWindow()), this, SLOT(OnInteLayersPlugin_RefeshWindow()));
 	
-	m_pToolBox->getWidget()->setParent(this);
-	m_pToolBox->getWidget()->setGeometry(0,height()-50,width(),50);
-	m_pToolBox->getWidget()->show();
-	m_pToolBox->getWidget()->raise();
+	m_pToolBox->setPluginParent(this);
+	m_pToolBox->setPluginGeometry(15, height()/2 - 200, 216, 400);
+	m_pToolBox->showPlugin();
+	m_pToolBox->raisePlugin();
+	connect(m_pToolBox->getObject(), SIGNAL(ToolBoxPlugin_SearchBtnClicked()), this, SLOT(OnToolBoxPlugin_SearchBtnClicked()));
+	connect(m_pToolBox->getObject(), SIGNAL(ToolBoxPlugin_SettingBtnClicked()), this, SLOT(OnToolBoxPlugin_SettingBtnClicked()));
+
+
+	
+	m_pInfoPanel = new QQuickWidget(this);
+	m_pInfoPanel->setFixedWidth(270);
+	m_pInfoPanel->setFixedHeight(380);
+
+	m_pInfoPanel->setResizeMode(QQuickWidget::SizeRootObjectToView);
+	//view->setWindowOpacity(0.2);
+	m_pInfoPanel->setClearColor(Qt::transparent);
+	m_pInfoPanel->setAttribute(Qt::WA_AlwaysStackOnTop);
+	m_pInfoPanel->setMouseTracking(true);
+
+	m_pInfoPanel->engine()->addImportPath("Resources/TimeExample");
+	//m_pInfoPanel->engine()->addImportPath("C:/Users/Administrator/Desktop/iObjectsDemo/src/Resources");
+	//m_pInfoPanel->engine()->addImportPath("C:/Users/Administrator/Desktop/iObjectsDemo/src/Resources/TimeExample");
+	m_pInfoPanel->engine()->addPluginPath("C:/Users/Administrator/Desktop/iObjectsDemo/src/Resources/TimeExample");
+
+	m_pInfoPanel->engine()->addPluginPath("C:/Users/Administrator/Desktop/iObjectsDemo/bin/Debug");
+
+	QStringList list = m_pInfoPanel->engine()->importPathList();
+
+	QStringList li = m_pInfoPanel->engine()->pluginPathList();
+	QList<QQmlError> errorss;
+	//QString s = qApp->applicationDirPath();
+	//QString b = s + "/InfoPanel.dll";
+	bool m = m_pInfoPanel->engine()->importPlugin("../bin/Debug/InfoPanel.dll", "TimeExample", &errorss);
+
+	//C:/Users/Administrator/Desktop/iObjectsDemo/bin/Debug/InfoPanel.dll
+	//QString yy = errorss.at(0).toString();
+
+
+	//view->setSource(QUrl("Resources/TimeExample/a/plugins.qml"));
+	m_pInfoPanel->setSource(QUrl("Resources/TimeExample/plugins.qml"));
+	m_pInfoPanel->show();
+ 	m_pInfoPanel->raise();
+
+
 
 	loadControls();
-	
 
 }
 
@@ -94,18 +144,18 @@ void iObjectsDemo::resizeEvent(QResizeEvent* e)
 		m_pCloseBtn->setGeometry(width() - 60, 20, m_pCloseBtn->width(), m_pCloseBtn->height());
 	}
 	
-	if (m_pToolBox->getWidget())
+	if (m_pToolBox)
 	{
-		m_pToolBox->getWidget()->setGeometry(0,height()-50,width(),50);
+		m_pToolBox->resizePlugin(0 ,height()-50, width(), 50);
 	}
 	if (m_pInteLayers)
 	{
-		m_pInteLayers->getWidget()->setGeometry(15, height()/2 - 200, 216, 400);
+		m_pInteLayers->resizePlugin(15, height()/2 - 200, 216, 400);
 	}
 
-	if (m_pMapTab->getWidget())
+	if (m_pMapTab)
 	{
-		m_pMapTab->getWidget()->setGeometry(0,0,width(),height());
+		m_pMapTab->resizePlugin(0, 0, width(), height());
 	}
 
 	if (m_pTitle)
@@ -117,6 +167,12 @@ void iObjectsDemo::resizeEvent(QResizeEvent* e)
 		m_pPopBtn->setGeometry(width()/2 - m_pPopBtn->width()/2, 0, m_pPopBtn->width(), m_pPopBtn->height());
 	}
 
+	if (m_pInfoPanel)
+	{
+		m_pInfoPanel->setGeometry(width() - m_pInfoPanel->width() - 15 ,height()/2 - 200,270,380);
+	}
+	
+	
 	QWidget::resizeEvent(e);
 }
 
@@ -205,4 +261,19 @@ void iObjectsDemo::OnTitleCollapsed()
 		}
 		
 	}
+}
+
+void iObjectsDemo::OnToolBoxPlugin_SearchBtnClicked()
+{
+
+}
+
+void iObjectsDemo::OnToolBoxPlugin_SettingBtnClicked()
+{
+
+}
+
+void iObjectsDemo::OnInteLayersPlugin_RefeshWindow()
+{
+	this->repaint();
 }

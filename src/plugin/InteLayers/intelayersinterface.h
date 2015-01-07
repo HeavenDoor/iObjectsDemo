@@ -2,11 +2,12 @@
 #define INTELAYERSINTERFACE_H
 
 #include <QtWidgets/QWidget>
-class InteLayersInterface
+#include "..\\widgetplugininterface.h"
+class InteLayersInterface : public WidgetPluginInterface
 {
 public:
 	virtual void test() = 0;
-	virtual QWidget* getWidget() = 0;
+	//virtual QWidget* getWidget() = 0;
 };
 
 

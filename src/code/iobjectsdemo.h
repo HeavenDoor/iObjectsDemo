@@ -3,7 +3,7 @@
 
 #include <QtWidgets/QWidget>
 #include <QApplication>
-
+#include <QQuickWidget>
 #include "title.h"
 #include "plugin/ToolBox/toolboxinterface.h"
 #include "plugin/MapTab/maptabinterface.h"
@@ -25,6 +25,10 @@ signals:
 private slots:
 	void OnCloseBtnClicked();
 	void OnTitleCollapsed();
+
+	void OnToolBoxPlugin_SearchBtnClicked();
+	void OnToolBoxPlugin_SettingBtnClicked();
+	void OnInteLayersPlugin_RefeshWindow();
 private:
 	bool loadControls();
 	bool loadPlugins(const QString& path, const QString& pluginName);
@@ -35,6 +39,7 @@ private:
 	MapTabInterface* m_pMapTab;
 	InteLayersInterface* m_pInteLayers;
 	Title* m_pTitle;
+	QQuickWidget* m_pInfoPanel;
 };
 
 #endif // IOBJECTSDEMO_H

@@ -43,3 +43,13 @@ QPushButton#PopTitleBtn:pressed{
 	border-image: url(:/poptitlep.png);
 	border-width:2px 2px 2px 2px;
 }
+
+/******************quickViewWidget*************************************/
+/*QQuickWidget#InfoPanelContainer{
+	border-image:url(:/sh.png);
+	border-width:20px 20px 20px 20px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}*/

@@ -38,7 +38,7 @@ MapTab::MapTab(QWidget *parent) : QWidget(parent)
 	file.open(QFile::ReadOnly);
 	QString style = QString(file.readAll());
 
-	qDebug()<<style;
+	//qDebug()<<style;
 	this->setStyleSheet(style);
 	file.close();
 }
@@ -57,10 +57,10 @@ void MapTab::paintEvent(QPaintEvent* e)
 	QWidget::paintEvent(e);
 }
 
-QWidget* MapTab::getWidget()
-{
-	return this;
-}
+// QWidget* MapTab::getWidget()
+// {
+// 	return this;
+// }
 
 void MapTab::test()
 {
@@ -80,6 +80,43 @@ void MapTab::resizeEvent( QResizeEvent* e)
 	}
 	QWidget::resizeEvent(e);
 }
+
+
+QObject* MapTab::getObject()
+{
+	return this;
+}
+
+void MapTab::setPluginGeometry( const QRect& rect )
+{
+	this->setGeometry(rect);
+}
+
+void MapTab::setPluginGeometry( int ax, int ay, int aw, int ah )
+{
+	this->setGeometry(ax, ay, aw, ah);
+}
+
+void MapTab::setPluginParent( QWidget* parentWidget )
+{
+	this->setParent(parentWidget);
+}
+
+void MapTab::showPlugin()
+{
+	this->show();
+}
+
+void MapTab::raisePlugin()
+{
+	this->raise();
+}
+
+void MapTab::resizePlugin(int ax, int ay, int aw, int ah)
+{
+	setGeometry(ax, ay, aw, ah);
+}
+
 
 void MapTab::OnChangeDimension( bool isTwoDimension )
 {

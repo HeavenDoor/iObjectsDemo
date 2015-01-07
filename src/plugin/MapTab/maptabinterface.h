@@ -4,11 +4,12 @@
 
 #include <QObject>
 #include <QtWidgets/QWidget>
-class MapTabInterface
+#include "..\\widgetplugininterface.h"
+class MapTabInterface : public WidgetPluginInterface
 {
 public:
 	virtual void test() = 0;
-	virtual QWidget* getWidget() = 0;
+	//virtual QWidget* getWidget() = 0;
 };
 
 
