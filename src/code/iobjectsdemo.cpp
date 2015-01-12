@@ -96,9 +96,9 @@ iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 	m_pInfoPanel->engine()->addImportPath("Resources/TimeExample");
 	//m_pInfoPanel->engine()->addImportPath("C:/Users/Administrator/Desktop/iObjectsDemo/src/Resources");
 	//m_pInfoPanel->engine()->addImportPath("C:/Users/Administrator/Desktop/iObjectsDemo/src/Resources/TimeExample");
-	m_pInfoPanel->engine()->addPluginPath("C:/Users/Administrator/Desktop/iObjectsDemo/src/Resources/TimeExample");
+	//m_pInfoPanel->engine()->addPluginPath("C:/Users/Administrator/Desktop/iObjectsDemo/src/Resources/TimeExample");
 
-	m_pInfoPanel->engine()->addPluginPath("C:/Users/Administrator/Desktop/iObjectsDemo/bin/Debug");
+	m_pInfoPanel->engine()->addPluginPath("../bin/Debug");
 
 	QStringList list = m_pInfoPanel->engine()->importPathList();
 
