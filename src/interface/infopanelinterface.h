@@ -1,9 +1,9 @@
 #ifndef INFOPANELINTERFACE_H
 #define INFOPANELINTERFACE_H
 
-
+#include "widgetplugininterface.h"
 #include <QtWidgets/QWidget>
-class InfoPanelInterface
+class InfoPanelInterface 
 {
 public:
 	virtual void test() = 0;

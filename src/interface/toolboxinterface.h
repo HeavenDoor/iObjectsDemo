@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QtWidgets/QWidget>
-#include "..\\widgetplugininterface.h"
+#include "widgetplugininterface.h"
 
 class ToolBoxInterface : public WidgetPluginInterface
 {

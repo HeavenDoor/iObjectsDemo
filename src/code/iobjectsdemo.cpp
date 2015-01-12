@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "iobjectsdemo.h"
 #include "commom/widgetrect.h"
+#include "pluginloader.h"
 
 #include <QLabel>
 #include <QWidget>
@@ -18,7 +19,8 @@ iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 	setObjectName("iObjectsDemo");
 	setGeometry(200,200,1247,766);
 	
-
+	Pluginloader* loader = new Pluginloader(NULL);
+	loader->showModel();
 
 	QString pluginPath;
 #if QT_NO_DEBUG

@@ -5,9 +5,11 @@
 #include <QApplication>
 #include <QQuickWidget>
 #include "title.h"
-#include "plugin/ToolBox/toolboxinterface.h"
-#include "plugin/MapTab/maptabinterface.h"
-#include "plugin/InteLayers/intelayersinterface.h"
+
+#include "interface/widgetplugininterface.h"
+#include "interface/toolboxinterface.h"
+#include "interface/maptabinterface.h"
+#include "interface/intelayersinterface.h"
 
 class iObjectsDemo : public QWidget
 {

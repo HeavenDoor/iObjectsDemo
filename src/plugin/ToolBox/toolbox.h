@@ -2,7 +2,7 @@
 #define TOOLBOX_H
 
 #include "toolbox_global.h"
-#include "toolboxinterface.h"
+#include "..\\..\\interface\\toolboxinterface.h"
 
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QPushButton>

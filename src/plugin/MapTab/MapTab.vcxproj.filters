@@ -67,9 +67,6 @@
     <ClInclude Include="maptab_global.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="maptabinterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="maptab.h">

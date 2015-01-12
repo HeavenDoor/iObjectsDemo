@@ -76,9 +76,6 @@
     <ClInclude Include="intelayers_global.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="intelayersinterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="intelayers.h">

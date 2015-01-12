@@ -55,13 +55,7 @@
     <ClInclude Include="toolbox_global.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="toolboxinterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\widgetplugininterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

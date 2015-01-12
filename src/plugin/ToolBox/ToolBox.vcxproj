@@ -106,9 +106,7 @@
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
     </CustomBuild>
-    <ClInclude Include="..\widgetplugininterface.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="toolboxinterface.h" />
     <ClInclude Include="toolbox_global.h" />
   </ItemGroup>
   <ItemGroup>

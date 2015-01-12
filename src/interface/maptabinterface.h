@@ -4,7 +4,7 @@
 
 #include <QObject>
 #include <QtWidgets/QWidget>
-#include "..\\widgetplugininterface.h"
+#include "widgetplugininterface.h"
 class MapTabInterface : public WidgetPluginInterface
 {
 public:

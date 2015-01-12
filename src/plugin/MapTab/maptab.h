@@ -2,7 +2,7 @@
 #define MAPTAB_H
 
 #include "maptab_global.h"
-#include "maptabinterface.h"
+#include "..\\..\\interface\\maptabinterface.h"
 #include "tabbar.h"
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QWidget>

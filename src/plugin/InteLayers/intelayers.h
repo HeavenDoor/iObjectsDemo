@@ -2,7 +2,7 @@
 #define INTELAYERS_H
 
 #include "intelayers_global.h"
-#include "intelayersinterface.h"
+#include "..\\..\\interface\\intelayersinterface.h"
 #include "tabwidget.h"
 
 #include <QtWidgets/QWidget>
@@ -44,7 +44,7 @@ private:
 	QPushButton* m_pCloseBtn;
 	TabWidget* m_pTabWidget;
 	QPushButton* m_pCollapseBtn;
-	static const int timespan = 400;
+	static const int timespan = 250;
 	QPropertyAnimation *m_pProAnima;
 	int m_width;
 };

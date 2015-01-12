@@ -2,7 +2,7 @@
 #define INTELAYERSINTERFACE_H
 
 #include <QtWidgets/QWidget>
-#include "..\\widgetplugininterface.h"
+#include "widgetplugininterface.h"
 class InteLayersInterface : public WidgetPluginInterface
 {
 public:

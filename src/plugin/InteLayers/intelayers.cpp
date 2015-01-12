@@ -53,6 +53,8 @@ InteLayers::InteLayers(QWidget* parent) : QWidget(parent)
 	m_pCollapseBtn->setVisible(false);
 	connect(m_pCollapseBtn, SIGNAL(clicked()), this, SLOT(OnInteLayersExpand()));
 	
+
+
 	QFile file(":/intelayers.qss");
 	file.open(QFile::ReadOnly);
 	QString style = QString(file.readAll());
