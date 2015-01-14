@@ -8,7 +8,6 @@
 #include <QLabel>
 #include <QWidget>
 #include <QUrl>
-#include <QQuickWidget>
 #include <QtQuick/QQuickView>
 #include <QtQml/QQmlEngine>
 #include <QtQuick/QtQuick>

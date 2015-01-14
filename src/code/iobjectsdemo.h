@@ -3,9 +3,8 @@
 
 #include <QtWidgets/QWidget>
 #include <QApplication>
-#include <QQuickWidget>
+#include <QtQuickWidgets/QQuickWidget>
 #include "title.h"
-#include <QQuickWidget>
 
 #include "interface/widgetplugininterface.h"
 #include "interface/toolboxinterface.h"
