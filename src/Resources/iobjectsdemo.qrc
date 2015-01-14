@@ -11,5 +11,11 @@
     <file>poptitlep.png</file>
     <file>tran.png</file>
     <file>sh.png</file>
+    <file>Checked.png</file>
+    <file>CheckedHover.png</file>
+    <file>Pressed.png</file>
+    <file>Unchecked.png</file>
+    <file>UncheckedPressed.png</file>
+    <file>UncheckedHover.png</file>
   </qresource>
 </RCC>

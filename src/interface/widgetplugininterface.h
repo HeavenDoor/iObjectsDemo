@@ -16,7 +16,12 @@ public:
 	virtual void setPluginGeometry(int ax, int ay, int aw, int ah) = 0;
 	virtual void showPlugin() = 0;
 	virtual void raisePlugin() = 0;
+	virtual void lowerPlugin() = 0;
 	virtual void resizePlugin(int ax, int ay, int aw, int ah) = 0;
+	virtual void setPluginWidth(int width) = 0;
+	virtual void setPluginHeight(int height) = 0;
+	virtual int pluginWidth() = 0;
+	virtual int pluginHeight() = 0;
 };
 
 

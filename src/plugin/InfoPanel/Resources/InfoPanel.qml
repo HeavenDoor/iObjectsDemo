@@ -6,8 +6,8 @@ Item{
 		switch(index)
 		{
 			case 0:
-				sBtn.setSource("s.png");
-				eBtn.setSource("e.png");
+				sBtn.setSource("qrc:/s.png");
+				eBtn.setSource("qrc:/ef.png");
 				{
 					textArea.height = text1.x + text1.height + textArea.vSpace + text2.height  + textArea.vSpace + text3.height + textArea.vSpace
 					text4.text = "所有的动画元素都是从Animation元素继承的 这些方法控制了动画的执行";
@@ -15,12 +15,12 @@ Item{
 				}
 			break;
 			case 1:
-				sBtn.setSource("s.png");
-				tBtn.setSource("t.png");
+				sBtn.setSource("qrc:/s.png");
+				tBtn.setSource("qrc:/t.png");
 				break;
 			case 2:
-				eBtn.setSource("e.png");
-				tBtn.setSource("t.png");
+				eBtn.setSource("qrc:/ef.png");
+				tBtn.setSource("qrc:/t.png");
 				break;
 			default: break;
 		}
@@ -68,9 +68,9 @@ Item{
 		z: 3
 		imgWidth : 25
 		imgHeight: 26
-		pressImg: "expand.png"
-		normalImg: "expand.png"
-		sourceImg: "expand.png"
+		pressImg: "qrc:/expand.png"
+		normalImg: "qrc:/expand.png"
+		sourceImg: "qrc:/expand.png"
 		visible: false
 		onButtonClicked: expandBtnClicked()
 	}
@@ -97,7 +97,7 @@ Item{
 			border { left: 20; top: 65; right: 20; bottom: 20 }
 			horizontalTileMode: BorderImage.Stretch
 			verticalTileMode: BorderImage.Stretch
-			source: "ccv.png"
+			source: "qrc:/ccv.png"
 		}
 	
 	
@@ -114,9 +114,9 @@ Item{
 				z: 3
 				imgWidth : 32
 				imgHeight: 32
-				pressImg: "tp.png"
-				normalImg: "t.png"
-				sourceImg: "tp.png"
+				pressImg: "qrc:/tp.png"
+				normalImg: "qrc:/t.png"
+				sourceImg: "qrc:/tp.png"
 				onButtonClicked: onTopBtnClicked(0)
 				
 			}
@@ -128,9 +128,9 @@ Item{
 				z: 3
 				imgWidth : 32
 				imgHeight: 32
-				pressImg: "ep.png"
-				normalImg: "e.png"
-				sourceImg: "e.png"
+				pressImg: "qrc:/ep.png"
+				normalImg: "qrc:/ef.png"
+				sourceImg: "qrc:/ef.png"
 				onButtonClicked: onTopBtnClicked(1)
 			}
 
@@ -141,9 +141,9 @@ Item{
 				z: 3
 				imgWidth : 32
 				imgHeight: 32
-				pressImg: "sp.png"
-				normalImg: "s.png"
-				sourceImg: "s.png"
+				pressImg: "qrc:/sp.png"
+				normalImg: "qrc:/s.png"
+				sourceImg: "qrc:/s.png"
 				onButtonClicked: onTopBtnClicked(2)
 			}
 
@@ -154,9 +154,9 @@ Item{
 				z: 3
 				imgWidth : 25
 				imgHeight: 26
-				pressImg: "colles.png"
-				normalImg: "colles.png"
-				sourceImg: "colles.png"
+				pressImg: "qrc:/colles.png"
+				normalImg: "qrc:/colles.png"
+				sourceImg: "qrc:/colles.png"
 				onButtonClicked: collesBtnClicked()
 			}			
 		}

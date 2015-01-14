@@ -27,7 +27,12 @@ public:
 	virtual void setPluginParent(QWidget* parentWidget);
 	virtual void showPlugin();
 	virtual void raisePlugin();
+	virtual void lowerPlugin();
 	virtual void resizePlugin(int ax, int ay, int aw, int ah);
+	virtual void setPluginWidth(int width);
+	virtual void setPluginHeight(int height);
+	virtual int pluginWidth();
+	virtual int pluginHeight();
 signals:
 	void refeshWindow();
 private slots:
@@ -47,6 +52,7 @@ private:
 	static const int timespan = 250;
 	QPropertyAnimation *m_pProAnima;
 	int m_width;
+	int m_height;
 };
 
 #endif // INTELAYERS_H

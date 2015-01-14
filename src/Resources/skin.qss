@@ -53,3 +53,113 @@ QPushButton#PopTitleBtn:pressed{
 	margin-top:0px;
 	margin-bottom:0px;
 }*/
+
+
+/******************Pluginloader*********************************/
+/*QWidget#Pluginloader{
+	border-image:url(:/mainWidget.png);
+	border-width:2px 2px 2px 2px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+*/
+
+/******************QCheckBox of Pluginloader*********************************/
+QCheckBox[PluginloaderCheckBox="true"] {
+    spacing: 20px;
+}
+
+QCheckBox[PluginloaderCheckBox="true"]::indicator {
+    width: 20px;
+    height: 20px;
+}
+
+QCheckBox[PluginloaderCheckBox="true"]::indicator:unchecked {
+    image: url(:/Unchecked.png);
+}
+
+QCheckBox[PluginloaderCheckBox="true"]::indicator:unchecked:hover {
+    image: url(:/UncheckedHover.png);
+}
+
+QCheckBox[PluginloaderCheckBox="true"]::indicator:unchecked:pressed {
+    image: url(:/UncheckedPressed.png);
+}
+
+QCheckBox[PluginloaderCheckBox="true"]::indicator:checked {
+     image: url(:/Checked.png);
+ }
+
+ QCheckBox[PluginloaderCheckBox="true"]::indicator:checked:hover {
+     image: url(:/CheckedHover.png);
+ }
+
+ QCheckBox[PluginloaderCheckBox="true"]::indicator:checked:pressed {
+     image: url(:/Pressed.png);
+ }
+
+/******************QTableWidget*********************************/
+/*QTableWidget#PluginloaderableWidget {
+	background-color: #8EDE21;
+    selection-background-color: #999
+
+	
+}
+
+QTableWidget#PluginloaderableWidget::item {
+	border: 4px solid
+    border-top-color: rgb(170, 170, 170);    
+	border-left-color: rgb(170, 170, 170);
+    border-right-color: rgb(170, 170, 170);    
+	border-bottom-color: rgb(170, 170, 170);
+}
+QTableWidget QHeaderView::section   
+{  
+    background-color:lightblue;  
+    color: black;  
+    padding-left: 4px;  
+    border: 1px solid #6c6c6c  
+} */
+
+
+
+/***************************************   QTableWidget   ***************************/
+
+QTableWidget#PluginloaderableWidget{
+	gridline-color: #9fd9ff;
+	background-color: #fcfcfc;
+	color: black;
+}
+
+QTableWidget#PluginloaderableWidget::item:hover{
+	background-color : #e9e9e9;
+}
+
+QTableWidget#PluginloaderableWidget::item:selected{
+	background-color : #99c3ed;
+}
+
+/**********************************************   QHeaderView   ***********************/
+QHeaderView{
+	font-size :12px;
+	color: #442244;
+	background-color: rgba(250,250,250,0);
+}
+
+QHeaderView::section{	
+    background-color: qlineargradient(y1: 0, x1: 0, y2: 1, x2: 0,stop: 0 #ffffff, stop: 1 #EEEEEE);
+	border-style: solid;
+	border-right-width: 1px;
+	border-left-width: 0px;
+	border-top-width: 0px;
+	border-bottom-width: 1px;
+	border-color: #9fd9ff;
+	padding: 4px;
+	color:black;
+}
+
+QHeaderView::section:hover{
+	background-color :qlineargradient(y1: 0, x1: 0, y2: 1, x2: 0,stop: 0 #ffffff, stop: 1 #add8e6);
+}

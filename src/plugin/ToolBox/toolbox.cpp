@@ -99,3 +99,28 @@ void ToolBox::resizePlugin(int ax, int ay, int aw, int ah)
 {
 	setGeometry(ax, ay, aw, ah);
 }
+
+void ToolBox::lowerPlugin()
+{
+	lower();
+}
+
+void ToolBox::setPluginWidth( int width )
+{
+	setFixedWidth(width);
+}
+
+void ToolBox::setPluginHeight( int height )
+{
+	setFixedHeight(height);
+}
+
+int ToolBox::pluginWidth()
+{
+	return width();
+}
+
+int ToolBox::pluginHeight()
+{
+	return height();
+}

@@ -123,3 +123,29 @@ void MapTab::OnChangeDimension( bool isTwoDimension )
 	if(!m_pTabWidget) return;
 	m_pTabWidget->setCurrentIndex(!isTwoDimension);
 }
+
+void MapTab::lowerPlugin()
+{
+	lower();
+}
+
+void MapTab::setPluginWidth( int width )
+{
+	setFixedWidth(width);
+}
+
+
+void MapTab::setPluginHeight( int height )
+{
+	setFixedHeight(height);
+}
+
+int MapTab::pluginWidth()
+{
+	return width();
+}
+
+int MapTab::pluginHeight()
+{
+	return height();
+}

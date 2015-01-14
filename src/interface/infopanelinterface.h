@@ -3,11 +3,11 @@
 
 #include "widgetplugininterface.h"
 #include <QtWidgets/QWidget>
-class InfoPanelInterface 
+class InfoPanelInterface : public WidgetPluginInterface
 {
 public:
 	virtual void test() = 0;
-	virtual QWidget* getWidget() = 0;
+	//virtual QWidget* getWidget() = 0;
 };
 
 

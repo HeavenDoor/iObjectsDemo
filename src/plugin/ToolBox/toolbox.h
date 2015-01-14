@@ -24,7 +24,12 @@ public:
 	virtual void setPluginParent(QWidget* parentWidget);
 	virtual void showPlugin();
 	virtual void raisePlugin();
+	virtual void lowerPlugin();
 	virtual void resizePlugin(int ax, int ay, int aw, int ah);
+	virtual void setPluginWidth(int width);
+	virtual void setPluginHeight(int height);
+	virtual int pluginWidth();
+	virtual int pluginHeight();
 signals:
 	//void resize(const QRect&);
 	void ToolBoxPlugin_SearchBtnClicked();

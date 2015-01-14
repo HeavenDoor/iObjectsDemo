@@ -2,10 +2,13 @@
 #define INFOPANEL_H
 
 #include "infopanel_global.h"
+#include "..\\..\\interface\infopanelinterface.h"
+
+
 #include <QtWidgets/QWidget>
 #include <QtQml/QQmlExtensionPlugin>
 #include <QtQml/qqml.h>
-
+#include <QtQuickWidgets/QQuickWidget>
 
 //////////////////////////////////////////////////////////////////////////
 #include <qdebug.h>
@@ -13,102 +16,32 @@
 #include <qbasictimer.h>
 #include <qcoreapplication.h>
 
-class MinuteTimer : public QObject
-{
-	Q_OBJECT
-public:
-	MinuteTimer(QObject *parent) : QObject(parent)
-	{
-	}
-
-	void start()
-	{
-		if (!timer.isActive()) {
-			time = QTime::currentTime();
-			timer.start(60000-time.second()*1000, this);
-		}
-	}
-
-	void stop()
-	{
-		timer.stop();
-	}
-
-	int hour() const { return time.hour(); }
-	int minute() const { return time.minute(); }
-
-signals:
-	void timeChanged();
-
-protected:
-	void timerEvent(QTimerEvent *)
-	{
-		QTime now = QTime::currentTime();
-		if (now.second() == 59 && now.minute() == time.minute() && now.hour() == time.hour()) {
-			// just missed time tick over, force it, wait extra 0.5 seconds
-			time.addSecs(60);
-			timer.start(60500, this);
-		} else {
-			time = now;
-			timer.start(60000-time.second()*1000, this);
-		}
-		emit timeChanged();
-	}
-
-private:
-	QTime time;
-	QBasicTimer timer;
-};
-
-//![0]
-class TimeModel : public QObject
-{
-	Q_OBJECT
-		Q_PROPERTY(int hour READ hour NOTIFY timeChanged)
-		Q_PROPERTY(int minute READ minute NOTIFY timeChanged)
-		//![0]
-
-public:
-	TimeModel(QObject *parent=0) : QObject(parent)
-	{
-		if (++instances == 1) {
-			if (!timer)
-				timer = new MinuteTimer(QCoreApplication::instance());
-			connect(timer, SIGNAL(timeChanged()), this, SIGNAL(timeChanged()));
-			timer->start();
-		}
-	}
-
-	~TimeModel()
-	{
-		if (--instances == 0) {
-			timer->stop();
-		}
-	}
-
-	int minute() const { return timer->minute(); }
-	int hour() const { return timer->hour(); }
-
-signals:
-	void timeChanged();
-
-private:
-	QTime t;
-	static MinuteTimer *timer;
-	static int instances;
-};
 
 //////////////////////////////////////////////////////////////////////////
-class InfoPanel : public QQmlExtensionPlugin
+class InfoPanel : public QQuickWidget, InfoPanelInterface
 {
 	Q_OBJECT
-	Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
+	Q_PLUGIN_METADATA(IID "{902CE857-E7E7-4F78-A034-6A40962BE4E3}" FILE "infopanel.json")
+	Q_INTERFACES(InfoPanelInterface)
 
 public:
 	InfoPanel();
 	~InfoPanel();
 	void registerTypes(const char *uri);
 
+	virtual void test();
+	virtual QObject* getObject();
+	virtual void setPluginGeometry(const QRect& rect);
+	virtual void setPluginGeometry(int ax, int ay, int aw, int ah);
+	virtual void setPluginParent(QWidget* parentWidget);
+	virtual void showPlugin();
+	virtual void raisePlugin();
+	virtual void lowerPlugin();
+	virtual void resizePlugin(int ax, int ay, int aw, int ah);
+	virtual void setPluginWidth(int width);
+	virtual void setPluginHeight(int height);
+	virtual int pluginWidth();
+	virtual int pluginHeight();
 };
 
 #endif // INFOPANEL_H

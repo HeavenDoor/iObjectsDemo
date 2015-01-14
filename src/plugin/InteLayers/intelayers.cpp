@@ -41,9 +41,6 @@ InteLayers::InteLayers(QWidget* parent) : QWidget(parent)
 	m_pProAnima = new QPropertyAnimation(this, "geometry");
 	connect(m_pProAnima, SIGNAL(finished()), this, SLOT(OnAnimationFinished()));
 
-
-	
-
 	m_pCollapseBtn = new QPushButton(this);
 	m_pCollapseBtn->setObjectName("CollapseBtn");
 	m_pCollapseBtn->setFixedWidth(32);
@@ -203,4 +200,32 @@ void InteLayers::OnAnimationFinished()
 	}
 
 	emit refeshWindow();
+}
+
+void InteLayers::lowerPlugin()
+{
+	lower();
+}
+
+void InteLayers::setPluginWidth( int width )
+{
+	m_width = width;
+	//setFixedWidth(width); // Animation will mot effect if you set this
+}
+
+void InteLayers::setPluginHeight( int height )
+{
+	m_height = height;
+	//setFixedHeight(height);
+}
+
+int InteLayers::pluginWidth()
+{
+	return m_width;
+	return width();
+}
+
+int InteLayers::pluginHeight()
+{
+	return m_height;
 }

@@ -2,54 +2,46 @@
 #include "iobjectsdemo.h"
 #include "commom/widgetrect.h"
 #include "pluginloader.h"
+#include "pluginmanager.h"
+#include "fileutils.h"
 
 #include <QLabel>
 #include <QWidget>
 #include <QUrl>
-
 #include <QQuickWidget>
 #include <QtQuick/QQuickView>
 #include <QtQml/QQmlEngine>
 #include <QtQuick/QtQuick>
 
-
-
 iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 {
 	setObjectName("iObjectsDemo");
 	setGeometry(200,200,1247,766);
-	
-	Pluginloader* loader = new Pluginloader(NULL);
-	loader->showModel();
 
-	QString pluginPath;
-#if QT_NO_DEBUG
-	pluginPath = "../bin/release";
-#else
-	pluginPath = "../bin/debug";
-#endif 
+	m_pToolBox = NULL;
+	m_pMapTab = NULL;
+	m_pInteLayers = NULL;
+	m_pInfoPanel = NULL;
 
-	if (!loadPlugins(pluginPath, "MapTab"))
+	m_pPluginloader = new Pluginloader(NULL);
+	m_pPluginloader->showModel();
+
+//#if QT_NO_DEBUG
+	pluginPath = "../plugins";
+// #else
+// 	pluginPath = "../bin/debug";
+// #endif 
+
+	m_pluginMap = PluginManager::instance()->getPluginMap();
+	QList<QString> pluginList = m_pluginMap.keys();
+
+	qDebug()<<m_pluginMap;
+	foreach(QString pluginName, pluginList)
 	{
-		exit(0);
+		if (!m_pluginMap.value(pluginName).toBool()) continue;
+		if(!loadPlugins(pluginPath, pluginName))
+			continue;
 	}
-
-	if (!loadPlugins(pluginPath, "ToolBox"))
-	{
-		exit(0);
-	}
-
-	if (!loadPlugins(pluginPath, "InteLayers"))
-	{
-		exit(0);
-	}
-
-
-
-	m_pMapTab->setPluginParent(this);
-	m_pMapTab->setPluginGeometry(0, 0, width(), height());
-	m_pMapTab->showPlugin();
-
 	 
 	m_pPopBtn = new QPushButton(this);
 	m_pPopBtn->setObjectName("PopTitleBtn");
@@ -57,72 +49,20 @@ iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 	m_pPopBtn->setFixedHeight(8);
 	m_pPopBtn->setGeometry(width()/2 - m_pPopBtn->width()/2, 0, m_pPopBtn->width(), m_pPopBtn->height());
 	m_pPopBtn->hide();
-	
-
 
 
 	m_pTitle = new Title(this);
-	//m_pTitle->setFixedHeight(85);
-	//m_pTitle->setFixedWidth(530);
-	//m_pTitle->setGeometry(width()/2 - m_pTitle->width()/2, 0, 530, 85 );
 	connect(m_pTitle, SIGNAL(collapse()), this, SLOT(OnTitleCollapsed()));
 	connect(m_pPopBtn, SIGNAL(clicked()), m_pTitle, SLOT(expandTitle()));
-
-
-
-	m_pInteLayers->setPluginParent(this);
-	m_pInteLayers->setPluginGeometry(15, height()/2 - 200, 216, 400);
-	m_pInteLayers->showPlugin();
-	m_pInteLayers->raisePlugin();
-	connect(m_pInteLayers->getObject(), SIGNAL(refeshWindow()), this, SLOT(OnInteLayersPlugin_RefeshWindow()));
-	
-	m_pToolBox->setPluginParent(this);
-	m_pToolBox->setPluginGeometry(15, height()/2 - 200, 216, 400);
-	m_pToolBox->showPlugin();
-	m_pToolBox->raisePlugin();
-	connect(m_pToolBox->getObject(), SIGNAL(ToolBoxPlugin_SearchBtnClicked()), this, SLOT(OnToolBoxPlugin_SearchBtnClicked()));
-	connect(m_pToolBox->getObject(), SIGNAL(ToolBoxPlugin_SettingBtnClicked()), this, SLOT(OnToolBoxPlugin_SettingBtnClicked()));
-
-
-	
-	m_pInfoPanel = new QQuickWidget(this);
-	m_pInfoPanel->setFixedWidth(270);
-	m_pInfoPanel->setFixedHeight(380);
-
-	m_pInfoPanel->setResizeMode(QQuickWidget::SizeRootObjectToView);
-	//view->setWindowOpacity(0.2);
-	m_pInfoPanel->setClearColor(Qt::transparent);
-	m_pInfoPanel->setAttribute(Qt::WA_AlwaysStackOnTop);
-	m_pInfoPanel->setMouseTracking(true);
-
-	m_pInfoPanel->engine()->addImportPath("Resources/TimeExample");
-	//m_pInfoPanel->engine()->addImportPath("C:/Users/Administrator/Desktop/iObjectsDemo/src/Resources");
-	//m_pInfoPanel->engine()->addImportPath("C:/Users/Administrator/Desktop/iObjectsDemo/src/Resources/TimeExample");
-	//m_pInfoPanel->engine()->addPluginPath("C:/Users/Administrator/Desktop/iObjectsDemo/src/Resources/TimeExample");
-
-	m_pInfoPanel->engine()->addPluginPath("../bin/Debug");
-
-	QStringList list = m_pInfoPanel->engine()->importPathList();
-
-	QStringList li = m_pInfoPanel->engine()->pluginPathList();
-	QList<QQmlError> errorss;
-	//QString s = qApp->applicationDirPath();
-	//QString b = s + "/InfoPanel.dll";
-	bool m = m_pInfoPanel->engine()->importPlugin("../bin/Debug/InfoPanel.dll", "TimeExample", &errorss);
-
-	//C:/Users/Administrator/Desktop/iObjectsDemo/bin/Debug/InfoPanel.dll
-	//QString yy = errorss.at(0).toString();
-
-
-	//view->setSource(QUrl("Resources/TimeExample/a/plugins.qml"));
-	m_pInfoPanel->setSource(QUrl("Resources/TimeExample/plugins.qml"));
-	m_pInfoPanel->show();
- 	m_pInfoPanel->raise();
-
-
+	m_pTitle->raise();
 
 	loadControls();
 
+	if (m_pPluginloader)
+	{
+		delete m_pPluginloader;
+		m_pPluginloader = NULL;
+	}
 }
 
 iObjectsDemo::~iObjectsDemo()
@@ -148,17 +88,25 @@ void iObjectsDemo::resizeEvent(QResizeEvent* e)
 	
 	if (m_pToolBox)
 	{
-		m_pToolBox->resizePlugin(0 ,height()-50, width(), 50);
+		m_pToolBox->resizePlugin(0 ,height()-m_pToolBox->pluginHeight(), width(), m_pToolBox->pluginHeight());
 	}
 	if (m_pInteLayers)
 	{
-		m_pInteLayers->resizePlugin(15, height()/2 - 200, 216, 400);
+		m_pInteLayers->resizePlugin(15, height()/2 - m_pInteLayers->pluginHeight()/2,  m_pInteLayers->pluginWidth(), m_pInteLayers->pluginHeight());
+
+		//m_pInteLayers->resizePlugin(15, height()/2 - 200,  216, 400);
+	}
+
+	if (m_pInfoPanel)
+	{
+		m_pInfoPanel->resizePlugin(width() - m_pInfoPanel->pluginWidth() - 15 ,height()/2 - m_pInfoPanel->pluginHeight()/2, m_pInfoPanel->pluginWidth(), m_pInfoPanel->pluginHeight());
 	}
 
 	if (m_pMapTab)
 	{
 		m_pMapTab->resizePlugin(0, 0, width(), height());
 	}
+
 
 	if (m_pTitle)
 	{
@@ -168,13 +116,6 @@ void iObjectsDemo::resizeEvent(QResizeEvent* e)
 	{
 		m_pPopBtn->setGeometry(width()/2 - m_pPopBtn->width()/2, 0, m_pPopBtn->width(), m_pPopBtn->height());
 	}
-
-	if (m_pInfoPanel)
-	{
-		m_pInfoPanel->setGeometry(width() - m_pInfoPanel->width() - 15 ,height()/2 - 200,270,380);
-	}
-	
-	
 	QWidget::resizeEvent(e);
 }
 
@@ -183,32 +124,33 @@ void iObjectsDemo::OnCloseBtnClicked()
 	this->close();
 }
 
-
 bool iObjectsDemo::loadControls()
 {
-	//QLabel *lable = new QLabel(this);
-	//lable->setText(QStringLiteral("我是中文"));
-	
 	m_pCloseBtn = new QPushButton(this);
 	m_pCloseBtn->setObjectName("CloseBtn");
 	m_pCloseBtn->setFixedHeight(48);
 	m_pCloseBtn->setFixedWidth(48);
 	m_pCloseBtn->setGeometry(width() - 60, 20, m_pCloseBtn->width(), m_pCloseBtn->height());
-
-	
 	connect(m_pCloseBtn, SIGNAL(clicked()), this, SLOT(OnCloseBtnClicked()));
-
 	return true;
+}
+
+bool iObjectsDemo::unLoadPlugins(const QString& pluginName )
+{
+	bool bPluginunload = false;
+	QPluginLoader* loader = qobject_cast<QPluginLoader*>(this->findChild<QPluginLoader*>(pluginName));
+	bPluginunload = loader->unload();
+	return bPluginunload;
 }
 
 bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 {
 	bool bPluginLoaded = false;
-	qApp->addLibraryPath(path); // ../bin/debug
-	QPluginLoader loader(pluginName) ;  
-	//QPluginLoader loader(QString("libMyPlugin.so")) ;  
+	qApp->addLibraryPath(path);
+	QPluginLoader* loader = new QPluginLoader(pluginName, this);  
+	loader->setObjectName(pluginName);
 	QObject* object;
-	if ( (object=loader.instance()) != NULL )  
+	if ( (object=loader->instance()) != NULL )  
 	{  
 
 		QString name = object->objectName();
@@ -218,6 +160,13 @@ bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 			if (m_pToolBox)  
 			{
 				bPluginLoaded = true;
+				m_pToolBox->setPluginParent(this);
+				m_pToolBox->setPluginHeight(50);
+				m_pToolBox->setPluginGeometry(0 ,height() - m_pToolBox->pluginHeight(), width(), m_pToolBox->pluginHeight());
+				m_pToolBox->showPlugin();
+				m_pToolBox->raisePlugin();
+				connect(m_pToolBox->getObject(), SIGNAL(ToolBoxPlugin_SearchBtnClicked()), this, SLOT(OnToolBoxPlugin_SearchBtnClicked()));
+				connect(m_pToolBox->getObject(), SIGNAL(ToolBoxPlugin_SettingBtnClicked()), this, SLOT(OnToolBoxPlugin_SettingBtnClicked()));
 			}
 		}
 		if (object->inherits("MapTabInterface"))
@@ -226,26 +175,51 @@ bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 			if (m_pMapTab)  
 			{
 				bPluginLoaded = true;
+				m_pMapTab->setPluginParent(this);
+				m_pMapTab->setPluginGeometry(0, 0, width(), height());
+				m_pMapTab->showPlugin();
+				m_pMapTab->lowerPlugin();
 			}
 		}
-
+		
 		if (object->inherits("InteLayersInterface"))
 		{
 			m_pInteLayers = qobject_cast<InteLayersInterface*>(object) ;  
 			if (m_pInteLayers)  
 			{
 				bPluginLoaded = true;
+				m_pInteLayers->setPluginParent(this);
+				m_pInteLayers->setPluginHeight(400);
+				m_pInteLayers->setPluginWidth(216);
+				m_pInteLayers->setPluginGeometry(15, height()/2 - m_pInteLayers->pluginHeight()/2, m_pInteLayers->pluginWidth(), m_pInteLayers->pluginHeight());
+				//m_pInteLayers->resizePlugin(15, height()/2 - 200,  216, 400);
+				m_pInteLayers->showPlugin();
+				m_pInteLayers->raisePlugin();
+				connect(m_pInteLayers->getObject(), SIGNAL(refeshWindow()), this, SLOT(OnInteLayersPlugin_RefeshWindow()));
+			}
+		}
+		if (object->inherits("InfoPanelInterface"))
+		{
+			m_pInfoPanel = qobject_cast<InfoPanelInterface*>(object);
+			if (m_pInfoPanel)
+			{
+				bPluginLoaded = true;
+				m_pInfoPanel->setPluginParent(this);
+				m_pInfoPanel->setPluginWidth(270);
+				m_pInfoPanel->setPluginHeight(380);
+				m_pInfoPanel->setPluginGeometry(15, height()/2 - 200, 216, 400);
+				m_pInfoPanel->showPlugin();
+				m_pInfoPanel->raisePlugin();
+				m_pInfoPanel->resizePlugin(width() - m_pInfoPanel->pluginWidth() - 15 ,height()/2 - m_pInfoPanel->pluginHeight()/2, m_pInfoPanel->pluginWidth(), m_pInfoPanel->pluginHeight());
 			}
 		}
 	}  
 	else  
 	{  
 		qDebug("failed to load plugin !! ");  
-		QString errorStr = loader.errorString();  
+		QString errorStr = loader->errorString();  
 		qDebug()<<errorStr;  
 	}  
-
-
 	return true;
 }
 
@@ -261,7 +235,6 @@ void iObjectsDemo::OnTitleCollapsed()
 		{
 			m_pPopBtn->show();
 		}
-		
 	}
 }
 
@@ -272,10 +245,39 @@ void iObjectsDemo::OnToolBoxPlugin_SearchBtnClicked()
 
 void iObjectsDemo::OnToolBoxPlugin_SettingBtnClicked()
 {
-
+	m_pPluginloader = new Pluginloader(NULL);
+	connect(m_pPluginloader, SIGNAL(reload()), this, SLOT(reloadPlugins()));
+	m_pPluginloader->showModel();
 }
 
 void iObjectsDemo::OnInteLayersPlugin_RefeshWindow()
 {
 	this->repaint();
+}
+
+void iObjectsDemo::reloadPlugins()
+{	
+	QVariantMap pluginMap = PluginManager::instance()->getPluginMap();
+	QList<QString> pluginList = pluginMap.keys();
+
+	qDebug()<<m_pluginMap;
+	foreach (QString pluginName, pluginList)
+	{
+		bool a = m_pluginMap.value(pluginName).toBool();
+		bool b = pluginMap.value(pluginName).toBool();
+		if (m_pluginMap.value(pluginName).toBool() == pluginMap.value(pluginName).toBool())
+		{
+			continue;
+		}
+		else if (m_pluginMap.value(pluginName).toBool())
+		{
+			unLoadPlugins(pluginName);
+		}
+		else
+		{
+			loadPlugins(pluginPath, pluginName);
+		}
+	}
+	m_pluginMap = pluginMap;
+	qDebug()<<m_pluginMap;
 }
