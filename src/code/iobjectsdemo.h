@@ -12,7 +12,7 @@
 #include "interface/intelayersinterface.h"
 #include "interface/infopanelinterface.h"
 #include "pluginloader.h"
-
+#include "Map2D/map2dcontainer.h"
 class iObjectsDemo : public QWidget
 {
 	Q_OBJECT
@@ -52,10 +52,13 @@ private:
 	InfoPanelInterface* m_pInfoPanel;
 
 	Title* m_pTitle;
-	//QQuickWidget* m_pInfoPanel;
-
 	Pluginloader* m_pPluginloader;
 	QVariantMap m_pluginMap;
+
+
+	Map2DContainer* m_pMap2DContainer;
+
+	QHBoxLayout* lay;
 };
 
 #endif // IOBJECTSDEMO_H

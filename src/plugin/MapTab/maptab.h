@@ -4,6 +4,7 @@
 #include "maptab_global.h"
 #include "..\\..\\interface\maptabinterface.h"
 #include "tabbar.h"
+#include "tabwidget.h"
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QWidget>
 
@@ -32,6 +33,8 @@ public:
 	virtual int pluginWidth();
 	virtual int pluginHeight();
 
+	virtual void addCentralWidget(QWidget* map, int tabIndex);
+
 protected:
 	void paintEvent(QPaintEvent*);
 	void resizeEvent(QResizeEvent*);
@@ -39,10 +42,9 @@ private slots:
 	void OnChangeDimension(bool isTwoDimension);
 	//void OnChangeToThreeDimension();
 private:
-	QTabWidget* m_pTabWidget;
+	TabWidget* m_pTabWidget;
 	TabBar* m_pTabBar;
-	QWidget* m_pTwoDimension;
-	QWidget* m_pThreeDimension;
+	
 };
 
 #endif // MAPTAB_H

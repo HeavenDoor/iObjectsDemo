@@ -16,10 +16,11 @@ QStringList FileUtils::getAllFileByExtensionsName( const QString & extensions, c
 {
 	QStringList list;
 
-	QString exeFileName = QApplication::applicationFilePath();
+ 	QString exeFileName = QApplication::applicationFilePath();
 	QFileInfo kk(exeFileName);
 	QString apppath = kk.canonicalPath(); 
-	QDir::setCurrent(apppath);
+	QString ss = QDir::currentPath();
+ 	QDir::setCurrent(apppath);
 
 	QDir dir(path);
 	
@@ -37,6 +38,7 @@ QStringList FileUtils::getAllFileByExtensionsName( const QString & extensions, c
 		
 
 	}
+	QDir::setCurrent(ss);
 	return list;
 }
 

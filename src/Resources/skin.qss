@@ -163,3 +163,14 @@ QHeaderView::section{
 QHeaderView::section:hover{
 	background-color :qlineargradient(y1: 0, x1: 0, y2: 1, x2: 0,stop: 0 #ffffff, stop: 1 #add8e6);
 }
+
+/******************Map2DContainer*********************************/
+QWidget#Map2DContainer{
+	border-image:url(:/shenghai.png);
+	border-width:0px 4px 2px 4px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+

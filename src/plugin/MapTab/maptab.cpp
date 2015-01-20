@@ -7,25 +7,7 @@ MapTab::MapTab(QWidget *parent) : QWidget(parent)
 {
 	setObjectName("MapTab");
 
-	/*QPushButton* p = new QPushButton(this);
-	p->setFixedHeight(50);
-	p->setFixedWidth(100);
-	p->setText("MapTab Control");*/
-	m_pTabWidget = new QTabWidget(this);
-	m_pTabWidget->tabBar()->setVisible(false);
-	m_pTabWidget->setGeometry(this->geometry());
-	
-
-
-
-	m_pTwoDimension = new QWidget(m_pTabWidget);
-	m_pTwoDimension->setObjectName("TwoDimension");
-	m_pThreeDimension = new QWidget(m_pTabWidget);
-	m_pThreeDimension->setObjectName("ThreeDimension");
-
-	m_pTabWidget->addTab(m_pTwoDimension,"two");
-	m_pTabWidget->addTab(m_pThreeDimension,"three");
-
+	m_pTabWidget = new TabWidget(this);
 
 	m_pTabBar = new TabBar(this);
 	m_pTabBar->setFixedHeight(58);
@@ -38,7 +20,7 @@ MapTab::MapTab(QWidget *parent) : QWidget(parent)
 	file.open(QFile::ReadOnly);
 	QString style = QString(file.readAll());
 
-	//qDebug()<<style;
+	qDebug()<<style;
 	this->setStyleSheet(style);
 	file.close();
 }
@@ -47,15 +29,15 @@ MapTab::~MapTab()
 {
 
 }
-
-void MapTab::paintEvent(QPaintEvent* e)
-{
-	QStyleOption opt;
-	opt.init(this);
-	QPainter p(this);
-	style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-	QWidget::paintEvent(e);
-}
+ 
+ void MapTab::paintEvent(QPaintEvent* e)
+ {
+ 	QStyleOption opt;
+ 	opt.init(this);
+ 	QPainter p(this);
+ 	style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+ 	QWidget::paintEvent(e);
+ }
 
 // QWidget* MapTab::getWidget()
 // {
@@ -78,6 +60,7 @@ void MapTab::resizeEvent( QResizeEvent* e)
 	{
 		m_pTabBar->setGeometry(width() - 260, 25, m_pTabBar->width(), m_pTabBar->height());
 	}
+
 	QWidget::resizeEvent(e);
 }
 
@@ -148,4 +131,11 @@ int MapTab::pluginWidth()
 int MapTab::pluginHeight()
 {
 	return height();
+}
+
+void MapTab::addCentralWidget( QWidget* map, int tabIndex )
+{
+	if (!m_pTabWidget || m_pTabWidget->count() <= tabIndex) return;
+	
+	m_pTabWidget->addCentralWidget(map, tabIndex);
 }

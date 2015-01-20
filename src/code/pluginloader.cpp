@@ -14,19 +14,16 @@ Pluginloader::Pluginloader(QWidget *parent) : QWidget(parent)
 {
 	setObjectName("Pluginloader");
 	setWindowTitle("SuperMap iObjectsDemo Pulgin Manager");
-// 	setWindowModality(Qt::ApplicationModal);
-// 	setAttribute(Qt::WA_ShowModal, true);
 
-// 
 	setFixedWidth(600);
 	setFixedHeight(400);
-
+	
 	QRect rect = QApplication::desktop()->availableGeometry();
 	setGeometry(rect.width()/2 - width()/2, rect.height()/2 - height()/2, 600, 400);
 	//setWindowFlags(Qt::WindowFlags)
 
 	pluginList = FileUtils::getAllFileByExtensionsName("pluginspec", "../plugins");
-
+	
 
 	m_pTableWidget = new QTableWidget(this);
 
@@ -41,7 +38,12 @@ Pluginloader::Pluginloader(QWidget *parent) : QWidget(parent)
 	columnName.push_back(QString(QStringLiteral("作者")));
 	m_pTableWidget->setHorizontalHeaderLabels(columnName);
 
-
+	QString exeFileName = QApplication::applicationFilePath();
+	QFileInfo kk(exeFileName);
+	QString apppath = kk.canonicalPath(); 
+	QString ss = QDir::currentPath();
+	QDir::setCurrent(apppath);
+	
 	for (int i = 0; i < pluginList.length(); i++)
 	{
 		QString plugiName = pluginList.at(i);
@@ -59,7 +61,7 @@ Pluginloader::Pluginloader(QWidget *parent) : QWidget(parent)
 		chBox->setChecked(PluginManager::instance()->getPluginValueByName(plugiName));
 		m_pTableWidget->setCellWidget(i,1,chBox);
 	}
-
+	QDir::setCurrent(ss);
 
 	m_pTableWidget->verticalHeader()->setVisible(false);
 	m_pTableWidget->horizontalHeader()->setFixedHeight(32);
@@ -85,38 +87,38 @@ Pluginloader::~Pluginloader()
 
 }
 
-void Pluginloader::applyChange()
-{
-	for(int i = 0; i < pluginList.length(); i++)
-	{
-		QString plugiName = pluginList.at(i);
-		QCheckBox* chBox = qobject_cast<QCheckBox*>(m_pTableWidget->cellWidget(i,1));
-		PluginManager::instance()->insertPluginItem(plugiName, chBox->isChecked());
-		if (!chBox) continue;
-		if (PluginManager::instance()->getPluginValueByName(plugiName) == chBox->isChecked()) continue;
-		else
-		{
-			PluginManager::instance()->setPluginValueByName(plugiName, chBox->isChecked());
-		}
-	}
-	qDebug()<< PluginManager::instance()->getPluginMap();
-}
+ void Pluginloader::applyChange()
+ {
+  	for(int i = 0; i < pluginList.length(); i++)
+  	{
+  		QString plugiName = pluginList.at(i);
+  		QCheckBox* chBox = qobject_cast<QCheckBox*>(m_pTableWidget->cellWidget(i,1));
+  		PluginManager::instance()->insertPluginItem(plugiName, chBox->isChecked());
+  		if (!chBox) continue;
+  		if (PluginManager::instance()->getPluginValueByName(plugiName) == chBox->isChecked()) continue;
+  		else
+  		{
+  			PluginManager::instance()->setPluginValueByName(plugiName, chBox->isChecked());
+  		}
+  	}
+  	qDebug()<< PluginManager::instance()->getPluginMap();
+ }
 
-void Pluginloader::OnBtnOKClicked()
-{
-	applyChange();
-	m_eventloop.exit(0);
-	close();
-}
+ void Pluginloader::OnBtnOKClicked()
+ {
+ 	applyChange();
+ 	m_eventloop.exit(0);
+ 	close();
+ }
 
-void Pluginloader::closeEvent( QCloseEvent * )
-{
-	applyChange();
-	
-	m_eventloop.exit(0);
+ void Pluginloader::closeEvent( QCloseEvent * )
+ {
+ 	applyChange();
+ 	
+ 	m_eventloop.exit(0);
+ 	emit reload();
 	close();
-	emit reload();
-}
+ }
 
 
 void Pluginloader::resizeEvent(QResizeEvent* e)
@@ -129,18 +131,18 @@ void Pluginloader::resizeEvent(QResizeEvent* e)
 
 void Pluginloader::paintEvent(QPaintEvent* e)
 {
-	QStyleOption opt;
-	opt.init(this);
-	QPainter p(this);
-	style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-	QWidget::paintEvent(e);
+ 	QStyleOption opt;
+ 	opt.init(this);
+ 	QPainter p(this);
+ 	style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+ 	QWidget::paintEvent(e);
 }
 
-void Pluginloader::showModel()
-{
-	show();
-	m_eventloop.exec();
-}
+ void Pluginloader::showModel()
+ {
+   	show();
+   	m_eventloop.exec();
+ }
 
 
 bool Pluginloader::getInfoPanel()
@@ -182,5 +184,3 @@ void Pluginloader::setToolBox(bool value)
 {
 	SysConfig::setValue("ToolBox", value);
 }
-
-

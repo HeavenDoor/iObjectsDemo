@@ -21,27 +21,24 @@ iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 	m_pMapTab = NULL;
 	m_pInteLayers = NULL;
 	m_pInfoPanel = NULL;
-
+	m_pMap2DContainer = NULL;
+// 
 	m_pPluginloader = new Pluginloader(NULL);
 	m_pPluginloader->showModel();
 
-//#if QT_NO_DEBUG
-	pluginPath = "../plugins";
-// #else
-// 	pluginPath = "../bin/debug";
-// #endif 
-
-	m_pluginMap = PluginManager::instance()->getPluginMap();
-	QList<QString> pluginList = m_pluginMap.keys();
-
-	qDebug()<<m_pluginMap;
-	foreach(QString pluginName, pluginList)
-	{
-		if (!m_pluginMap.value(pluginName).toBool()) continue;
-		if(!loadPlugins(pluginPath, pluginName))
-			continue;
-	}
-	 
+ 	pluginPath = "../plugins";
+ 
+ 	m_pluginMap = PluginManager::instance()->getPluginMap();
+ 	QList<QString> pluginList = m_pluginMap.keys();
+ 
+ 	qDebug()<<m_pluginMap;
+ 	foreach(QString pluginName, pluginList)
+ 	{
+ 		if (!m_pluginMap.value(pluginName).toBool()) continue;
+ 		if(!loadPlugins(pluginPath, pluginName))
+ 			continue;
+ 	}
+ 	 
 	m_pPopBtn = new QPushButton(this);
 	m_pPopBtn->setObjectName("PopTitleBtn");
 	m_pPopBtn->setFixedWidth(40);
@@ -55,7 +52,9 @@ iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 	connect(m_pPopBtn, SIGNAL(clicked()), m_pTitle, SLOT(expandTitle()));
 	m_pTitle->raise();
 
+
 	loadControls();
+
 
 	if (m_pPluginloader)
 	{
@@ -115,6 +114,16 @@ void iObjectsDemo::resizeEvent(QResizeEvent* e)
 	{
 		m_pPopBtn->setGeometry(width()/2 - m_pPopBtn->width()/2, 0, m_pPopBtn->width(), m_pPopBtn->height());
 	}
+
+	if (m_pMap2DContainer)
+	{
+		//m_pMap2DContainer->setGeometry(0,0,width(), height());
+		m_pMap2DContainer->setFixedHeight(height());
+		m_pMap2DContainer->setFixedWidth(width());
+// 		int m = m_pMap2DContainer->width();
+// 		int ys = m_pMap2DContainer->height();
+	}
+
 	QWidget::resizeEvent(e);
 }
 
@@ -145,6 +154,13 @@ bool iObjectsDemo::unLoadPlugins(const QString& pluginName )
 bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 {
 	bool bPluginLoaded = false;
+
+	QString exeFileName = QApplication::applicationFilePath();
+	QFileInfo kk(exeFileName);
+	QString apppath = kk.canonicalPath(); 
+	QString ss = QDir::currentPath();
+	QDir::setCurrent(apppath);
+
 	qApp->addLibraryPath(path);
 	QPluginLoader* loader = new QPluginLoader(pluginName, this);  
 	loader->setObjectName(pluginName);
@@ -173,11 +189,15 @@ bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 			m_pMapTab = qobject_cast<MapTabInterface*>(object) ;  
 			if (m_pMapTab)  
 			{
+				QDir::setCurrent(ss);
 				bPluginLoaded = true;
 				m_pMapTab->setPluginParent(this);
 				m_pMapTab->setPluginGeometry(0, 0, width(), height());
 				m_pMapTab->showPlugin();
 				m_pMapTab->lowerPlugin();
+// 
+ 				m_pMap2DContainer = new Map2DContainer(this);
+ 				m_pMapTab->addCentralWidget(m_pMap2DContainer, 0);
 			}
 		}
 		
@@ -219,6 +239,7 @@ bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 		QString errorStr = loader->errorString();  
 		qDebug()<<errorStr;  
 	}  
+	QDir::setCurrent(ss);
 	return true;
 }
 
