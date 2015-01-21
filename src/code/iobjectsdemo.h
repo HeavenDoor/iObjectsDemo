@@ -59,6 +59,12 @@ private:
 	Map2DContainer* m_pMap2DContainer;
 
 	QHBoxLayout* lay;
+
+	QWidget* a;
+	QWidget* b;
+	QWidget* c;
+	QWidget* d;
+	QWidget* e;
 };
 
 #endif // IOBJECTSDEMO_H

@@ -9,7 +9,9 @@ class MapTabInterface : public WidgetPluginInterface
 {
 public:
 	virtual void test() = 0;
-	virtual void addCentralWidget(QWidget* map, int tabIndex) = 0;
+	virtual void addCentralWidget(QWidget* map, int tabIndex, QString tabName) = 0;
+	virtual void setCurrentIndex(int index) = 0;
+	virtual void loadSkin() = 0;
 };
 
 

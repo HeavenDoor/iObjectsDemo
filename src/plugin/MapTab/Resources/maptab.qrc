@@ -9,5 +9,7 @@
       <file>upthree.png</file>
       <file>downtwo.png</file>
       <file>uptwo.png</file>
+      <file>downmaptab.png</file>
+      <file>upmaptab.png</file>
     </qresource>
 </RCC>

@@ -147,7 +147,51 @@ bool iObjectsDemo::unLoadPlugins(const QString& pluginName )
 {
 	bool bPluginunload = false;
 	QPluginLoader* loader = qobject_cast<QPluginLoader*>(this->findChild<QPluginLoader*>(pluginName));
-	bPluginunload = loader->unload();
+	//bPluginunload = loader->unload();
+	//		delete m_pInteLayers;
+	//m_pInteLayers = NULL;
+
+	
+	if (pluginName == "ToolBox")
+	{
+		bPluginunload = loader->unload();
+		//delete m_pToolBox;
+		m_pToolBox = NULL;
+	}
+
+	if (pluginName == "MapTab"/*loader->instance()->inherits("MapTabInterface")*/)
+	{
+		bPluginunload = loader->unload();
+	//	delete m_pMapTab;
+		m_pMapTab = NULL;
+		//delete m_pMap2DContainer;
+		m_pMap2DContainer = NULL;
+
+		//delete a;
+		a = NULL;
+		//delete b;
+		b = NULL;
+		//delete c;
+		c = NULL;
+		d = NULL;
+		e = NULL;
+	}
+
+	if (pluginName == "InteLayers"/*loader->instance()->inherits("InteLayersInterface")*/)
+	{
+		bPluginunload = loader->unload();
+//		delete m_pInteLayers;
+		m_pInteLayers = NULL;
+	}
+
+	if (pluginName == "InfoPanel"/*loader->instance()->inherits("InfoPanelInterface")*/)
+	{
+		bPluginunload = loader->unload();
+		//delete m_pInfoPanel;
+		m_pInfoPanel = NULL;
+	}
+	
+	
 	return bPluginunload;
 }
 
@@ -192,12 +236,37 @@ bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 				QDir::setCurrent(ss);
 				bPluginLoaded = true;
 				m_pMapTab->setPluginParent(this);
-				m_pMapTab->setPluginGeometry(0, 0, width(), height());
-				m_pMapTab->showPlugin();
-				m_pMapTab->lowerPlugin();
+				
+ 
+ 				//m_pMap2DContainer = new Map2DContainer(this);
+ 				//m_pMapTab->addCentralWidget(m_pMap2DContainer, 0, QStringLiteral("¶þÎ¬"));
+				{
+					a = new QWidget();
+					m_pMapTab->addCentralWidget(a, 0, "erwei");
+
+					b = new QWidget();
+					m_pMapTab->addCentralWidget(b, 1, "sisa");
 // 
- 				m_pMap2DContainer = new Map2DContainer(this);
- 				m_pMapTab->addCentralWidget(m_pMap2DContainer, 0);
+					c = new QWidget();
+					m_pMapTab->addCentralWidget(c, 2, "sissdf");
+// 
+					QWidget* d = new QWidget();
+					m_pMapTab->addCentralWidget(d, 0, "shenghai");
+// 
+					QWidget* e = new QWidget();
+					m_pMapTab->addCentralWidget(e, 3, "ren");
+// 
+					m_pMap2DContainer = new Map2DContainer(this);
+					m_pMapTab->addCentralWidget(m_pMap2DContainer, 8, QStringLiteral("¶þÎ¬"));
+					m_pMapTab->setCurrentIndex(0);
+					m_pMapTab->loadSkin();
+					m_pMapTab->setPluginGeometry(0, 0, width(), height());
+					m_pMapTab->showPlugin();
+					m_pMapTab->lowerPlugin();
+					m_pMap2DContainer->setFixedWidth(width());
+					m_pMap2DContainer->setFixedHeight(height());
+					
+				}
 			}
 		}
 		

@@ -3,27 +3,17 @@
 
 TabWidget::TabWidget(QWidget *parent/*, TabBar* tabbar*/) : QTabWidget(parent)
 {
-	w = NULL;
+	//w = NULL;
 	setObjectName("Tabwidget");
 	setAttribute(Qt::WA_TranslucentBackground);
-	//tabBar()->setVisible(false);  // 隐藏自带tabbar
 	tabBar()->setVisible(false);  // 隐藏自带tabbar
 	//if(tabbar) setTabBar(tabbar);
-	m_pTwoDimension = NULL;
-	m_pThreeDimension = NULL;
 
-	m_pTwoDimension = new QWidget(this);
-	//m_pTwoDimension->setObjectName("TwoDimension");
-	m_pThreeDimension = new QWidget(this);
-	//m_pThreeDimension->setObjectName("ThreeDimension");
-
-	addTab(m_pTwoDimension,"two");
-	addTab(m_pThreeDimension,"three");
 }
 
 TabWidget::~TabWidget()
 {
-
+	m_pTabList.clear();
 }
 
  void TabWidget::paintEvent(QPaintEvent* e)
@@ -37,29 +27,21 @@ TabWidget::~TabWidget()
 
 void TabWidget::resizeEvent(QResizeEvent* e)
 {
-// 	if (w)
-// 	{
-// 		w->setGeometry(this->geometry());
-// 	}
-	if (m_pTwoDimension)
+	foreach (QWidget* w, m_pTabList)
 	{
-		m_pTwoDimension->setGeometry(0,0,width(), height());
-	}
-	if (m_pThreeDimension)
-	{
-		m_pThreeDimension->setGeometry(this->geometry());
+		w->setGeometry(0,0,width(), height());
 	}
 }
 
-void TabWidget::addCentralWidget( QWidget* map, int tabIndex )
+void TabWidget::addCentralWidget( QWidget* map, int tabIndex, QString tabName )
 {
-	map->setParent(this);
 	map->setFixedHeight(this->height());
 	map->setFixedWidth(this->width());
 	map->setProperty("TabIndex", tabIndex);
-//	map->setObjectName("TabIndex" + QString::number(tabIndex));
-	w = map;
-// 	addTab(map,"two");
-// 	m_pThreeDimension = new QWidget(this);
-// 	addTab(m_pThreeDimension,"three");
+	insertTab(tabIndex, map, tabName);
+	//addTab(map, tabName);
+	m_pTabList.push_back(map);
+// 	QPushButton* pp = new QPushButton(map);
+// 	pp->setText(tabName);
+
 }

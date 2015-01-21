@@ -11,9 +11,22 @@ Map2DContainer::Map2DContainer(QWidget *parent) : QWidget(parent)
 	QWidget* map2D = dynamic_cast<QWidget*>(m_pMapControl);
 	m_pMap2DLayout->addWidget(map2D);
 	this->setLayout(m_pMap2DLayout);
-// 	QString mm = QApplication::applicationDirPath() + "/Map/China/China400.smwu";
-// 	int flag = m_pMapControl->OpenMap("C:/Users/Administrator/Desktop/iObjectsDemo/bin/Debug/Map/Shanghai/Shanghai.smwu");
- 	int flag = m_pMapControl->OpenMap("C:/Users/Administrator/Desktop/China/China400.smwu");
+	QString exeFileName = QApplication::applicationFilePath();
+	QFileInfo kk(exeFileName);
+	QString apppath = kk.canonicalPath(); 
+	QString ss = QDir::currentPath();
+	QDir::setCurrent(apppath);
+
+	QFileInfo info("Map/China/China400.smwu");
+	QString ssb = info.absoluteFilePath();
+	QDir::setCurrent(ss);
+ 	int flag = m_pMapControl->OpenMap(ssb);
+
+	
+	if (flag != 0)
+	{
+		QMessageBox::warning(NULL, "", QString::number(flag));
+	}
  	m_pMapControl->show();
 
 	//QPushButton* pbtn = new QPushButton(this);
@@ -22,7 +35,9 @@ Map2DContainer::Map2DContainer(QWidget *parent) : QWidget(parent)
 
 Map2DContainer::~Map2DContainer()
 {
-
+	m_pMapControl->Release();
+	delete m_pMapControl;
+	m_pMapControl = NULL;
 }
 
 void Map2DContainer::resizeEvent( QResizeEvent * )

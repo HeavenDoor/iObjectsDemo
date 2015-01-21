@@ -33,15 +33,18 @@ public:
 	virtual int pluginWidth();
 	virtual int pluginHeight();
 
-	virtual void addCentralWidget(QWidget* map, int tabIndex);
+	virtual void addCentralWidget(QWidget* map, int tabIndex, QString tabName);
+	virtual void setCurrentIndex(int index);
+	virtual void loadSkin();
 
 protected:
 	void paintEvent(QPaintEvent*);
 	void resizeEvent(QResizeEvent*);
 private slots:
-	void OnChangeDimension(bool isTwoDimension);
+	void OnChangeDimension(int isTwoDimension);
 	//void OnChangeToThreeDimension();
 private:
+	static const int tabrwidth = 81;
 	TabWidget* m_pTabWidget;
 	TabBar* m_pTabBar;
 	

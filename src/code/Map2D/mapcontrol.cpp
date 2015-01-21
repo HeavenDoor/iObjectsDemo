@@ -455,6 +455,8 @@ void MapControl::Release()
 
 	if (m_pWorkspace != NULL)
 	{
+		m_pWorkspace->Close();
+		
 		delete m_pWorkspace;
 		m_pWorkspace = NULL;
 	}
@@ -553,6 +555,7 @@ int MapControl::OpenMap( const QString& mapPath )
 	}
 
 	UGMap *pMap = (UGMap*)&(m_pMapEditorWnd->m_mapWnd.m_Map);
+	
 	pMap->SetWorkspace(m_pWorkspace);
 
 	pMap->m_TrackingLayer.SetVisible(TRUE);

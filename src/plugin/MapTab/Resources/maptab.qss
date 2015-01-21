@@ -47,35 +47,39 @@ QWidget#ThreeDimension{
 }
 
 /******************TabBtn*********************************/
-QToolButton[twoselected = "false"]:!pressed{
+QToolButton[HeadSelectedTabBar = "0"]{
 	border-image: url(:/uptwo.png);
 	border-width:0px 0px 0px 0px;
 	color: white;
 }
-QToolButton[twoselected = "false"]:pressed{
-	border-image: url(:/downtwo.png);
-	border-width:0px 0px 0px 0px;
-	color: white;
-}
-QToolButton[twoselected = "true"]{
+
+QToolButton[HeadSelectedTabBar = "1"]{
 	border-image: url(:/downtwo.png);
 	border-width:0px 0px 0px 0px;
 	color: white;
 }
 
 
-QToolButton[threeselected = "false"]:!pressed{
+QToolButton[TailSelectedTabBar = "0"]{
 	border-image: url(:/upthree.png);
 	border-width:0px 0px 0px 0px;
 	color: white;
 }
-QToolButton[threeselected = "false"]:pressed{
+
+QToolButton[TailSelectedTabBar = "1"]{
 	border-image: url(:/downthree.png);
 	border-width:0px 0px 0px 0px;
 	color: white;
 }
-QToolButton[threeselected = "true"]{
-	border-image: url(:/downthree.png);
+
+
+QToolButton[SelectedTabBar = "0"]{
+	border-image: url(:/upmaptab.png);
+	border-width:0px 0px 0px 0px;
+	color: white;
+}
+QToolButton[SelectedTabBar = "1"]{
+	border-image: url(:/downmaptab.png);
 	border-width:0px 0px 0px 0px;
 	color: white;
 }
