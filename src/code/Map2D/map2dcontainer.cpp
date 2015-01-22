@@ -17,7 +17,7 @@ Map2DContainer::Map2DContainer(QWidget *parent) : QWidget(parent)
 	QString ss = QDir::currentPath();
 	QDir::setCurrent(apppath);
 
-	QFileInfo info("Map/China/China400.smwu");
+	QFileInfo info("../Map/China/China400.smwu");
 	QString ssb = info.absoluteFilePath();
 	QDir::setCurrent(ss);
  	int flag = m_pMapControl->OpenMap(ssb);
