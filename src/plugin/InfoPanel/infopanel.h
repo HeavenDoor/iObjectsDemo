@@ -3,13 +3,15 @@
 
 #include "infopanel_global.h"
 #include "..\\..\\interface\infopanelinterface.h"
-
+#include "infohandler.h"
+#include "..\\..\\commom\widgetrect.h"
 
 #include <QtWidgets/QWidget>
 #include <QtQml/QQmlExtensionPlugin>
 #include <QtQml/qqml.h>
+#include <QtQml/QQmlContext>
 #include <QtQuickWidgets/QQuickWidget>
-
+#include <QPropertyAnimation>
 //////////////////////////////////////////////////////////////////////////
 #include <qdebug.h>
 #include <qdatetime.h>
@@ -42,6 +44,24 @@ public:
 	virtual void setPluginHeight(int height);
 	virtual int pluginWidth();
 	virtual int pluginHeight();
+
+
+	virtual void setAnimationTimespan(int timespan);
+public:
+	
+private slots:
+	void collapseWnd();
+	void expandWnd();	
+	void OnAnimationFinished();
+	bool eventFilter(QObject*, QEvent*);
+private:
+	int m_timespan;
+	QPropertyAnimation *m_pProAnima;
+	//InfoHandler* m_pInfoHandler;
+	QObject * m_pExpandBtn;
+	QObject * m_pRoot;
+	int m_width;
+	int m_height;
 };
 
 #endif // INFOPANEL_H

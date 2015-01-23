@@ -59,7 +59,7 @@
     <ClCompile Include="GeneratedFiles\Release\moc_tabwidget.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="widgetrect.cpp">
+    <ClCompile Include="..\..\commom\widgetrect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_widgetrect.cpp">
@@ -87,7 +87,7 @@
     <CustomBuild Include="tabwidget.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="widgetrect.h">
+    <CustomBuild Include="..\..\commom\widgetrect.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

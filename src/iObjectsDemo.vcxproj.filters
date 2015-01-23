@@ -133,6 +133,15 @@
     <ClCompile Include="code\Map2D\mapcontrol.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="commom\xmlutils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_xmlutils.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_xmlutils.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -189,6 +198,9 @@
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="code\Map2D\mapcontrol.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="commom\xmlutils.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

@@ -117,11 +117,8 @@ void iObjectsDemo::resizeEvent(QResizeEvent* e)
 
 	if (m_pMap2DContainer)
 	{
-		//m_pMap2DContainer->setGeometry(0,0,width(), height());
 		m_pMap2DContainer->setFixedHeight(height());
 		m_pMap2DContainer->setFixedWidth(width());
-// 		int m = m_pMap2DContainer->width();
-// 		int ys = m_pMap2DContainer->height();
 	}
 
 	QWidget::resizeEvent(e);
@@ -147,31 +144,21 @@ bool iObjectsDemo::unLoadPlugins(const QString& pluginName )
 {
 	bool bPluginunload = false;
 	QPluginLoader* loader = qobject_cast<QPluginLoader*>(this->findChild<QPluginLoader*>(pluginName));
-	//bPluginunload = loader->unload();
-	//		delete m_pInteLayers;
-	//m_pInteLayers = NULL;
 
-	
 	if (pluginName == "ToolBox")
 	{
 		bPluginunload = loader->unload();
-		//delete m_pToolBox;
 		m_pToolBox = NULL;
 	}
 
 	if (pluginName == "MapTab"/*loader->instance()->inherits("MapTabInterface")*/)
 	{
 		bPluginunload = loader->unload();
-	//	delete m_pMapTab;
 		m_pMapTab = NULL;
-		//delete m_pMap2DContainer;
 		m_pMap2DContainer = NULL;
 
-		//delete a;
 		a = NULL;
-		//delete b;
 		b = NULL;
-		//delete c;
 		c = NULL;
 		d = NULL;
 		e = NULL;
@@ -180,14 +167,12 @@ bool iObjectsDemo::unLoadPlugins(const QString& pluginName )
 	if (pluginName == "InteLayers"/*loader->instance()->inherits("InteLayersInterface")*/)
 	{
 		bPluginunload = loader->unload();
-//		delete m_pInteLayers;
 		m_pInteLayers = NULL;
 	}
 
 	if (pluginName == "InfoPanel"/*loader->instance()->inherits("InfoPanelInterface")*/)
 	{
 		bPluginunload = loader->unload();
-		//delete m_pInfoPanel;
 		m_pInfoPanel = NULL;
 	}
 	
@@ -219,13 +204,20 @@ bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 			if (m_pToolBox)  
 			{
 				bPluginLoaded = true;
+				//m_pToolBox->
 				m_pToolBox->setPluginParent(this);
 				m_pToolBox->setPluginHeight(50);
+				m_pToolBox->setToolButtonSize(QSize(50,50));
 				m_pToolBox->setPluginGeometry(0 ,height() - m_pToolBox->pluginHeight(), width(), m_pToolBox->pluginHeight());
 				m_pToolBox->showPlugin();
 				m_pToolBox->raisePlugin();
-				connect(m_pToolBox->getObject(), SIGNAL(ToolBoxPlugin_SearchBtnClicked()), this, SLOT(OnToolBoxPlugin_SearchBtnClicked()));
-				connect(m_pToolBox->getObject(), SIGNAL(ToolBoxPlugin_SettingBtnClicked()), this, SLOT(OnToolBoxPlugin_SettingBtnClicked()));
+				QObject* obj = m_pToolBox->createToolButton("search");
+				if(obj) connect(obj, SIGNAL(clicked()), this, SLOT(OnToolBoxPlugin_SearchBtnClicked()));
+				obj = m_pToolBox->createToolButton("set", Qt::AlignRight);
+				if(obj) connect(obj, SIGNAL(clicked()), this, SLOT(OnToolBoxPlugin_SettingBtnClicked()));
+
+// 				m_pToolBox->createToolButton("set");
+// 				m_pToolBox->createToolButton("search", Qt::AlignRight);
 			}
 		}
 		if (object->inherits("MapTabInterface"))
@@ -237,19 +229,16 @@ bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 				bPluginLoaded = true;
 				m_pMapTab->setPluginParent(this);
 				
- 
- 				//m_pMap2DContainer = new Map2DContainer(this);
- 				//m_pMapTab->addCentralWidget(m_pMap2DContainer, 0, QStringLiteral("¶þÎ¬"));
 				{
-					a = new QWidget();
-					m_pMapTab->addCentralWidget(a, 0, "erwei");
+// 					a = new QWidget();
+// 					m_pMapTab->addCentralWidget(a, 0, "erwei");
 
-					b = new QWidget();
-					m_pMapTab->addCentralWidget(b, 1, "sisa");
+// 					b = new QWidget();
+// 					m_pMapTab->addCentralWidget(b, 1, "sisa");
 // 
-					c = new QWidget();
-					m_pMapTab->addCentralWidget(c, 2, "sissdf");
-// 
+// 					c = new QWidget();
+// 					m_pMapTab->addCentralWidget(c, 2, "sissdf");
+// // 
 					QWidget* d = new QWidget();
 					m_pMapTab->addCentralWidget(d, 0, "shenghai");
 // 
@@ -293,11 +282,12 @@ bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 			{
 				bPluginLoaded = true;
 				m_pInfoPanel->setPluginParent(this);
-				m_pInfoPanel->setPluginWidth(270);
-				m_pInfoPanel->setPluginHeight(380);
-				m_pInfoPanel->setPluginGeometry(15, height()/2 - 200, 216, 400);
+				m_pInfoPanel->setPluginWidth(280);
+				m_pInfoPanel->setPluginHeight(370);
+				m_pInfoPanel->setPluginGeometry(15, height()/2 - 200, 280, 370);
 				m_pInfoPanel->showPlugin();
 				m_pInfoPanel->raisePlugin();
+				m_pInfoPanel->setAnimationTimespan(600);
 				m_pInfoPanel->resizePlugin(width() - m_pInfoPanel->pluginWidth() - 15 ,height()/2 - m_pInfoPanel->pluginHeight()/2, m_pInfoPanel->pluginWidth(), m_pInfoPanel->pluginHeight());
 			}
 		}
@@ -369,4 +359,9 @@ void iObjectsDemo::reloadPlugins()
 	}
 	m_pluginMap = pluginMap;
 	qDebug()<<m_pluginMap;
+}
+
+void iObjectsDemo::moveEvent( QMoveEvent* e)
+{
+	QWidget::moveEvent(e);
 }

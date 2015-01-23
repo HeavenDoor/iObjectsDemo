@@ -25,6 +25,7 @@ public:
 protected:
 	void paintEvent(QPaintEvent*);
 	void resizeEvent(QResizeEvent*);
+	void moveEvent(QMoveEvent*);
 signals:
 
 private slots:
@@ -55,10 +56,7 @@ private:
 	Pluginloader* m_pPluginloader;
 	QVariantMap m_pluginMap;
 
-
 	Map2DContainer* m_pMap2DContainer;
-
-	QHBoxLayout* lay;
 
 	QWidget* a;
 	QWidget* b;

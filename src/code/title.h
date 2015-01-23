@@ -14,7 +14,7 @@ public:
 protected:
 	void paintEvent(QPaintEvent*);
 	void resizeEvent(QResizeEvent *);
-
+	void moveEvent(QMoveEvent *);
 signals:
 	void collapse();
 public slots:

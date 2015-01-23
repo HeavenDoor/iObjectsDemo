@@ -39,9 +39,11 @@ private slots:
 	void OnInteLayersCollapse();
 	void OnInteLayersExpand();
 	void OnAnimationFinished();
+	bool eventFilter(QObject*, QEvent*);
 protected:
 	void paintEvent(QPaintEvent*);
 	void resizeEvent(QResizeEvent*);
+	void	moveEvent(QMoveEvent*);
 private:
 	QVBoxLayout* m_pVLayout;
 	QWidget* m_pHead;

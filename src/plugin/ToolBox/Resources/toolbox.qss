@@ -8,7 +8,7 @@ QWidget#ToolBox{
 	margin-bottom:0px;
 }
 
-QPushButton#search:!pressed{
+/*QPushButton#search:!pressed{
 	border-image: url(:/search.png);
 	border-width:2px 2px 2px 2px;
 }
@@ -25,4 +25,4 @@ QPushButton#set:!pressed{
 QPushButton#set:pressed{
 	border-image: url(:/setp.png);
 	border-width:2px 2px 2px 2px;
-}
+}*/

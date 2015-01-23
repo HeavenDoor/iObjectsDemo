@@ -1,11 +1,12 @@
 ﻿import QtQuick 2.4
-
+import SuperMap 1.0
 Item{
 	function onTopBtnClicked(index){
 		console.log(index)
 		switch(index)
 		{
 			case 0:
+				
 				sBtn.setSource("qrc:/s.png");
 				eBtn.setSource("qrc:/ef.png");
 				{
@@ -15,6 +16,7 @@ Item{
 				}
 			break;
 			case 1:
+
 				sBtn.setSource("qrc:/s.png");
 				tBtn.setSource("qrc:/t.png");
 				break;
@@ -37,8 +39,8 @@ Item{
 	}
 
 	function animationIncreaseFinished(){
-		console.log("Increasefinish");
-		expandBtn.visible = false
+		//console.log("Increasefinish");
+		//expandBtn.visible = false
 	}
 	function animationDecreaseFinished(){
 		console.log("Decreasefinish");
@@ -61,9 +63,36 @@ Item{
 		textArea.height = text3.y + text3.height + textArea.vSpace
 	}
 
+
+	function infoChanged(info)
+	{
+		textArea.height = text1.x + text1.height + textArea.vSpace + text2.height  + textArea.vSpace + text3.height + textArea.vSpace
+		text4.text = info
+		console.log("info");
+		animationText.start();
+	}
+
+	InfoHandler{
+		id: infohandler
+	}
+
+	Connections {  
+        target: infohandler;  
+        onInfoChanged:{
+			infoChanged(info)  
+            console.log(info);
+        }  
+    }  
+
+	//InfoPanel{
+	//	id: infopanel
+	//}
+
 	Button {
 		id: expandBtn
-		x: root.x - 30
+		objectName: "expandBtn"
+		x: root.width - imgWidth
+		//x: root.x - imgWidth
 		y: 5
 		z: 3
 		imgWidth : 25
@@ -77,7 +106,9 @@ Item{
 
 	Rectangle {
 		id: root
-		width: 270; height: 380			
+		objectName: "root"
+		width: 100; 
+		height: 480;			
 		color: "#00000000"
 
 		//property string animationType : 'width';
@@ -87,7 +118,7 @@ Item{
 		property int innerX;
 		property int innerY;
 		property int innerWidth: width
-		property int innerHeight: 380
+		property int innerHeight: height
 		property double innerOpacity;
 
 
@@ -107,7 +138,7 @@ Item{
 			width: 180; height: 40
 			x: root.x + 20
 			y: 8
-			Button {
+			/*Button {
 				id: tBtn
 				x: tab.x + 5
 				y:3
@@ -145,10 +176,11 @@ Item{
 				normalImg: "qrc:/s.png"
 				sourceImg: "qrc:/s.png"
 				onButtonClicked: onTopBtnClicked(2)
-			}
+			}*/
 
 			Button {
 				id: collesBtn
+				objectName: "collesBtn"
 				x: root.width - 65
 				y: 5
 				z: 3
@@ -175,16 +207,24 @@ Item{
 			property: 'x';
 			from: root.innerWidth;
 			to: 0
+			//property: 'opacity';
+			//from: 1
+			//to: 1;
 			onStopped: animationIncreaseFinished()
 		}
 		PropertyAnimation {
 			id: animWidthDecrease
+			objectName: "animWidthDecrease"
 			target: root
 			duration: root.duration
 			easing.type: root.easingType
 			property: 'x';
 			from: 0;
 			to: root.innerWidth
+
+			//property: 'opacity';
+			//from: 1
+			//to: 1;
 			onStopped: animationDecreaseFinished()
 		}		
 
@@ -213,7 +253,7 @@ Item{
 				font.weight: Font.Black
 				wrapMode: Text.WordWrap
 				lineHeight: 1.3
-				text: "<li>ssss Text根据需要的空间来设置它。除非设置了wrapMode，否则总是优先宽度而不是高度  <a href=\"http://www.baidu.com\">百度</a></li><li>bbbb <a href=\"http://www.sohu.com\">搜狐</a></li>" //"see the sohu.com adgadgfdg<a href=\"http://www.sohu.com\">图片信息</a>"
+				//text: "<li>ssss Text根据需要的空间来设置它。除非设置了wrapMode，否则总是优先宽度而不是高度  <a href=\"http://www.baidu.com\">百度</a></li><li>bbbb <a href=\"http://www.sohu.com\">搜狐</a></li>" //"see the sohu.com adgadgfdg<a href=\"http://www.sohu.com\">图片信息</a>"
 				onLinkActivated: Qt.openUrlExternally(link)
 			}
 
@@ -232,7 +272,7 @@ Item{
 				font.weight: Font.Black
 				wrapMode: Text.WordWrap
 				lineHeight: 1.3
-				text: "<li>2015反腐五大猜想:或再有副国级老虎被查  <a href=\"http://news.sohu.com/20150109/n407655211.shtml\">链接地址</a></li>"
+				//text: "<li>2015反腐五大猜想:或再有副国级老虎被查  <a href=\"http://news.sohu.com/20150109/n407655211.shtml\">链接地址</a></li>"
 				onLinkActivated: Qt.openUrlExternally(link)
 			}
 
@@ -251,7 +291,7 @@ Item{
 				font.weight: Font.Black
 				wrapMode: Text.WordWrap
 				lineHeight: 1.3
-				text: "<li>哈登3分暴扣逼停尼克斯  <a href=\"http://sports.sohu.com/20150109/n407662352.shtml\">链接地址</a></li>"
+				//text: "<li>哈登3分暴扣逼停尼克斯  <a href=\"http://sports.sohu.com/20150109/n407662352.shtml\">链接地址</a></li>"
 				onLinkActivated: Qt.openUrlExternally(link)
 			}
 

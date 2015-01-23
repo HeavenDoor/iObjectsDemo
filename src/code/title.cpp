@@ -4,6 +4,7 @@
 Title::Title(QWidget *parent) : QWidget(parent)
 {
 	setObjectName("Title");
+	setMouseTracking(true);
 	//setAttribute(Qt::WA_TranslucentBackground);
 	QRect rec = parent->rect();
 	setGeometry(parent->width()/2 - width()/2, 0, 530, 85);
@@ -89,4 +90,9 @@ void Title::packupTitle()
 
 void Title::OnAnimationFinished()
 {
+}
+
+void Title::moveEvent( QMoveEvent * e)
+{
+	QWidget::moveEvent(e);
 }

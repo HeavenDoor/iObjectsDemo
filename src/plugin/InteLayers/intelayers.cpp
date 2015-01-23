@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "intelayers.h"
 
-#include "widgetrect.h"
+#include "..\\..\\commom\widgetrect.h"
 #include <QtWidgets\QMessageBox>
+#include <QMouseEvent>
 
 InteLayers::InteLayers(QWidget* parent) : QWidget(parent)
 {
@@ -50,7 +51,7 @@ InteLayers::InteLayers(QWidget* parent) : QWidget(parent)
 	m_pCollapseBtn->setVisible(false);
 	connect(m_pCollapseBtn, SIGNAL(clicked()), this, SLOT(OnInteLayersExpand()));
 	
-
+	qApp->installEventFilter(this);
 
 	QFile file(":/intelayers.qss");
 	file.open(QFile::ReadOnly);
@@ -76,6 +77,22 @@ void InteLayers::test()
 {
 
 }
+bool InteLayers::eventFilter(QObject* obj, QEvent* e)
+{
+	if(e->type() == QEvent::Move)
+	{
+		QMoveEvent* en = dynamic_cast<QMoveEvent*>(e);
+		if(!en) return false;
+		
+		QPoint point = en->pos();;
+		if (m_pCollapseBtn && m_pCollapseBtn->isVisible())
+		{
+			QRect re = WidgetRect::widgetGlobalRect(this);
+			m_pCollapseBtn->setGeometry(re.right(), re.top(), m_pCollapseBtn->width(), m_pCollapseBtn->height());
+		}
+	}
+	return false;
+}
 
 void InteLayers::paintEvent( QPaintEvent* e)
 {
@@ -100,6 +117,18 @@ void InteLayers::resizeEvent( QResizeEvent* e)
 	}
 	QWidget::resizeEvent(e);
 }
+
+
+
+void InteLayers::moveEvent( QMoveEvent* e)
+{
+	if (m_pCollapseBtn && m_pCollapseBtn->isVisible())
+	{
+		QRect re = WidgetRect::widgetGlobalRect(this);
+		m_pCollapseBtn->setGeometry(re.right(), re.top(), m_pCollapseBtn->width(), m_pCollapseBtn->height());
+	}
+}
+
 
 
 QObject* InteLayers::getObject()

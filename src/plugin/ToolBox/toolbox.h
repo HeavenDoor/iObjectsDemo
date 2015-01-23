@@ -6,6 +6,7 @@
 
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QHBoxLayout>
 #include <QObject>
 
 class ToolBox : public QWidget , ToolBoxInterface
@@ -30,6 +31,10 @@ public:
 	virtual void setPluginHeight(int height);
 	virtual int pluginWidth();
 	virtual int pluginHeight();
+
+
+	virtual QObject* createToolButton(const QString& objectName, Qt::Alignment align = Qt::AlignLeft);
+	virtual void setToolButtonSize(QSize size);
 signals:
 	//void resize(const QRect&);
 	void ToolBoxPlugin_SearchBtnClicked();
@@ -40,8 +45,12 @@ protected:
 	void paintEvent(QPaintEvent*);
 	void resizeEvent(QResizeEvent *);
 private:
-	QPushButton* m_pSearch;
-	QPushButton* m_pSet;
+	QHBoxLayout* m_pOutLayout;
+	QHBoxLayout* m_pLeftLayout;
+	QHBoxLayout* m_pRightLayout;
+// 	QPushButton* m_pSearch;
+// 	QPushButton* m_pSet;
+	QSize m_size;
 };
 
 #endif // TOOLBOX_H

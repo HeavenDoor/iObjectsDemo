@@ -174,3 +174,22 @@ QWidget#Map2DContainer{
 	margin-bottom:0px;
 }
 
+/******************ToolBox*********************************/
+QPushButton#search:!pressed{
+	border-image: url(:/search.png);
+	border-width:2px 2px 2px 2px;
+}
+QPushButton#search:pressed{
+	border-image: url(:/searchp.png);
+	border-width:2px 2px 2px 2px;
+}
+
+
+QPushButton#set:!pressed{
+	border-image: url(:/set.png);
+	border-width:2px 2px 2px 2px;
+}
+QPushButton#set:pressed{
+	border-image: url(:/setp.png);
+	border-width:2px 2px 2px 2px;
+}

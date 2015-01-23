@@ -7,7 +7,8 @@ class InfoPanelInterface : public WidgetPluginInterface
 {
 public:
 	virtual void test() = 0;
-	//virtual QWidget* getWidget() = 0;
+	
+	virtual void setAnimationTimespan(int timespan /*Millisecond*/) = 0;
 };
 
 
