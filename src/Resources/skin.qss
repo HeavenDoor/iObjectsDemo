@@ -193,3 +193,18 @@ QPushButton#set:pressed{
 	border-image: url(:/setp.png);
 	border-width:2px 2px 2px 2px;
 }
+
+/******************Map2DController*********************************/
+/****QToolButton - SelectBtn*****/
+/*QToolButton#SelectBtn{
+	border-image:url(:/select.png);
+	border-width:0px 0px 0px 0px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}*/
+
+
+
+

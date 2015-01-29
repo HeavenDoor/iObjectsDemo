@@ -9,3 +9,5 @@ GeneratedFiles
 *.exp
 SuperMap
 Map
+/src/plugin/ToolBox/*.cd
+*.cd

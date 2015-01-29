@@ -17,7 +17,11 @@
     <file>Unchecked.png</file>
     <file>UncheckedPressed.png</file>
     <file>UncheckedHover.png</file>
-    <file>Pan.png</file>
     <file>shenghai.png</file>
+    <file>Pan.png</file>
+    <file>Entire.png</file>
+    <file>select.png</file>
+    <file>Zoomout.png</file>
+    <file>Zoomin.png</file>
   </qresource>
 </RCC>

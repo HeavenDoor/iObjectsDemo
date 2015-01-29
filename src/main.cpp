@@ -8,9 +8,10 @@ void initStyle();
 
 int main(int argc, char *argv[])
 {
-	QApplication a(argc, argv);
-	QTextCodec *codec = QTextCodec::codecForName("utf-8");
+	QTextCodec *codec = QTextCodec::codecForName("GB2312");//utf-8
 	QTextCodec::setCodecForLocale(codec);
+	QApplication a(argc, argv);
+	
 	initStyle();
 	iObjectsDemo w;
 	w.show();

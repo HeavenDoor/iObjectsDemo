@@ -7,6 +7,8 @@
 
 InteLayers::InteLayers(QWidget* parent) : QWidget(parent)
 {
+	m_pTabWidget = NULL;
+	m_pHead = NULL;
 	setObjectName("InteLayers");
 
 	m_pVLayout = new QVBoxLayout(this);
@@ -67,6 +69,19 @@ InteLayers::~InteLayers()
 {
 
 }
+
+void InteLayers::addTabPage( QVector<QString> vec )
+{
+	if (!m_pTabWidget) return;
+	m_pTabWidget->addTabPage(vec);
+
+	QFile file(":/intelayers.qss");
+	file.open(QFile::ReadOnly);
+	QString style = QString(file.readAll());
+	this->setStyleSheet(style);
+	file.close();
+}
+
 
 // QWidget* InteLayers::getWidget()
 // {
@@ -258,3 +273,4 @@ int InteLayers::pluginHeight()
 {
 	return m_height;
 }
+

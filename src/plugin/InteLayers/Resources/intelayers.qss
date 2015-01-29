@@ -196,3 +196,23 @@ QToolButton[ShowTabs_3 = "false"]{
 	border-image: url(:/tb5.png);
 	border-width:0px 0px 0px 0px;
 }
+
+
+/**********************itemBK**************************************************/
+QWidget#InteLayersItem{
+	border-image:url(:/itemBK.png);
+	border-width:1px 1px 1px 1px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+QScrollArea#scroll{
+	border-image:url(:/trans.png);
+	border-width:1px 1px 1px 1px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}

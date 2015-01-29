@@ -246,6 +246,8 @@ bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 					m_pMapTab->addCentralWidget(e, 3, "ren");
 // 
 					m_pMap2DContainer = new Map2DContainer(this);
+					//connect(m_pMap2DContainer,SIGNAL(showLayers(QVector<QString>)), this, SLOT(OnShowLayers(QVector<QString>)));
+					OnShowLayers(m_pMap2DContainer->getLayers());
 					m_pMapTab->addCentralWidget(m_pMap2DContainer, 8, QStringLiteral("¶þÎ¬"));
 					m_pMapTab->setCurrentIndex(0);
 					m_pMapTab->loadSkin();
@@ -254,6 +256,7 @@ bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 					m_pMapTab->lowerPlugin();
 					m_pMap2DContainer->setFixedWidth(width());
 					m_pMap2DContainer->setFixedHeight(height());
+					
 					
 				}
 			}
@@ -301,6 +304,16 @@ bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 	QDir::setCurrent(ss);
 	return true;
 }
+
+void iObjectsDemo::OnShowLayers( QVector<QString> vec )
+{
+	if (m_pInteLayers)
+	{
+		m_pInteLayers->addTabPage(vec);
+		qDebug()<<vec;
+	}
+}
+
 
 void iObjectsDemo::OnTitleCollapsed()
 {
@@ -365,3 +378,4 @@ void iObjectsDemo::moveEvent( QMoveEvent* e)
 {
 	QWidget::moveEvent(e);
 }
+

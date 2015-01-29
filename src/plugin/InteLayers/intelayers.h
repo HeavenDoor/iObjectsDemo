@@ -33,6 +33,8 @@ public:
 	virtual void setPluginHeight(int height);
 	virtual int pluginWidth();
 	virtual int pluginHeight();
+
+	virtual void addTabPage(QVector<QString> vec);
 signals:
 	void refeshWindow();
 private slots:

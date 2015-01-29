@@ -5,6 +5,8 @@
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QToolButton>
+#include <QtWidgets/QScrollArea>
+
 class TabWidget : public QWidget
 {
 	Q_OBJECT
@@ -12,6 +14,7 @@ class TabWidget : public QWidget
 public:
 	TabWidget(QWidget *parent);
 	~TabWidget();
+	void addTabPage(QVector<QString> vec);
 protected:
 	void paintEvent(QPaintEvent *);
 	void resizeEvent(QResizeEvent*);
@@ -29,6 +32,7 @@ private:
 	QVBoxLayout* m_pVLayout;
 	QVBoxLayout* m_pVLayout2;
 	QVBoxLayout* m_pVLayout3;
+
 	QWidget* m_pOne;
 	QWidget* m_pTwo;
 	QWidget* m_pThree;
@@ -52,6 +56,10 @@ private:
 
 	QWidget* m_k;
 	QWidget* m_l;
+
+
+	QScrollArea* scroll;
+	QWidget* a ;
 };
 
 #endif // TABWIDGET_H

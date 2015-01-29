@@ -1,5 +1,8 @@
 #include "stdafx.h"
 #include "tabwidget.h"
+#include <QtWidgets/QScrollArea>
+#include <QtWidgets/QScrollBar>
+#include <QtWidgets/QLabel>
 
 TabWidget::TabWidget(QWidget *parent) : QWidget(parent)
 {
@@ -31,16 +34,16 @@ TabWidget::TabWidget(QWidget *parent) : QWidget(parent)
 	m_pBtn2->setProperty("ShowTabs_2", false);
 	connect(m_pBtn2, SIGNAL(clicked()), this, SLOT(OnTabButtonClicked()));
 
-	m_pBtn3 = new QToolButton(m_pTabBar);
-	m_pBtn3->setObjectName("pBtn3");
-	m_pBtn3->setFixedWidth(32);
-	m_pBtn3->setFixedHeight(32);
-	m_pBtn3->setProperty("ShowTabs_3", false);
-	connect(m_pBtn3, SIGNAL(clicked()), this, SLOT(OnTabButtonClicked()));
+// 	m_pBtn3 = new QToolButton(m_pTabBar);
+// 	m_pBtn3->setObjectName("pBtn3");
+// 	m_pBtn3->setFixedWidth(32);
+// 	m_pBtn3->setFixedHeight(32);
+// 	m_pBtn3->setProperty("ShowTabs_3", false);
+// 	connect(m_pBtn3, SIGNAL(clicked()), this, SLOT(OnTabButtonClicked()));
 
 	m_pHLayout->addWidget(m_pBtn1);
 	m_pHLayout->addWidget(m_pBtn2);
-	m_pHLayout->addWidget(m_pBtn3);
+	//m_pHLayout->addWidget(m_pBtn3);
 
 
 
@@ -114,7 +117,7 @@ TabWidget::TabWidget(QWidget *parent) : QWidget(parent)
 	m_pVLayout2->addWidget(m_j);
 
 	//////////////////////////////////////////////////////////////////////////
-	m_pThree = new QWidget(m_pTabWidget);
+	/*m_pThree = new QWidget(m_pTabWidget);
 	m_pVLayout3 = new QVBoxLayout(m_pThree);
 	//m_pVLayout->setContentsMargins(0, 0, 0, 0);
 	m_pVLayout3->setSpacing(2);
@@ -126,13 +129,13 @@ TabWidget::TabWidget(QWidget *parent) : QWidget(parent)
 	m_l->setObjectName("m_l");
 	m_l->setFixedHeight(40);
 	m_pVLayout3->addWidget(m_k);
-	m_pVLayout3->addWidget(m_l);
+	m_pVLayout3->addWidget(m_l);*/
 
 
 
 	m_pTabWidget->addTab(m_pOne, "one");
 	m_pTabWidget->addTab(m_pTwo, "two");
-	m_pTabWidget->addTab(m_pThree, "three");
+	//m_pTabWidget->addTab(m_pThree, "three");
 
 	m_pTabWidget->tabBar()->setVisible(false);
 }
@@ -141,6 +144,73 @@ TabWidget::~TabWidget()
 {
 
 }
+
+
+void TabWidget::addTabPage( QVector<QString> vec )
+{
+	m_pBtn3 = new QToolButton(m_pTabBar);
+	m_pBtn3->setObjectName("pBtn3");
+	m_pBtn3->setFixedWidth(32);
+	m_pBtn3->setFixedHeight(32);
+	m_pBtn3->setProperty("ShowTabs_3", false);
+	connect(m_pBtn3, SIGNAL(clicked()), this, SLOT(OnTabButtonClicked()));
+
+	if (m_pHLayout) m_pHLayout->insertWidget(0, m_pBtn3);
+
+	m_pThree = new QWidget(m_pTabWidget);
+
+	
+	scroll = new QScrollArea(m_pThree);
+	//scroll->setClearColor(Qt::transparent);
+	scroll->setStyleSheet("background-color:green;");//transparent
+	scroll->setAttribute(Qt::WA_TranslucentBackground);
+	a = new QWidget(scroll);
+	a->setStyleSheet("background-color:red;");
+	m_pVLayout3 = new QVBoxLayout(scroll);
+	m_pVLayout3->setContentsMargins(0, 0, 0, 0);
+	m_pVLayout3->setSpacing(2);
+	m_pVLayout3->setAlignment(Qt::AlignVertical_Mask);
+	scroll->setWidget(a);
+
+	scroll->setObjectName("scroll");
+	QScrollBar* vBar = scroll->verticalScrollBar();//new QScrollBar(scroll);
+	vBar->setObjectName("VScroll");
+	vBar->setFixedWidth(0);
+	//vBar->hide();
+	
+	QScrollBar* hBar = scroll->horizontalScrollBar();
+	hBar->hide();
+	scroll->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
+	scroll->setWidgetResizable(true);
+
+	//scroll->setLayout(m_pVLayout3);
+	a->setLayout(m_pVLayout3);
+
+	QString ss = vec.first();
+	vec.pop_front();
+	foreach (QString name, vec)
+	{
+		QWidget* p = new QWidget(m_pThree);
+		p->setObjectName("InteLayersItem");
+		QLabel* l = new QLabel(p);
+		l->setText(name);
+		p->setFixedHeight(40);
+		m_pVLayout3->addWidget(p);
+
+	}
+// 	m_k = new QWidget(m_pThree);
+// 	m_k->setObjectName("m_k");
+// 	m_k->setFixedHeight(40);
+// 	m_l = new QWidget(m_pThree);
+// 	m_l->setObjectName("m_l");
+// 	m_l->setFixedHeight(40);
+// 	m_pVLayout3->addWidget(m_k);
+// 	m_pVLayout3->addWidget(m_l);
+
+
+	m_pTabWidget->insertTab(0,m_pThree,"three");
+}
+
 
 void TabWidget::paintEvent( QPaintEvent * e)
 {
@@ -173,6 +243,14 @@ void TabWidget::resizeEvent( QResizeEvent* e)
  		{
  			m_pThree->setGeometry(0,0,m_pTabWidget->width(), m_pTabWidget->height());
  		}
+		if (scroll)
+		{
+			scroll->setGeometry(0,0,m_pTabWidget->width(), m_pTabWidget->height());
+		}
+		if (a)
+		{
+			a->setGeometry(0,0,m_pTabWidget->width(), m_pTabWidget->height());
+		}
 	}
 	QWidget::resizeEvent(e);
 }
@@ -187,9 +265,9 @@ void TabWidget::OnTabButtonClicked()
 		if (!pTBtn->property("ShowTabs_1").toBool())
 		{
 			pTBtn->setProperty("ShowTabs_1", true);
-			m_pBtn2->setProperty("ShowTabs_2", false);
-			m_pBtn3->setProperty("ShowTabs_3", false);
-			m_pTabWidget->setCurrentIndex(0);
+			if(m_pBtn2) m_pBtn2->setProperty("ShowTabs_2", false);
+			if(m_pBtn3) m_pBtn3->setProperty("ShowTabs_3", false);
+			if(m_pTabWidget) m_pTabWidget->setCurrentIndex(0);
 		}
 		else
 		{
@@ -202,9 +280,9 @@ void TabWidget::OnTabButtonClicked()
 		if (!pTBtn->property("ShowTabs_2").toBool())
 		{
 			pTBtn->setProperty("ShowTabs_2", true);
-			m_pBtn1->setProperty("ShowTabs_1", false);
-			m_pBtn3->setProperty("ShowTabs_3", false);
-			m_pTabWidget->setCurrentIndex(1);
+			if(m_pBtn1) m_pBtn1->setProperty("ShowTabs_1", false);
+			if(m_pBtn3) m_pBtn3->setProperty("ShowTabs_3", false);
+			if(m_pTabWidget) m_pTabWidget->setCurrentIndex(1);
 		}
 		else
 		{
@@ -216,9 +294,9 @@ void TabWidget::OnTabButtonClicked()
 		if (!pTBtn->property("ShowTabs_3").toBool())
 		{
 			pTBtn->setProperty("ShowTabs_3", true);
-			m_pBtn1->setProperty("ShowTabs_1", false);
-			m_pBtn2->setProperty("ShowTabs_2", false);
-			m_pTabWidget->setCurrentIndex(2);
+			if(m_pBtn1) m_pBtn1->setProperty("ShowTabs_1", false);
+			if(m_pBtn2) m_pBtn2->setProperty("ShowTabs_2", false);
+			if(m_pTabWidget) m_pTabWidget->setCurrentIndex(2);
 		}
 		else
 		{

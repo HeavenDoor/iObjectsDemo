@@ -8,6 +8,7 @@ class InteLayersInterface : public WidgetPluginInterface
 public:
 	virtual void test() = 0;
 	//virtual QWidget* getWidget() = 0;
+	virtual void addTabPage(QVector<QString> vec) = 0;
 };
 
 

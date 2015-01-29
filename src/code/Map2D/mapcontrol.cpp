@@ -3,13 +3,14 @@
 #include <QPainter>
 #include <QWheelEvent>
 #include <QDebug>
+#include <QVector>
 #include <qfiledialog.h>
 
 #include "mapcontrol.h"
 		
 using namespace UGC;
 
-// èŽ·å–ç§»åŠ¨è¿‡ç¨‹ä¸­çš„å€¼
+// »ñÈ¡ÒÆ¶¯¹ý³ÌÖÐµÄÖµ
 void UGSTDCALL TrackingCallBack(UGlong pWnd, UGdouble dx, UGdouble dy, UGint nButtonClicked, UGdouble dCurrentLength, UGdouble dCurrentAngle, UGdouble dAzimuth, UGdouble dTotalLength, UGdouble dTotalArea)
 {
 	MapControl* pControl = (MapControl*)pWnd;
@@ -18,25 +19,25 @@ void UGSTDCALL TrackingCallBack(UGlong pWnd, UGdouble dx, UGdouble dy, UGint nBu
 	{
 		case 0:
 		{
-			showString.append(QString::fromUtf8("è·ç¦»:"));
+			showString.append(QString::fromUtf8("¾àÀë:"));
 			showString.append(QString::number(dTotalLength/1000, 'g', 4));
-			showString.append(QString::fromUtf8("å…¬é‡Œ"));
+			showString.append(QString::fromUtf8("¹«Àï"));
 
 		}
 		break;
 		case 1:
 		{
-			showString.append(QString::fromUtf8("é¢ç§¯:"));
+			showString.append(QString::fromUtf8("Ãæ»ý:"));
 			showString.append(QString::number(dTotalArea/1000000, 'g', 4));
-			showString.append(QString::fromUtf8("å¹³æ–¹å…¬é‡Œ"));
+			showString.append(QString::fromUtf8("Æ½·½¹«Àï"));
 
 		}
 		break;
 		case 2:
 		{
-			showString.append(QString::fromUtf8("æ–¹ä½è§’:"));
+			showString.append(QString::fromUtf8("·½Î»½Ç:"));
 			showString.append(QString::number(dAzimuth, 'g', 4));
-			showString.append(QString::fromUtf8("Â°"));
+			showString.append(QString::fromUtf8("¡ã"));
 		}
 		break;
 		default:
@@ -55,7 +56,7 @@ void UGSTDCALL AfterTrackingLayerCallBack(UGlong pWnd, UGGraphics* pGraphics)
 void UGSTDCALL TrackedCallBack(UGlong pWnd)
 {
 	MapControl* pControl = (MapControl*)pWnd;
-	QString str = QString("è·ç¦»:%1").arg(QString::number(0, 'g', 4));
+	QString str = QString("¾àÀë:%1").arg(QString::number(0, 'g', 4));
 }
 
 UGC::UGuint GetUGKeyflagMasks(QInputEvent* event)
@@ -142,12 +143,6 @@ void MapControl::paintEvent( QPaintEvent* event )
 	}
 
 	PaintToQPainter();
-
-// 	QStyleOption opt;
-// 	opt.init(this);
-// 	QPainter p(this);
-// 	style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-// 	QWidget::paintEvent(event);
 }
 
 void MapControl::SetWaitCursor()
@@ -158,83 +153,82 @@ void MapControl::SetWaitCursor()
 
 void MapControl::ReviseCursor()
 {
-	Pan();
 	switch(m_pMapEditorWnd->m_mapWnd.GetCursorShape())
 	{
-		case UGC::UGMapWnd::ecBusy :
+	case UGC::UGMapWnd::ecBusy :
 		{
-			//SetWaitCursor();
+			SetWaitCursor();
 			break;
 		}
-		case UGC::UGMapWnd::ecArrow:
+	case UGC::UGMapWnd::ecArrow:
 		{
 			setCursor(QCursor(Qt::ArrowCursor));
 			break;
 		}
-		case UGC::UGMapWnd::ecMarginPanLeft:
+	case UGC::UGMapWnd::ecMarginPanLeft:
 		{
-			//setCursor(QCursor(QPixmap(":/Resources/Pan_left.png"), 0, 15));
+			setCursor(QCursor(QPixmap(":/Resources/Pan_left.png"), 0, 15));
 			break;
 		}
 	case UGC::UGMapWnd::ecMarginPanRight:
 		{
-			//setCursor(QCursor(QPixmap(":/Resources/Pan_right.png"), 30, 10));
+			setCursor(QCursor(QPixmap(":/Resources/Pan_right.png"), 30, 10));
 			break;
 		}
 	case UGC::UGMapWnd::ecMarginPanTop:
 		{
-			//setCursor(QCursor(QPixmap(":/Resources/Pan_top.png"),10, 0));	
+			setCursor(QCursor(QPixmap(":/Resources/Pan_top.png"),10, 0));	
 			break;
 		}
 	case UGC::UGMapWnd::ecMarginPanBottom:
 		{
-			//setCursor(QCursor(QPixmap(":/Resources/Pan_bottom.png"), 10, 30));
+			setCursor(QCursor(QPixmap(":/Resources/Pan_bottom.png"), 10, 30));
 			break;
 		}
 	case UGC::UGMapWnd::ecMarginPanTopLeft:
 		{
-			//setCursor(QCursor(QPixmap(":/Resources/Pan_topleft.png"), 0, 0));
+			setCursor(QCursor(QPixmap(":/Resources/Pan_topleft.png"), 0, 0));
 			break;
 		}
 	case UGC::UGMapWnd::ecMarginPanTopRight:
 		{
-			//setCursor(QCursor(QPixmap(":/Resources/Pan_topright.png"), 30, 0));
+			setCursor(QCursor(QPixmap(":/Resources/Pan_topright.png"), 30, 0));
 			break;
 		}
 	case UGC::UGMapWnd::ecMarginPanBottomRight:
 		{
-			//setCursor(QCursor(QPixmap(":/Resources/Pan_bottomright.png"), 30, 30));
+			setCursor(QCursor(QPixmap(":/Resources/Pan_bottomright.png"), 30, 30));
 			break;
 		}
 	case UGC::UGMapWnd::ecMarginPanBottomLeft:
 		{
-			//setCursor(QCursor(QPixmap(":/Resources/Pan_bottomleft.png"), 0, 30));
+			setCursor(QCursor(QPixmap(":/Resources/Pan_bottomleft.png"), 0, 30));
 			break;
 		}
 	case UGC::UGMapWnd::ecZoomFree:
 	case UGC::UGMapWnd::ecZoomFree2:
 		{
-			//setCursor(QCursor(QPixmap(":/Resources/ZoomFree.png")));
+			setCursor(QCursor(QPixmap(":/Resources/ZoomFree.png")));
 			break;
 		}
 	case UGC::UGMapWnd::ecPan:
 		{
-			setCursor(QCursor(QPixmap("qrc:/pan.png")));
+			setCursor(QCursor(QPixmap(":/Pan.png")));
 			break;
 		}
 	case UGC::UGMapWnd::ecPan2:
 		{
-			setCursor(QCursor(QPixmap("qrc:/pan.png")));
+			setCursor(QCursor(QPixmap(":/Pan.png")));
 			break;
 		}
 	case UGC::UGMapWnd::ecZoomIn:
 		{
-			//setCursor(QCursor(QPixmap(":/Resources/ZoomIn.png"), 2, 2));
+			setCursor(QCursor(QPixmap(":/Zoomin.png"), 2, 2));
 			break;
 		}
 	case UGC::UGMapWnd::ecZoomOut:
 		{
-			//setCursor(QCursor(QPixmap(":/Resources/ZoomOut.png"), 2, 2));
+			setCursor(QCursor(QPixmap(":/Zoomout.png"), 2, 2));
 			break;
 		}
 	case UGC::UGMapWnd::ecPointModeSelect:
@@ -242,14 +236,14 @@ void MapControl::ReviseCursor()
 	case UGC::UGMapWnd::ecRectModeSelect:
 	case UGC::UGMapWnd::ecLineModeSelect:
 		{
-			//setCursor(QCursor(QPixmap(":/Resources/Select.png"), 4, 4));
+			setCursor(QCursor(QPixmap(":/select.png"), 4, 4));
 			break;
 		}	
 	case UGC::UGMapWnd::ecDrawPolyGon:
 	case UGC::UGMapWnd::ecDrawPolyLine:
 
 		{
-			//setCursor(QCursor(QPixmap(":/Resources/Length.png"), 8, 8));
+			setCursor(QCursor(QPixmap(":/Resources/Length.png"), 8, 8));
 			break;
 		}
 	case UGC::UGMapWnd::ecDrawText:
@@ -475,73 +469,6 @@ UGString MapControl::QStringToUGString(QString qstring )
 	return ugstring;
 }
 
-int MapControl::OpenMap()
-{ 
-	if (m_pWorkspace == NULL || m_pMapEditorWnd == NULL )
-	{
-		return 1;
-	}
-
-	if (m_initialized)
-	{
-		m_pMapEditorWnd->m_mapWnd.m_Map.Reset();
-		m_pWorkspace->Close();
-	}
-
-	QString qStrPath = QFileDialog::getOpenFileName(this,QString::fromUtf8("æ‰“å¼€å·¥ä½œç©ºé—´"), "../SampleData", tr("smwu(*.smwu)"));
-
-	if (qStrPath == NULL)
-	{
-		return 0;
-	}
-
-    UGString workspacePath = QStringToUGString(qStrPath);
-
-	UGbool isOpen = m_pWorkspace->Open(workspacePath);
-	
-	if (!isOpen)
-	{
-		return 2;
-	}
-
-	UGMap *pMap = (UGMap*)&(m_pMapEditorWnd->m_mapWnd.m_Map);
-	pMap->SetWorkspace(m_pWorkspace);
-
-	pMap->m_TrackingLayer.SetVisible(TRUE);
-	pMap->m_TrackingLayer.SetEditable(TRUE);
-	pMap->m_TrackingLayer.SetSelectable(TRUE);
-	pMap->m_TrackingLayer.SetLineSmoothingMode(false);
-
-	pMap->SetLineSmoothingMode(false);
-
-	int nMapCount = m_pWorkspace->m_MapStorages.GetCount();
-
-	if (nMapCount == 0)
-	{
-		return 3;
-	}
-
-	UGint num = m_pWorkspace->m_MapStorages.GetCount();
-
-	UGString mapName = m_pWorkspace->m_MapStorages.GetNameAt(0);
-    
-	
-
-	if (!pMap->Open(mapName))
-	{
-		return 4;
-	}
-
-	m_defaultCenter = pMap->GetCenter();
-	m_defaultScale = pMap->GetScale();
-	
-	this->ViewEntire();
-
-	m_initialized = true;
-
-	return 0;
-}
-
 int MapControl::OpenMap( const QString& mapPath )
 {
 	QApplication::applicationDirPath();
@@ -573,13 +500,14 @@ int MapControl::OpenMap( const QString& mapPath )
 	}
 
 	UGint num = m_pWorkspace->m_MapStorages.GetCount();
-	UGString mapName = m_pWorkspace->m_MapStorages.GetNameAt(0);
+	UGString mapName = m_pWorkspace->m_MapStorages.GetNameAt(num - 1);
 
 	if (!pMap->Open(mapName))
 	{
 		return 4;
 	}
 
+	
 	m_defaultCenter = pMap->GetCenter();
 	m_defaultScale = pMap->GetScale();
 
@@ -589,6 +517,29 @@ int MapControl::OpenMap( const QString& mapPath )
 
 	return 0;
 }
+
+
+
+QVector<QString> MapControl::getLayersList()
+{
+	QVector<QString> sList;
+	for (int i = 0; i < m_pWorkspace->m_MapStorages.GetCount(); i++)
+	{
+		UGString name = m_pWorkspace->m_MapStorages.GetNameAt(i);
+
+		UGMBString strMB;
+		name.ToMBString(strMB);
+		const OgdcAchar * ugchar = strMB.Cstr();
+		OgdcWchar * ugWchar;
+		name.AcharToWchar(ugchar, ugWchar, name.GetLength());
+		std::string drawstring = ugchar;
+		QString strText = QString::fromLocal8Bit(drawstring.c_str());
+		sList.push_back(strText);
+	} 
+	qDebug()<<sList;
+	return sList;
+}
+
 
 void MapControl::CreateUGGrpaphics(UGGraphics* &pGraphics)
 {

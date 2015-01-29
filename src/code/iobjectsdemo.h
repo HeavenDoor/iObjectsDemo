@@ -13,6 +13,7 @@
 #include "interface/infopanelinterface.h"
 #include "pluginloader.h"
 #include "Map2D/map2dcontainer.h"
+
 class iObjectsDemo : public QWidget
 {
 	Q_OBJECT
@@ -37,6 +38,7 @@ private slots:
 	void OnToolBoxPlugin_SearchBtnClicked();
 	void OnToolBoxPlugin_SettingBtnClicked();
 	void OnInteLayersPlugin_RefeshWindow();
+	void OnShowLayers(QVector<QString> vec);
 private:
 	bool loadControls();
 	bool loadPlugins(const QString& path, const QString& pluginName);

@@ -74,7 +74,6 @@ public:
 
 public:
 	//打开地图方法
-	int OpenMap();
 	int OpenMap(const QString& mapPath);
 	//显示距离
 	void ShowMessureResult(QString mType);
@@ -108,6 +107,9 @@ public:
 	void OnMapDrawn(UGGraphics* pGraphics);
 
      UGString  QStringToUGString(QString qstring );
+
+public:
+	QVector<QString> getLayersList();
 public:
 
 	int m_MessureType;
@@ -116,6 +118,7 @@ public:
 signals:
 	//绘制地图信号
 	void UGMapDrawnEvent(MapControl* pQMap, UGGraphics* pGraphics);
+
 
 private:	
 	UGMap& GetMap();
