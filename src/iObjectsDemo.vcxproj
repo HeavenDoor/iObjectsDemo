@@ -342,6 +342,7 @@
     <ClInclude Include="interface\infopanelinterface.h" />
     <ClInclude Include="interface\intelayersinterface.h" />
     <ClInclude Include="interface\maptabinterface.h" />
+    <ClInclude Include="interface\scenetabinterface.h" />
     <ClInclude Include="interface\toolboxinterface.h" />
     <ClInclude Include="interface\widgetplugininterface.h" />
     <ClInclude Include="stdafx.h" />

@@ -192,6 +192,9 @@
     <ClInclude Include="interface\widgetplugininterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="interface\scenetabinterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Resources\iobjectsdemo.qrc">

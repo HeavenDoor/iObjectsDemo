@@ -11,10 +11,10 @@
 class MapTab : public QWidget , MapTabInterface
 {
 	Q_OBJECT
-		Q_PLUGIN_METADATA(IID "{38E64368-2917-4426-8E1B-CC9D72250A25}" FILE "maptab.json")
-		Q_INTERFACES(MapTabInterface)
+	Q_PLUGIN_METADATA(IID "{38E64368-2917-4426-8E1B-CC9D72250A25}" FILE "maptab.json")
+	Q_INTERFACES(MapTabInterface)
 public:
-	MapTab(QWidget *parent = 0);
+	MapTab(QWidget *parent = NULL);
 	~MapTab();
 
 	virtual void test();
