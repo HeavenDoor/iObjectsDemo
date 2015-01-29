@@ -23,5 +23,14 @@
     <file>select.png</file>
     <file>Zoomout.png</file>
     <file>Zoomin.png</file>
+    
+    <!--ToolBox-->
+    <file>toolbox.qss</file>
+    <file>toolbox.png</file>
+    <file>searchp.png</file>
+    <file>search.png</file>
+    <file>set.png</file>
+    <file>setp.png</file>
+    
   </qresource>
 </RCC>

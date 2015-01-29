@@ -86,8 +86,9 @@ void iObjectsDemo::resizeEvent(QResizeEvent* e)
 	
 	if (m_pToolBox)
 	{
-		m_pToolBox->resizePlugin(0 ,height()-m_pToolBox->pluginHeight(), width(), m_pToolBox->pluginHeight());
+		m_pToolBox->setGeometry(0, height() - m_pToolBox->height(), width(), m_pToolBox->height());
 	}
+
 	if (m_pInteLayers)
 	{
 		m_pInteLayers->resizePlugin(15, height()/2 - m_pInteLayers->pluginHeight()/2,  m_pInteLayers->pluginWidth(), m_pInteLayers->pluginHeight());
@@ -137,6 +138,16 @@ bool iObjectsDemo::loadControls()
 	m_pCloseBtn->setFixedWidth(48);
 	m_pCloseBtn->setGeometry(width() - 60, 20, m_pCloseBtn->width(), m_pCloseBtn->height());
 	connect(m_pCloseBtn, SIGNAL(clicked()), this, SLOT(OnCloseBtnClicked()));
+
+
+	m_pToolBox = new ToolBox(this);
+	m_pToolBox->setFixedHeight(50);
+	m_pToolBox->setToolButtonSize(QSize(m_pToolBox->height(),m_pToolBox->height()));
+	QObject* obj = m_pToolBox->createToolButton("search");
+	if(obj) connect(obj, SIGNAL(clicked()), this, SLOT(OnToolBoxPlugin_SearchBtnClicked()));
+	obj = m_pToolBox->createToolButton("set", Qt::AlignRight);
+	if(obj) connect(obj, SIGNAL(clicked()), this, SLOT(OnToolBoxPlugin_SettingBtnClicked()));
+
 	return true;
 }
 
@@ -145,11 +156,6 @@ bool iObjectsDemo::unLoadPlugins(const QString& pluginName )
 	bool bPluginunload = false;
 	QPluginLoader* loader = qobject_cast<QPluginLoader*>(this->findChild<QPluginLoader*>(pluginName));
 
-	if (pluginName == "ToolBox")
-	{
-		bPluginunload = loader->unload();
-		m_pToolBox = NULL;
-	}
 
 	if (pluginName == "MapTab"/*loader->instance()->inherits("MapTabInterface")*/)
 	{
@@ -198,28 +204,6 @@ bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 	{  
 
 		QString name = object->objectName();
-		if (object->inherits("ToolBoxInterface"))
-		{
-			m_pToolBox = qobject_cast<ToolBoxInterface*>(object) ;  
-			if (m_pToolBox)  
-			{
-				bPluginLoaded = true;
-				//m_pToolBox->
-				m_pToolBox->setPluginParent(this);
-				m_pToolBox->setPluginHeight(50);
-				m_pToolBox->setToolButtonSize(QSize(50,50));
-				m_pToolBox->setPluginGeometry(0 ,height() - m_pToolBox->pluginHeight(), width(), m_pToolBox->pluginHeight());
-				m_pToolBox->showPlugin();
-				m_pToolBox->raisePlugin();
-				QObject* obj = m_pToolBox->createToolButton("search");
-				if(obj) connect(obj, SIGNAL(clicked()), this, SLOT(OnToolBoxPlugin_SearchBtnClicked()));
-				obj = m_pToolBox->createToolButton("set", Qt::AlignRight);
-				if(obj) connect(obj, SIGNAL(clicked()), this, SLOT(OnToolBoxPlugin_SettingBtnClicked()));
-
-// 				m_pToolBox->createToolButton("set");
-// 				m_pToolBox->createToolButton("search", Qt::AlignRight);
-			}
-		}
 		if (object->inherits("MapTabInterface"))
 		{
 			m_pMapTab = qobject_cast<MapTabInterface*>(object) ;  

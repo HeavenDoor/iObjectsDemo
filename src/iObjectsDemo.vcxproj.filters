@@ -142,6 +142,15 @@
     <ClCompile Include="GeneratedFiles\Release\moc_xmlutils.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_toolbox.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_toolbox.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="code\toolbox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -201,6 +210,9 @@
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="commom\xmlutils.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="code\toolbox.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

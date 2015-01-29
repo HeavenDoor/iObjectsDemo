@@ -5,6 +5,7 @@
 #include <QApplication>
 #include <QtQuickWidgets/QQuickWidget>
 #include "title.h"
+#include "toolbox.h"
 
 #include "interface/widgetplugininterface.h"
 #include "interface/toolboxinterface.h"
@@ -40,8 +41,11 @@ private slots:
 	void OnInteLayersPlugin_RefeshWindow();
 	void OnShowLayers(QVector<QString> vec);
 private:
+	// 加载控件
 	bool loadControls();
+	// 加载插件 path：插件所在文件夹目录
 	bool loadPlugins(const QString& path, const QString& pluginName);
+	// 卸载插件 
 	bool unLoadPlugins(const QString& pluginName);
 private:
 
@@ -49,12 +53,14 @@ private:
 	QPushButton* m_pCloseBtn;
 	QPushButton* m_pPopBtn;
 
-	ToolBoxInterface* m_pToolBox;
+	//ToolBoxInterface* m_pToolBox;
 	MapTabInterface* m_pMapTab;
 	InteLayersInterface* m_pInteLayers;
 	InfoPanelInterface* m_pInfoPanel;
 
 	Title* m_pTitle;
+	ToolBox * m_pToolBox;
+
 	Pluginloader* m_pPluginloader;
 	QVariantMap m_pluginMap;
 
