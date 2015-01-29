@@ -8,7 +8,7 @@ class Title : public QWidget
 	Q_OBJECT
 
 public:
-	Title(QWidget *parent);
+	Title(QWidget *parent = NULL);
 	~Title();
 	
 protected:

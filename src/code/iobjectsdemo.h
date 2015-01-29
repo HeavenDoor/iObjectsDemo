@@ -5,15 +5,16 @@
 #include <QApplication>
 #include <QtQuickWidgets/QQuickWidget>
 #include "title.h"
-#include "toolbox.h"
-
-#include "interface/widgetplugininterface.h"
-#include "interface/toolboxinterface.h"
-#include "interface/maptabinterface.h"
-#include "interface/intelayersinterface.h"
-#include "interface/infopanelinterface.h"
 #include "pluginloader.h"
 #include "Map2D/map2dcontainer.h"
+#include "ToolBox/toolbox.h"
+#include "InfoPanel/infopanel.h"
+
+#include "interface/widgetplugininterface.h"
+//#include "interface/toolboxinterface.h"
+#include "interface/maptabinterface.h"
+#include "interface/intelayersinterface.h"
+//#include "interface/infopanelinterface.h"
 
 class iObjectsDemo : public QWidget
 {
@@ -54,12 +55,14 @@ private:
 	QPushButton* m_pPopBtn;
 
 	//ToolBoxInterface* m_pToolBox;
+	ToolBox * m_pToolBox;
+	InfoPanel* m_pInfoPanel;
 	MapTabInterface* m_pMapTab;
 	InteLayersInterface* m_pInteLayers;
-	InfoPanelInterface* m_pInfoPanel;
+
 
 	Title* m_pTitle;
-	ToolBox * m_pToolBox;
+	
 
 	Pluginloader* m_pPluginloader;
 	QVariantMap m_pluginMap;

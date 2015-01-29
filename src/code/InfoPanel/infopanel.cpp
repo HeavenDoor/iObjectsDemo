@@ -2,7 +2,8 @@
 #include "infopanel.h"
 #include <QQuickItem>
 
-InfoPanel::InfoPanel()
+
+InfoPanel::InfoPanel( QWidget* parent /*= NULL*/ ) : QQuickWidget(parent)
 {
 	m_timespan = 500;
 	registerTypes("SuperMap");
@@ -43,57 +44,22 @@ void InfoPanel::registerTypes( const char *uri )
 	qmlRegisterType<InfoHandler>(uri, 1, 0, "InfoHandler");
 }
 
-void InfoPanel::test()
+bool InfoPanel::IsExpandBtnVisible()
 {
-
+	if (!m_pExpandBtn) return false;
+	return m_pExpandBtn->property("visible").toBool();
 }
 
-QObject* InfoPanel::getObject()
+int InfoPanel::getExpandBtnWidth()
 {
-	return this;
+	if (!m_pExpandBtn) return false;
+	return m_pExpandBtn->property("imgWidth").toInt();
 }
 
-void InfoPanel::setPluginGeometry( const QRect& rect )
+int InfoPanel::getExpandBtnHeight()
 {
-	setGeometry(rect);
-}
-
-void InfoPanel::setPluginGeometry( int ax, int ay, int aw, int ah )
-{
-	setGeometry(ax, ay, aw, ah);
-}
-
-void InfoPanel::setPluginParent( QWidget* parentWidget )
-{
-	setParent(parentWidget);
-}
-
-void InfoPanel::showPlugin()
-{
-	show();
-}
-
-void InfoPanel::raisePlugin()
-{
-	raise();
-}
-
-void InfoPanel::lowerPlugin()
-{
-	lower();
-}
-
-void InfoPanel::resizePlugin( int ax, int ay, int aw, int ah )
-{
-	if (!m_pExpandBtn) return;
-	if (!m_pExpandBtn->property("visible").toBool())
-	{
-		setGeometry(ax, ay, aw, ah);
-	}
-	else
-	{
-		this->setGeometry(ax + aw - m_pExpandBtn->property("imgWidth").toInt() , ay, m_pExpandBtn->property("imgWidth").toInt(), m_pExpandBtn->property("imgHeight").toInt() + 10);
-	}
+	if (!m_pExpandBtn) return 0;
+	return m_pExpandBtn->property("imgHeight").toInt();
 }
 
 void InfoPanel::setPluginWidth( int width )

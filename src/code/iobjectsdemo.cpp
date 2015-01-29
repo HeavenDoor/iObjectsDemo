@@ -98,7 +98,15 @@ void iObjectsDemo::resizeEvent(QResizeEvent* e)
 
 	if (m_pInfoPanel)
 	{
-		m_pInfoPanel->resizePlugin(width() - m_pInfoPanel->pluginWidth() - 15 ,height()/2 - m_pInfoPanel->pluginHeight()/2, m_pInfoPanel->pluginWidth(), m_pInfoPanel->pluginHeight());
+		if (m_pInfoPanel->IsExpandBtnVisible())
+		{
+			m_pInfoPanel->setGeometry(width() -  m_pInfoPanel->getExpandBtnWidth() - 15 ,height()/2 - m_pInfoPanel->pluginHeight()/2, m_pInfoPanel->getExpandBtnWidth(), m_pInfoPanel->getExpandBtnHeight() + 10);
+		}
+		else
+		{
+			m_pInfoPanel->setGeometry(width() - m_pInfoPanel->pluginWidth() - 15 ,height()/2 - m_pInfoPanel->pluginHeight()/2, m_pInfoPanel->pluginWidth(), m_pInfoPanel->pluginHeight());
+		}
+	
 	}
 
 	if (m_pMapTab)
@@ -148,6 +156,18 @@ bool iObjectsDemo::loadControls()
 	obj = m_pToolBox->createToolButton("set", Qt::AlignRight);
 	if(obj) connect(obj, SIGNAL(clicked()), this, SLOT(OnToolBoxPlugin_SettingBtnClicked()));
 
+
+	m_pInfoPanel = new InfoPanel(this);
+
+	m_pInfoPanel->setPluginWidth(280);
+	m_pInfoPanel->setPluginHeight(370);
+	//m_pInfoPanel->setGeometry(15, height()/2 - 200, 280, 370);
+	m_pInfoPanel->show();
+	m_pInfoPanel->raise();
+	m_pInfoPanel->setAnimationTimespan(600);
+	m_pInfoPanel->setGeometry(width() - m_pInfoPanel->pluginWidth() - 15 ,height()/2 - m_pInfoPanel->pluginHeight()/2, m_pInfoPanel->pluginWidth(), m_pInfoPanel->pluginHeight());
+
+
 	return true;
 }
 
@@ -176,13 +196,6 @@ bool iObjectsDemo::unLoadPlugins(const QString& pluginName )
 		m_pInteLayers = NULL;
 	}
 
-	if (pluginName == "InfoPanel"/*loader->instance()->inherits("InfoPanelInterface")*/)
-	{
-		bPluginunload = loader->unload();
-		m_pInfoPanel = NULL;
-	}
-	
-	
 	return bPluginunload;
 }
 
@@ -223,8 +236,8 @@ bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 // 					c = new QWidget();
 // 					m_pMapTab->addCentralWidget(c, 2, "sissdf");
 // // 
-					QWidget* d = new QWidget();
-					m_pMapTab->addCentralWidget(d, 0, "shenghai");
+// 					QWidget* d = new QWidget();
+// 					m_pMapTab->addCentralWidget(d, 0, "shenghai");
 // 
 					QWidget* e = new QWidget();
 					m_pMapTab->addCentralWidget(e, 3, "ren");
@@ -260,22 +273,6 @@ bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 				m_pInteLayers->showPlugin();
 				m_pInteLayers->raisePlugin();
 				connect(m_pInteLayers->getObject(), SIGNAL(refeshWindow()), this, SLOT(OnInteLayersPlugin_RefeshWindow()));
-			}
-		}
-		if (object->inherits("InfoPanelInterface"))
-		{
-			m_pInfoPanel = qobject_cast<InfoPanelInterface*>(object);
-			if (m_pInfoPanel)
-			{
-				bPluginLoaded = true;
-				m_pInfoPanel->setPluginParent(this);
-				m_pInfoPanel->setPluginWidth(280);
-				m_pInfoPanel->setPluginHeight(370);
-				m_pInfoPanel->setPluginGeometry(15, height()/2 - 200, 280, 370);
-				m_pInfoPanel->showPlugin();
-				m_pInfoPanel->raisePlugin();
-				m_pInfoPanel->setAnimationTimespan(600);
-				m_pInfoPanel->resizePlugin(width() - m_pInfoPanel->pluginWidth() - 15 ,height()/2 - m_pInfoPanel->pluginHeight()/2, m_pInfoPanel->pluginWidth(), m_pInfoPanel->pluginHeight());
 			}
 		}
 	}  

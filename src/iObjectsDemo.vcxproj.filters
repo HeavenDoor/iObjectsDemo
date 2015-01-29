@@ -142,13 +142,31 @@
     <ClCompile Include="GeneratedFiles\Release\moc_xmlutils.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="code\ToolBox\toolbox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_toolbox.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_toolbox.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="code\toolbox.cpp">
+    <ClCompile Include="GeneratedFiles\Debug\moc_infopanel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_infopanel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="code\InfoPanel\infohandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_infohandler.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_infohandler.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="code\InfoPanel\infopanel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -212,7 +230,13 @@
     <CustomBuild Include="commom\xmlutils.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="code\toolbox.h">
+    <CustomBuild Include="code\ToolBox\toolbox.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="code\InfoPanel\infopanel.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="code\InfoPanel\infohandler.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

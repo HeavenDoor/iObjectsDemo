@@ -31,6 +31,18 @@
     <file>search.png</file>
     <file>set.png</file>
     <file>setp.png</file>
-    
+    <!--InfoPanel-->
+    <file>InfoPanel.qml</file>
+    <file>Button.qml</file>
+    <file>ccv.png</file>
+    <file>colles.png</file>
+    <file>ef.png</file>
+    <file>ep.png</file>
+    <file>expand.png</file>
+    <file>s.png</file>
+    <file>sp.png</file>
+    <file>t.png</file>
+    <file>tp.png</file>
+    <!---->
   </qresource>
 </RCC>

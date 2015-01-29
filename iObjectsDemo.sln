@@ -7,8 +7,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MapTab", "src\plugin\MapTab
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InteLayers", "src\plugin\InteLayers\InteLayers.vcxproj", "{A227A4C9-27CC-4638-B21E-B14D3A3BAE90}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InfoPanel", "src\plugin\InfoPanel\InfoPanel.vcxproj", "{33FBA4A0-E0ED-46A3-B82E-217648118D1E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -27,10 +25,6 @@ Global
 		{A227A4C9-27CC-4638-B21E-B14D3A3BAE90}.Debug|Win32.Build.0 = Debug|Win32
 		{A227A4C9-27CC-4638-B21E-B14D3A3BAE90}.Release|Win32.ActiveCfg = Release|Win32
 		{A227A4C9-27CC-4638-B21E-B14D3A3BAE90}.Release|Win32.Build.0 = Release|Win32
-		{33FBA4A0-E0ED-46A3-B82E-217648118D1E}.Debug|Win32.ActiveCfg = Debug|Win32
-		{33FBA4A0-E0ED-46A3-B82E-217648118D1E}.Debug|Win32.Build.0 = Debug|Win32
-		{33FBA4A0-E0ED-46A3-B82E-217648118D1E}.Release|Win32.ActiveCfg = Release|Win32
-		{33FBA4A0-E0ED-46A3-B82E-217648118D1E}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
