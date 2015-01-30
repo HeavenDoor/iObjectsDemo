@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\commom\widgetrect.cpp" />
+    <ClCompile Include="GeneratedFiles\Debug\moc_tabbar.cpp" />
+    <ClCompile Include="GeneratedFiles\Debug\moc_tabwidget.cpp" />
+    <ClCompile Include="GeneratedFiles\Debug\moc_widgetrect.cpp" />
+    <ClCompile Include="GeneratedFiles\qrc_maptab.cpp" />
+    <ClCompile Include="GeneratedFiles\Release\moc_maptab.cpp" />
+    <ClCompile Include="GeneratedFiles\Release\moc_tabbar.cpp" />
+    <ClCompile Include="GeneratedFiles\Release\moc_tabwidget.cpp" />
+    <ClCompile Include="GeneratedFiles\Release\moc_widgetrect.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="tabbar.cpp" />
+    <ClCompile Include="tabwidget.cpp" />
+    <ClCompile Include="GeneratedFiles\Debug\moc_mapbase.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_mapbase.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="mapbase.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="mapbase_global.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="tabwidget.h" />
+    <CustomBuild Include="tabbar.h" />
+    <CustomBuild Include="..\..\commom\widgetrect.h" />
+    <CustomBuild Include="Resources\maptab.qrc" />
+    <CustomBuild Include="mapbase.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\maptab.qss" />
+    <None Include="Resources\tabbar.qss" />
+    <None Include="mapbase.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h</Extensions>
+      <ParseFiles>true</ParseFiles>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>moc;h;cpp</Extensions>
+      <ParseFiles>true</ParseFiles>
+    </Filter>
+    <Filter Include="Generated Files\Debug">
+      <UniqueIdentifier>{17f2daaf-03cf-4a1b-a06c-60d960325ae0}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Generated Files\Release">
+      <UniqueIdentifier>{bf412a2d-9b1b-4bb4-8d8a-8ae9385e1855}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+  </ItemGroup>
+</Project>

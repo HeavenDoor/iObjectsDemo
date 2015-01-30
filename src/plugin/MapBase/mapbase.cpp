@@ -1,9 +1,9 @@
 #include "stdafx.h"
-#include "maptab.h"
+#include "mapbase.h"
 
 
 
-MapTab::MapTab(QWidget *parent) : QWidget(parent)
+MapBase::MapBase(QWidget *parent) : QWidget(parent)
 {
 	setObjectName("MapTab");
 
@@ -18,7 +18,7 @@ MapTab::MapTab(QWidget *parent) : QWidget(parent)
 	int j = m_pTabBar->width();
 }
 
-MapTab::~MapTab()
+MapBase::~MapBase()
 {
 	delete m_pTabWidget;
 	m_pTabWidget = NULL;
@@ -27,7 +27,7 @@ MapTab::~MapTab()
 	m_pTabBar = NULL;
 }
  
- void MapTab::paintEvent(QPaintEvent* e)
+ void MapBase::paintEvent(QPaintEvent* e)
  {
  	QStyleOption opt;
  	opt.init(this);
@@ -41,12 +41,12 @@ MapTab::~MapTab()
 // 	return this;
 // }
 
-void MapTab::test()
+void MapBase::test()
 {
 
 }
 
-void MapTab::resizeEvent( QResizeEvent* e)
+void MapBase::resizeEvent( QResizeEvent* e)
 {
 	if (m_pTabWidget)
 	{
@@ -63,76 +63,76 @@ void MapTab::resizeEvent( QResizeEvent* e)
 }
 
 
-QObject* MapTab::getObject()
+QObject* MapBase::getObject()
 {
 	return this;
 }
 
-void MapTab::setPluginGeometry( const QRect& rect )
+void MapBase::setPluginGeometry( const QRect& rect )
 {
 	this->setGeometry(rect);
 }
 
-void MapTab::setPluginGeometry( int ax, int ay, int aw, int ah )
+void MapBase::setPluginGeometry( int ax, int ay, int aw, int ah )
 {
 	this->setGeometry(ax, ay, aw, ah);
 }
 
-void MapTab::setPluginParent( QWidget* parentWidget )
+void MapBase::setPluginParent( QWidget* parentWidget )
 {
 	this->setParent(parentWidget);
 }
 
-void MapTab::showPlugin()
+void MapBase::showPlugin()
 {
 	this->show();
 }
 
-void MapTab::raisePlugin()
+void MapBase::raisePlugin()
 {
 	this->raise();
 }
 
-void MapTab::resizePlugin(int ax, int ay, int aw, int ah)
+void MapBase::resizePlugin(int ax, int ay, int aw, int ah)
 {
 	setGeometry(ax, ay, aw, ah);
 }
 
 
-void MapTab::OnChangeDimension( int isTwoDimension )
+void MapBase::OnChangeDimension( int isTwoDimension )
 {
 	if(!m_pTabWidget) return;
 	m_pTabWidget->resize(width(), height());
 	m_pTabWidget->setCurrentIndex(isTwoDimension);
 }
 
-void MapTab::lowerPlugin()
+void MapBase::lowerPlugin()
 {
 	lower();
 }
 
-void MapTab::setPluginWidth( int width )
+void MapBase::setPluginWidth( int width )
 {
 	setFixedWidth(width);
 }
 
 
-void MapTab::setPluginHeight( int height )
+void MapBase::setPluginHeight( int height )
 {
 	setFixedHeight(height);
 }
 
-int MapTab::pluginWidth()
+int MapBase::pluginWidth()
 {
 	return width();
 }
 
-int MapTab::pluginHeight()
+int MapBase::pluginHeight()
 {
 	return height();
 }
 
-void MapTab::addCentralWidget( QWidget* map, int tabIndex, QString tabName)
+void MapBase::addCentralWidget( QWidget* map, int tabIndex, QString tabName)
 {
 	if (!m_pTabWidget ||  !m_pTabBar) return;
 	if (m_pTabWidget->count() < tabIndex) tabIndex = m_pTabWidget->count();
@@ -142,7 +142,7 @@ void MapTab::addCentralWidget( QWidget* map, int tabIndex, QString tabName)
 	m_pTabWidget->addCentralWidget(map, tabIndex, tabName);
 }
 
-void MapTab::setCurrentIndex( int index )
+void MapBase::setCurrentIndex( int index )
 {
 	if (!m_pTabWidget ||  !m_pTabBar) return;
 	if (m_pTabWidget->count() <= index) index = m_pTabWidget->count() - 1;
@@ -150,7 +150,7 @@ void MapTab::setCurrentIndex( int index )
 	m_pTabBar->setCurrentIndex(index);
 }
 
-void MapTab::loadSkin()
+void MapBase::loadSkin()
 {
 	QFile file(":/maptab.qss");
 	file.open(QFile::ReadOnly);

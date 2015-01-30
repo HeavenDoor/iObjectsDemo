@@ -207,13 +207,13 @@
     <ClInclude Include="interface\intelayersinterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="interface\maptabinterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="interface\widgetplugininterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="interface\scenetabinterface.h">
+    <ClInclude Include="interface\scenebaseinterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\mapbaseinterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

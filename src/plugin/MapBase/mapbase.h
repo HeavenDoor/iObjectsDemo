@@ -1,21 +1,21 @@
 #ifndef MAPTAB_H
 #define MAPTAB_H
 
-#include "maptab_global.h"
-#include "..\\..\\interface\maptabinterface.h"
+#include "mapbase_global.h"
+#include "..\\..\\interface\mapbaseinterface.h"
 #include "tabbar.h"
 #include "tabwidget.h"
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QWidget>
 
-class MapTab : public QWidget , MapTabInterface
+class MapBase : public QWidget , MapBaseInterface
 {
 	Q_OBJECT
-	Q_PLUGIN_METADATA(IID "{38E64368-2917-4426-8E1B-CC9D72250A25}" FILE "maptab.json")
-	Q_INTERFACES(MapTabInterface)
+	Q_PLUGIN_METADATA(IID "{38E64368-2917-4426-8E1B-CC9D72250A25}" FILE "mapbase.json")
+	Q_INTERFACES(MapBaseInterface)
 public:
-	MapTab(QWidget *parent = NULL);
-	~MapTab();
+	MapBase(QWidget *parent = NULL);
+	~MapBase();
 
 	virtual void test();
 	//virtual QWidget* getWidget();

@@ -1,19 +1,19 @@
 #ifndef SCENETAB_H
 #define SCENETAB_H
 
-#include "scenetab_global.h"
-#include "..\\..\\interface\scenetabinterface.h"
+#include "scenebase_global.h"
+#include "..\\..\\interface\scenebaseinterface.h"
 
 #include <QtWidgets/QWidget>
 
-class SceneTab : public QWidget ,SceneTabInterface
+class SceneBase : public QWidget, SceneBaseInterface
 {
 	Q_OBJECT
-	Q_PLUGIN_METADATA(IID "{2E23E146-CD7C-4D00-9335-E0DB52AE9087}" FILE "scenetab.json")
-	Q_INTERFACES(SceneTabInterface)
+	Q_PLUGIN_METADATA(IID "{2E23E146-CD7C-4D00-9335-E0DB52AE9087}" FILE "scenebase.json")
+	Q_INTERFACES(SceneBaseInterface)
 public:
-	SceneTab(QWidget *parent = NULL);
-	~SceneTab();
+	SceneBase(QWidget *parent = NULL);
+	~SceneBase();
 
 	virtual void test();
 	virtual QObject* getObject();

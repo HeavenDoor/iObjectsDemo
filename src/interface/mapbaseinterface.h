@@ -5,7 +5,7 @@
 #include <QObject>
 #include <QtWidgets/QWidget>
 #include "widgetplugininterface.h"
-class MapTabInterface : public WidgetPluginInterface
+class MapBaseInterface : public WidgetPluginInterface
 {
 public:
 	virtual void test() = 0;
@@ -16,7 +16,7 @@ public:
 
 
 QT_BEGIN_NAMESPACE
-	Q_DECLARE_INTERFACE(MapTabInterface, "{6EDEBEEB-DFDE-461E-BAF2-2A5D0C90BF1D}")
+	Q_DECLARE_INTERFACE(MapBaseInterface, "{6EDEBEEB-DFDE-461E-BAF2-2A5D0C90BF1D}")
 QT_END_NAMESPACE
 
 #endif
