@@ -169,6 +169,33 @@
     <ClCompile Include="code\InfoPanel\infopanel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="code\TabView\tabbar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_tabbar.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_tabbar.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="code\TabView\tabview.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_tabview.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_tabview.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="code\TabView\tabwidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_tabwidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_tabwidget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -177,16 +204,10 @@
     <ClInclude Include="commom\pluginspec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="interface\infopanelinterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="interface\intelayersinterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="interface\maptabinterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="interface\toolboxinterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="interface\widgetplugininterface.h">
@@ -240,6 +261,15 @@
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="code\InfoPanel\infohandler.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="code\TabView\tabbar.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="code\TabView\tabview.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="code\TabView\tabwidget.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

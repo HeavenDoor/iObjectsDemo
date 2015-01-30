@@ -9,6 +9,7 @@
 #include "Map2D/map2dcontainer.h"
 #include "ToolBox/toolbox.h"
 #include "InfoPanel/infopanel.h"
+#include "TabView/tabview.h"
 
 #include "interface/widgetplugininterface.h"
 //#include "interface/toolboxinterface.h"
@@ -54,13 +55,13 @@ private:
 	QPushButton* m_pCloseBtn;
 	QPushButton* m_pPopBtn;
 
-	//ToolBoxInterface* m_pToolBox;
 	ToolBox * m_pToolBox;
 	InfoPanel* m_pInfoPanel;
+	TabView* m_pTabView;
+
 	MapTabInterface* m_pMapTab;
 	InteLayersInterface* m_pInteLayers;
-
-
+	
 	Title* m_pTitle;
 	
 

@@ -17,11 +17,15 @@ iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 	setObjectName("iObjectsDemo");
 	setGeometry(200,200,1247,766);
 
+	m_pTitle = NULL;
+	m_pPopBtn = NULL;
+
 	m_pToolBox = NULL;
 	m_pMapTab = NULL;
 	m_pInteLayers = NULL;
 	m_pInfoPanel = NULL;
 	m_pMap2DContainer = NULL;
+	m_pTabView = NULL;
 // 
 	m_pPluginloader = new Pluginloader(NULL);
 	m_pPluginloader->showModel();
@@ -39,20 +43,6 @@ iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
  			continue;
  	}
  	 
-	m_pPopBtn = new QPushButton(this);
-	m_pPopBtn->setObjectName("PopTitleBtn");
-	m_pPopBtn->setFixedWidth(40);
-	m_pPopBtn->setFixedHeight(8);
-	m_pPopBtn->setGeometry(width()/2 - m_pPopBtn->width()/2, 0, m_pPopBtn->width(), m_pPopBtn->height());
-	m_pPopBtn->hide();
-
-
-	m_pTitle = new Title(this);
-	connect(m_pTitle, SIGNAL(collapse()), this, SLOT(OnTitleCollapsed()));
-	connect(m_pPopBtn, SIGNAL(clicked()), m_pTitle, SLOT(expandTitle()));
-	m_pTitle->raise();
-
-
 	loadControls();
 
 
@@ -114,6 +104,11 @@ void iObjectsDemo::resizeEvent(QResizeEvent* e)
 		m_pMapTab->resizePlugin(0, 0, width(), height());
 	}
 
+	if (m_pTabView)
+	{
+		m_pTabView->setGeometry(0,0,width(),height());
+	}
+
 
 	if (m_pTitle)
 	{
@@ -124,11 +119,11 @@ void iObjectsDemo::resizeEvent(QResizeEvent* e)
 		m_pPopBtn->setGeometry(width()/2 - m_pPopBtn->width()/2, 0, m_pPopBtn->width(), m_pPopBtn->height());
 	}
 
-	if (m_pMap2DContainer)
-	{
-		m_pMap2DContainer->setFixedHeight(height());
-		m_pMap2DContainer->setFixedWidth(width());
-	}
+// 	if (m_pMap2DContainer)
+// 	{
+// 		m_pMap2DContainer->setFixedHeight(height());
+// 		m_pMap2DContainer->setFixedWidth(width());
+// 	}
 
 	QWidget::resizeEvent(e);
 }
@@ -140,6 +135,37 @@ void iObjectsDemo::OnCloseBtnClicked()
 
 bool iObjectsDemo::loadControls()
 {
+	m_pPopBtn = new QPushButton(this);
+	m_pPopBtn->setObjectName("PopTitleBtn");
+	m_pPopBtn->setFixedWidth(40);
+	m_pPopBtn->setFixedHeight(8);
+	m_pPopBtn->setGeometry(width()/2 - m_pPopBtn->width()/2, 0, m_pPopBtn->width(), m_pPopBtn->height());
+	m_pPopBtn->hide();
+
+
+	m_pTitle = new Title(this);
+	connect(m_pTitle, SIGNAL(collapse()), this, SLOT(OnTitleCollapsed()));
+	connect(m_pPopBtn, SIGNAL(clicked()), m_pTitle, SLOT(expandTitle()));
+	m_pTitle->raise();
+	m_pTitle->hide();
+
+	m_pTabView = new TabView(this);
+	QWidget* e = new QWidget(m_pTabView);
+	e->setObjectName("TwoDimension");
+	m_pTabView->addCentralWidget(e, 3, "ren");
+
+	QWidget* rr = new QWidget(m_pTabView);
+	rr->setObjectName("rr");
+	m_pTabView->addCentralWidget(rr, 3, "rr");
+	// 
+	m_pMap2DContainer = new Map2DContainer(m_pTabView);
+	//connect(m_pMap2DContainer,SIGNAL(showLayers(QVector<QString>)), this, SLOT(OnShowLayers(QVector<QString>)));
+	OnShowLayers(m_pMap2DContainer->getLayers());
+	m_pTabView->addCentralWidget(m_pMap2DContainer, 8, QStringLiteral("¶þÎ¬"));
+	m_pTabView->setCurrentIndex(0);
+	//m_pTabView->loadSkin();
+
+
 	m_pCloseBtn = new QPushButton(this);
 	m_pCloseBtn->setObjectName("CloseBtn");
 	m_pCloseBtn->setFixedHeight(48);
@@ -273,6 +299,7 @@ bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 				m_pInteLayers->showPlugin();
 				m_pInteLayers->raisePlugin();
 				connect(m_pInteLayers->getObject(), SIGNAL(refeshWindow()), this, SLOT(OnInteLayersPlugin_RefeshWindow()));
+				
 			}
 		}
 	}  

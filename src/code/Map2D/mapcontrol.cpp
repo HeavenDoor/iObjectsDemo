@@ -80,6 +80,17 @@ void UGSTDCALL MapDrawnCallBack_QMap(UGlong pWnd, UGGraphics* pGraphics)
 	pQMap->OnMapDrawn(pGraphics);
 }
 
+void UGSTDCALL MapSingleGeometrySelectedCallBack(UGlong pWnd,UGLayer* pLayer,UGint nGeoID)
+{
+	MapControl* pQMap = (MapControl*)pWnd;
+	//pQMap->OnMapDrawn(pGraphics);
+}
+
+void UGSTDCALL GeometrySelectedProcCallBack(UGlong pWnd,UGint nSelectedGeometryCount)
+{
+	MapControl* pQMap = (MapControl*)pWnd;
+}
+
 MapControl::MapControl( QWidget* parent)
 {
 	m_width = this->width();
@@ -120,6 +131,9 @@ void MapControl::Init()
 	m_pMapEditorWnd->m_mapWnd.SetAfterMapDrawFunc(MapDrawnCallBack_QMap, (UGlong)this);
 	m_pMapEditorWnd->SetTrackingFunc(TrackingCallBack, (UGlong)this);
 	m_pMapEditorWnd->SetTrackedFunc(TrackedCallBack, (UGlong)this);
+
+	m_pMapEditorWnd->SetSingleGeometrySelectedFunc(MapSingleGeometrySelectedCallBack, (UGlong)this);
+	m_pMapEditorWnd->SetGeometrySelectedFunc(GeometrySelectedProcCallBack, (UGlong)this);
 
 	m_pWorkspace = new UGWorkspace;
 }

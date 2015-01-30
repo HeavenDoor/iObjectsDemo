@@ -43,6 +43,16 @@
     <file>sp.png</file>
     <file>t.png</file>
     <file>tp.png</file>
-    <!---->
+    <!--TabView-->
+    <file>tabbar.qss</file>
+    <file>bk.png</file>
+    <file>twodimension.png</file>
+    <file>threedimension.png</file>
+    <file>downthree.png</file>
+    <file>upthree.png</file>
+    <file>downtwo.png</file>
+    <file>uptwo.png</file>
+    <file>downmaptab.png</file>
+    <file>upmaptab.png</file>
   </qresource>
 </RCC>

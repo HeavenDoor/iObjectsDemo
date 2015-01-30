@@ -1,4 +1,4 @@
-<plugin name="MapTab" version="3.0.1" compatVersion="3.0.0">
+<plugin name="SceneBase" version="3.0.1" compatVersion="3.0.0">
     <vendor>Digia Plc</vendor>
     <copyright>(C) 2014 Digia Plc</copyright>
     <license>

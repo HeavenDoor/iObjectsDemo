@@ -1,0 +1,37 @@
+
+QToolButton[HeadSelectedTabBar = "0"]{
+	border-image: url(:/uptwo.png);
+	border-width:0px 0px 0px 0px;
+	color: white;
+}
+
+QToolButton[HeadSelectedTabBar = "1"]{
+	border-image: url(:/downtwo.png);
+	border-width:0px 0px 0px 0px;
+	color: white;
+}
+
+
+QToolButton[TailSelectedTabBar = "0"]{
+	border-image: url(:/upthree.png);
+	border-width:0px 0px 0px 0px;
+	color: white;
+}
+
+QToolButton[TailSelectedTabBar = "1"]{
+	border-image: url(:/downthree.png);
+	border-width:0px 0px 0px 0px;
+	color: white;
+}
+
+
+QToolButton[SelectedTabBar = "0"]{
+	border-image: url(:/upmaptab.png);
+	border-width:0px 0px 0px 0px;
+	color: white;
+}
+QToolButton[SelectedTabBar = "1"]{
+	border-image: url(:/downmaptab.png);
+	border-width:0px 0px 0px 0px;
+	color: white;
+}
