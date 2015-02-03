@@ -1,0 +1,56 @@
+/******************Main*********************************/
+/**********************itemBK**************************************************/
+QWidget#InteLayersItem{
+	border-image:url(:/itemBK.png);
+	border-width:1px 1px 1px 1px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+QWidget#LayersContainer{
+	border-image:url(:/tran.png);
+	border-width:1px 1px 1px 1px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+QWidget#EmptyWidget{
+	border-image:url(:/tran.png);
+	border-width:0px 0px 0px 0px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+QScrollBar:vertical {
+    background-color:#C6E2FF;
+	width: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background-color:qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 #e3a41e, stop: 1 #d69200);
+    min-height: 100px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background-color:qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 #d69200, stop: 1 #d26106);
+}
+
+QScrollBar:horizontal {
+    background-color:#C6E2FF;
+	height: 0px;
+}
+
+QScrollBar::handle:horizontal {
+    background-color:qlineargradient(y1: 0, x1: 0, y2: 1, x2: 0,stop: 0 #e3a41e, stop: 1 #d69200);
+	min-width: 100px;
+}
+
+QScrollBar::handle:horizontal:hover {
+    background-color:qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 #d69200, stop: 1 #d26106);
+}

@@ -9,15 +9,14 @@ class MapBaseInterface : public WidgetPluginInterface
 {
 public:
 	virtual void test() = 0;
-	virtual void addCentralWidget(QWidget* map, int tabIndex, QString tabName) = 0;
-	virtual void setCurrentIndex(int index) = 0;
-	virtual void loadSkin() = 0;
+	virtual QWidget* getWidget() = 0;
+	virtual QWidget* getController() = 0;
+	virtual QString getStyleSheet() = 0;
 };
 
 
 QT_BEGIN_NAMESPACE
-	Q_DECLARE_INTERFACE(MapBaseInterface, "{6EDEBEEB-DFDE-461E-BAF2-2A5D0C90BF1D}")
+	Q_DECLARE_INTERFACE(MapBaseInterface, "{D1B7D4F8-A0E7-42B8-AE6A-DAF3122D6EB8}")
 QT_END_NAMESPACE
 
 #endif
-

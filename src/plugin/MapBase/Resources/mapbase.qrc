@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+      <file>mapbase.qss</file>
+      <file>Pan.png</file>
+      <file>Entire.png</file>
+      <file>select.png</file>
+      <file>Zoomout.png</file>
+      <file>Zoomin.png</file>
+
+      <file>itemBK.png</file>
+      <file>tran.png</file>
+    </qresource>
+</RCC>

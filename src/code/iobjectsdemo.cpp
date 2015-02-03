@@ -19,14 +19,15 @@ iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 
 	m_pTitle = NULL;
 	m_pPopBtn = NULL;
-
 	m_pToolBox = NULL;
-	m_pMapTab = NULL;
+	m_pMapBase = NULL;
 	m_pInteLayers = NULL;
 	m_pInfoPanel = NULL;
-	m_pMap2DContainer = NULL;
 	m_pTabView = NULL;
-// 
+
+	initInteLayers();
+	initTabView();
+
 	m_pPluginloader = new Pluginloader(NULL);
 	m_pPluginloader->showModel();
 
@@ -43,8 +44,10 @@ iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
  			continue;
  	}
  	 
-	loadControls();
+	initControls();
 
+	if (m_pInteLayers) m_pInteLayers->raise();
+	if (m_pInfoPanel) m_pInfoPanel->raise();
 
 	if (m_pPluginloader)
 	{
@@ -58,82 +61,32 @@ iObjectsDemo::~iObjectsDemo()
 
 }
 
-void iObjectsDemo::paintEvent(QPaintEvent* e)
+bool iObjectsDemo::initTabView()
 {
-	QStyleOption opt;
-	opt.init(this);
-	QPainter p(this);
-	style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-	QWidget::paintEvent(e);
+	m_pTabView = new TabView(this);
+	QWidget* e = new QWidget(m_pTabView);
+	e->setObjectName("TwoDimension");
+	m_pTabView->addCentralWidget(e, 3, "ren");
+	QWidget* rr = new QWidget(m_pTabView);
+	rr->setObjectName("rr");
+	m_pTabView->addCentralWidget(rr, 3, "rr");
+	return true;
 }
 
-void iObjectsDemo::resizeEvent(QResizeEvent* e)
+
+bool iObjectsDemo::initInteLayers()
 {
-	if (m_pCloseBtn)
-	{
-		m_pCloseBtn->setGeometry(width() - 60, 20, m_pCloseBtn->width(), m_pCloseBtn->height());
-	}
-	
-	if (m_pToolBox)
-	{
-		m_pToolBox->setGeometry(0, height() - m_pToolBox->height(), width(), m_pToolBox->height());
-	}
-
-	if (m_pInteLayers)
-	{
-		m_pInteLayers->resizePlugin(15, height()/2 - m_pInteLayers->pluginHeight()/2,  m_pInteLayers->pluginWidth(), m_pInteLayers->pluginHeight());
-
-		//m_pInteLayers->resizePlugin(15, height()/2 - 200,  216, 400);
-	}
-
-	if (m_pInfoPanel)
-	{
-		if (m_pInfoPanel->IsExpandBtnVisible())
-		{
-			m_pInfoPanel->setGeometry(width() -  m_pInfoPanel->getExpandBtnWidth() - 15 ,height()/2 - m_pInfoPanel->pluginHeight()/2, m_pInfoPanel->getExpandBtnWidth(), m_pInfoPanel->getExpandBtnHeight() + 10);
-		}
-		else
-		{
-			m_pInfoPanel->setGeometry(width() - m_pInfoPanel->pluginWidth() - 15 ,height()/2 - m_pInfoPanel->pluginHeight()/2, m_pInfoPanel->pluginWidth(), m_pInfoPanel->pluginHeight());
-		}
-	
-	}
-
-	if (m_pMapTab)
-	{
-		m_pMapTab->resizePlugin(0, 0, width(), height());
-	}
-
-	if (m_pTabView)
-	{
-		m_pTabView->setGeometry(0,0,width(),height());
-	}
-
-
-	if (m_pTitle)
-	{
-		m_pTitle->setGeometry(width()/2 - m_pTitle->width()/2, 0, m_pTitle->width(), m_pTitle->height());
-	}
-	if (m_pPopBtn)
-	{
-		m_pPopBtn->setGeometry(width()/2 - m_pPopBtn->width()/2, 0, m_pPopBtn->width(), m_pPopBtn->height());
-	}
-
-// 	if (m_pMap2DContainer)
-// 	{
-// 		m_pMap2DContainer->setFixedHeight(height());
-// 		m_pMap2DContainer->setFixedWidth(width());
-// 	}
-
-	QWidget::resizeEvent(e);
+	m_pInteLayers = new InteLayers(this);
+	connect(m_pInteLayers, SIGNAL(refeshWindow()), this, SLOT(OnInteLayersPlugin_RefeshWindow()));
+	m_pInteLayers->setInteLayersWidth(216);
+	m_pInteLayers->setInteLayersHeight(410);
+	m_pInteLayers->setGeometry(15, height()/2 - m_pInteLayers->InteLayersHeight()/2, m_pInteLayers->InteLayersWidth(), m_pInteLayers->InteLayersHeight());
+	m_pInteLayers->raise();
+	return true;
 }
 
-void iObjectsDemo::OnCloseBtnClicked()
-{
-	this->close();
-}
 
-bool iObjectsDemo::loadControls()
+bool iObjectsDemo::initControls()
 {
 	m_pPopBtn = new QPushButton(this);
 	m_pPopBtn->setObjectName("PopTitleBtn");
@@ -142,29 +95,11 @@ bool iObjectsDemo::loadControls()
 	m_pPopBtn->setGeometry(width()/2 - m_pPopBtn->width()/2, 0, m_pPopBtn->width(), m_pPopBtn->height());
 	m_pPopBtn->hide();
 
-
 	m_pTitle = new Title(this);
 	connect(m_pTitle, SIGNAL(collapse()), this, SLOT(OnTitleCollapsed()));
 	connect(m_pPopBtn, SIGNAL(clicked()), m_pTitle, SLOT(expandTitle()));
 	m_pTitle->raise();
 	m_pTitle->hide();
-
-	m_pTabView = new TabView(this);
-	QWidget* e = new QWidget(m_pTabView);
-	e->setObjectName("TwoDimension");
-	m_pTabView->addCentralWidget(e, 3, "ren");
-
-	QWidget* rr = new QWidget(m_pTabView);
-	rr->setObjectName("rr");
-	m_pTabView->addCentralWidget(rr, 3, "rr");
-	// 
-	m_pMap2DContainer = new Map2DContainer(m_pTabView);
-	//connect(m_pMap2DContainer,SIGNAL(showLayers(QVector<QString>)), this, SLOT(OnShowLayers(QVector<QString>)));
-	OnShowLayers(m_pMap2DContainer->getLayers());
-	m_pTabView->addCentralWidget(m_pMap2DContainer, 8, QStringLiteral("¶þÎ¬"));
-	m_pTabView->setCurrentIndex(0);
-	//m_pTabView->loadSkin();
-
 
 	m_pCloseBtn = new QPushButton(this);
 	m_pCloseBtn->setObjectName("CloseBtn");
@@ -172,7 +107,6 @@ bool iObjectsDemo::loadControls()
 	m_pCloseBtn->setFixedWidth(48);
 	m_pCloseBtn->setGeometry(width() - 60, 20, m_pCloseBtn->width(), m_pCloseBtn->height());
 	connect(m_pCloseBtn, SIGNAL(clicked()), this, SLOT(OnCloseBtnClicked()));
-
 
 	m_pToolBox = new ToolBox(this);
 	m_pToolBox->setFixedHeight(50);
@@ -182,9 +116,7 @@ bool iObjectsDemo::loadControls()
 	obj = m_pToolBox->createToolButton("set", Qt::AlignRight);
 	if(obj) connect(obj, SIGNAL(clicked()), this, SLOT(OnToolBoxPlugin_SettingBtnClicked()));
 
-
 	m_pInfoPanel = new InfoPanel(this);
-
 	m_pInfoPanel->setPluginWidth(280);
 	m_pInfoPanel->setPluginHeight(370);
 	//m_pInfoPanel->setGeometry(15, height()/2 - 200, 280, 370);
@@ -192,8 +124,6 @@ bool iObjectsDemo::loadControls()
 	m_pInfoPanel->raise();
 	m_pInfoPanel->setAnimationTimespan(600);
 	m_pInfoPanel->setGeometry(width() - m_pInfoPanel->pluginWidth() - 15 ,height()/2 - m_pInfoPanel->pluginHeight()/2, m_pInfoPanel->pluginWidth(), m_pInfoPanel->pluginHeight());
-
-
 	return true;
 }
 
@@ -202,26 +132,11 @@ bool iObjectsDemo::unLoadPlugins(const QString& pluginName )
 	bool bPluginunload = false;
 	QPluginLoader* loader = qobject_cast<QPluginLoader*>(this->findChild<QPluginLoader*>(pluginName));
 
-
-	if (pluginName == "MapTab"/*loader->instance()->inherits("MapTabInterface")*/)
+	if (pluginName == "MapBase"/*loader->instance()->inherits("MapTabInterface")*/)
 	{
 		bPluginunload = loader->unload();
-		m_pMapTab = NULL;
-		m_pMap2DContainer = NULL;
-
-		a = NULL;
-		b = NULL;
-		c = NULL;
-		d = NULL;
-		e = NULL;
+		m_pMapBase = NULL;
 	}
-
-	if (pluginName == "InteLayers"/*loader->instance()->inherits("InteLayersInterface")*/)
-	{
-		bPluginunload = loader->unload();
-		m_pInteLayers = NULL;
-	}
-
 	return bPluginunload;
 }
 
@@ -241,65 +156,24 @@ bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 	QObject* object;
 	if ( (object=loader->instance()) != NULL )  
 	{  
-
 		QString name = object->objectName();
-		if (object->inherits("MapTabInterface"))
+		if (object->inherits("MapBaseInterface"))
 		{
-			m_pMapTab = qobject_cast<MapTabInterface*>(object) ;  
-			if (m_pMapTab)  
+			m_pMapBase = qobject_cast<MapBaseInterface*>(object) ;  
+			if (m_pMapBase)  
 			{
-				QDir::setCurrent(ss);
 				bPluginLoaded = true;
-				m_pMapTab->setPluginParent(this);
-				
+				m_pMapBase->setPluginParent(this);	
 				{
-// 					a = new QWidget();
-// 					m_pMapTab->addCentralWidget(a, 0, "erwei");
-
-// 					b = new QWidget();
-// 					m_pMapTab->addCentralWidget(b, 1, "sisa");
-// 
-// 					c = new QWidget();
-// 					m_pMapTab->addCentralWidget(c, 2, "sissdf");
-// // 
-// 					QWidget* d = new QWidget();
-// 					m_pMapTab->addCentralWidget(d, 0, "shenghai");
-// 
-					QWidget* e = new QWidget();
-					m_pMapTab->addCentralWidget(e, 3, "ren");
-// 
-					m_pMap2DContainer = new Map2DContainer(this);
-					//connect(m_pMap2DContainer,SIGNAL(showLayers(QVector<QString>)), this, SLOT(OnShowLayers(QVector<QString>)));
-					OnShowLayers(m_pMap2DContainer->getLayers());
-					m_pMapTab->addCentralWidget(m_pMap2DContainer, 8, QStringLiteral("¶þÎ¬"));
-					m_pMapTab->setCurrentIndex(0);
-					m_pMapTab->loadSkin();
-					m_pMapTab->setPluginGeometry(0, 0, width(), height());
-					m_pMapTab->showPlugin();
-					m_pMapTab->lowerPlugin();
-					m_pMap2DContainer->setFixedWidth(width());
-					m_pMap2DContainer->setFixedHeight(height());
-					
-					
+					if (m_pTabView)
+					{
+						m_pTabView->addCentralWidget(m_pMapBase->getWidget(), 0, "sheng");
+						m_pTabView->setCurrentIndex(0);
+						m_pTabView->loadDefaultSkin();
+						m_pInteLayers->addLayers(m_pMapBase->getController());
+						setStyleSheet(m_pMapBase->getStyleSheet());
+					}					
 				}
-			}
-		}
-		
-		if (object->inherits("InteLayersInterface"))
-		{
-			m_pInteLayers = qobject_cast<InteLayersInterface*>(object) ;  
-			if (m_pInteLayers)  
-			{
-				bPluginLoaded = true;
-				m_pInteLayers->setPluginParent(this);
-				m_pInteLayers->setPluginHeight(400);
-				m_pInteLayers->setPluginWidth(216);
-				m_pInteLayers->setPluginGeometry(15, height()/2 - m_pInteLayers->pluginHeight()/2, m_pInteLayers->pluginWidth(), m_pInteLayers->pluginHeight());
-				//m_pInteLayers->resizePlugin(15, height()/2 - 200,  216, 400);
-				m_pInteLayers->showPlugin();
-				m_pInteLayers->raisePlugin();
-				connect(m_pInteLayers->getObject(), SIGNAL(refeshWindow()), this, SLOT(OnInteLayersPlugin_RefeshWindow()));
-				
 			}
 		}
 	}  
@@ -307,19 +181,84 @@ bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 	{  
 		qDebug("failed to load plugin !! ");  
 		QString errorStr = loader->errorString();  
-		qDebug()<<errorStr;  
+		qDebug()<<errorStr; 
+		QMessageBox::warning(NULL,"",errorStr);
 	}  
 	QDir::setCurrent(ss);
 	return true;
 }
 
+
+void iObjectsDemo::paintEvent(QPaintEvent* e)
+{
+	QStyleOption opt;
+	opt.init(this);
+	QPainter p(this);
+	style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+	QWidget::paintEvent(e);
+}
+
+void iObjectsDemo::resizeEvent(QResizeEvent* e)
+{
+	if (m_pCloseBtn)
+	{
+		m_pCloseBtn->setGeometry(width() - 60, 20, m_pCloseBtn->width(), m_pCloseBtn->height());
+	}
+
+	if (m_pToolBox)
+	{
+		m_pToolBox->setGeometry(0, height() - m_pToolBox->height(), width(), m_pToolBox->height());
+	}
+
+	if (m_pInteLayers && m_pInteLayers->width() !=0)
+	{
+		m_pInteLayers->setGeometry(15, height()/2 - m_pInteLayers->InteLayersHeight()/2,  m_pInteLayers->InteLayersWidth(), m_pInteLayers->InteLayersHeight());
+	}
+
+	if (m_pInfoPanel)
+	{
+		if (m_pInfoPanel->IsExpandBtnVisible())
+		{
+			m_pInfoPanel->setGeometry(width() -  m_pInfoPanel->getExpandBtnWidth() - 15 ,height()/2 - m_pInfoPanel->pluginHeight()/2, m_pInfoPanel->getExpandBtnWidth(), m_pInfoPanel->getExpandBtnHeight() + 10);
+		}
+		else
+		{
+			m_pInfoPanel->setGeometry(width() - m_pInfoPanel->pluginWidth() - 15 ,height()/2 - m_pInfoPanel->pluginHeight()/2, m_pInfoPanel->pluginWidth(), m_pInfoPanel->pluginHeight());
+		}
+
+	}
+
+	if (m_pTabView)
+	{
+		m_pTabView->setGeometry(0,0,width(),height());
+	}
+
+
+	if (m_pTitle)
+	{
+		m_pTitle->setGeometry(width()/2 - m_pTitle->width()/2, 0, m_pTitle->width(), m_pTitle->height());
+	}
+	if (m_pPopBtn)
+	{
+		m_pPopBtn->setGeometry(width()/2 - m_pPopBtn->width()/2, 0, m_pPopBtn->width(), m_pPopBtn->height());
+	}
+
+	QWidget::resizeEvent(e);
+}
+
+void iObjectsDemo::OnCloseBtnClicked()
+{
+	this->close();
+}
+
+
 void iObjectsDemo::OnShowLayers( QVector<QString> vec )
 {
-	if (m_pInteLayers)
-	{
-		m_pInteLayers->addTabPage(vec);
-		qDebug()<<vec;
-	}
+// 	if (m_pInteLayers)
+// 	{
+// 		m_pInteLayers->addTabPage(vec);
+// 		qDebug()<<vec;
+// 	}
 }
 
 

@@ -106,33 +106,6 @@
     <ClCompile Include="GeneratedFiles\Release\moc_pluginmanager.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="code\Map2D\map2dcontroller.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_map2dcontroller.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_map2dcontroller.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="code\Map2D\map2dcontainer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_map2dcontainer.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_map2dcontainer.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_mapcontrol.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_mapcontrol.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="code\Map2D\mapcontrol.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="commom\xmlutils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -196,6 +169,15 @@
     <ClCompile Include="GeneratedFiles\Release\moc_tabwidget.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_intelayers.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_intelayers.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="code\InteLayers\intelayers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -242,15 +224,6 @@
     <CustomBuild Include="commom\pluginmanager.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="code\Map2D\map2dcontroller.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="code\Map2D\map2dcontainer.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="code\Map2D\mapcontrol.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="commom\xmlutils.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
@@ -270,6 +243,9 @@
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="code\TabView\tabwidget.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="code\InteLayers\intelayers.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

@@ -18,11 +18,7 @@
     <file>UncheckedPressed.png</file>
     <file>UncheckedHover.png</file>
     <file>shenghai.png</file>
-    <file>Pan.png</file>
-    <file>Entire.png</file>
-    <file>select.png</file>
-    <file>Zoomout.png</file>
-    <file>Zoomin.png</file>
+
     
     <!--ToolBox-->
     <file>toolbox.qss</file>
@@ -54,5 +50,11 @@
     <file>uptwo.png</file>
     <file>downmaptab.png</file>
     <file>upmaptab.png</file>
+    <!--InteLayers-->
+    <file>head.png</file>
+    <file>body.png</file>
+    <file>tran.png</file>
+    <file>colles.png</file>
+    <file>closeintelayersbtn.png</file>
   </qresource>
 </RCC>

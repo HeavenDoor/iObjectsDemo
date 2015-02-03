@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "sysconfig.h"
-#include <QApplication>
+#include <QtWidgets/QApplication>
 
 QSettings* SysConfig::m_sysSetting = NULL;
 

@@ -1,8 +1,8 @@
 #ifndef SHENGHAI_H_
 #define SHENGHAI_H_
 
-#include <QWidget>
-#include<QLabel>
+#include <QtWidgets/QWidget>
+#include<QtWidgets/QLabel>
 //#include <QGLWidget>
 
 #include <vector>
@@ -106,8 +106,9 @@ public:
 
 	void OnMapDrawn(UGGraphics* pGraphics);
 
-     UGString  QStringToUGString(QString qstring );
+    UGString  QStringToUGString(QString qstring );
 
+	void openLayers(const QString& text);
 public:
 	QVector<QString> getLayersList();
 public:

@@ -1,11 +1,11 @@
 #include "stdafx.h"
-#include <QMessageBox>
+#include <QtWidgets/QMessageBox>
 #include <QPainter>
 #include <QWheelEvent>
 #include <QDebug>
 #include <QVector>
-#include <qfiledialog.h>
-
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QApplication>
 #include "mapcontrol.h"
 		
 using namespace UGC;
@@ -93,6 +93,7 @@ void UGSTDCALL GeometrySelectedProcCallBack(UGlong pWnd,UGint nSelectedGeometryC
 
 MapControl::MapControl( QWidget* parent)
 {
+
 	m_width = this->width();
 	m_height = this->height();
 	m_pWorkspace = NULL;
@@ -481,6 +482,18 @@ UGString MapControl::QStringToUGString(QString qstring )
 	UGString ugstring;
 	ugstring.Append(qstring.toStdWString().c_str(),qstring.length());
 	return ugstring;
+}
+
+
+void MapControl::openLayers( const QString& text )
+{
+	GetMap().Open(QStringToUGString(text));
+
+
+	m_defaultCenter = GetMap().GetCenter();
+	m_defaultScale = GetMap().GetScale();
+
+	this->ViewEntire();
 }
 
 int MapControl::OpenMap( const QString& mapPath )

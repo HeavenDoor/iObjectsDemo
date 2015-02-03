@@ -83,7 +83,7 @@ void TabView::setCurrentIndex( int index )
 
 void TabView::loadDefaultSkin()
 {
-	QFile file(":/maptab.qss");
+	QFile file(":/tabbar.qss");
 	file.open(QFile::ReadOnly);
 	QString style = QString(file.readAll());
 

@@ -6,16 +6,14 @@
 #include <QtQuickWidgets/QQuickWidget>
 #include "title.h"
 #include "pluginloader.h"
-#include "Map2D/map2dcontainer.h"
 #include "ToolBox/toolbox.h"
 #include "InfoPanel/infopanel.h"
 #include "TabView/tabview.h"
+#include "InteLayers/intelayers.h"
 
 #include "interface/widgetplugininterface.h"
-//#include "interface/toolboxinterface.h"
-#include "interface/maptabinterface.h"
-#include "interface/intelayersinterface.h"
-//#include "interface/infopanelinterface.h"
+#include "interface/mapbaseinterface.h"
+#include "interface/scenebaseinterface.h"
 
 class iObjectsDemo : public QWidget
 {
@@ -44,7 +42,9 @@ private slots:
 	void OnShowLayers(QVector<QString> vec);
 private:
 	// 加载控件
-	bool loadControls();
+	bool initControls();
+	bool initTabView(); // 地图插件依赖于TabView 注意TabView要先加载
+	bool initInteLayers(); // 情报图层需要先于地图插件加载
 	// 加载插件 path：插件所在文件夹目录
 	bool loadPlugins(const QString& path, const QString& pluginName);
 	// 卸载插件 
@@ -58,23 +58,14 @@ private:
 	ToolBox * m_pToolBox;
 	InfoPanel* m_pInfoPanel;
 	TabView* m_pTabView;
-
-	MapTabInterface* m_pMapTab;
-	InteLayersInterface* m_pInteLayers;
-	
+	InteLayers* m_pInteLayers;
 	Title* m_pTitle;
-	
-
 	Pluginloader* m_pPluginloader;
 	QVariantMap m_pluginMap;
 
-	Map2DContainer* m_pMap2DContainer;
+	MapBaseInterface* m_pMapBase;
 
-	QWidget* a;
-	QWidget* b;
-	QWidget* c;
-	QWidget* d;
-	QWidget* e;
+	
 };
 
 #endif // IOBJECTSDEMO_H

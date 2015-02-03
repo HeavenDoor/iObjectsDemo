@@ -291,3 +291,35 @@ QToolButton[SelectedTabBar = "1"]{
 	color: white;
 }
 
+/******************InteLayers*********************************/
+QWidget#InteLayersBody{
+	border-image:url(:/body.png);
+	border-width:0px 0px 0px 0px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+
+QWidget#InteLayersHead{
+	border-image:url(:/head.png);
+	border-width:0px 0px 0px 0px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+
+QPushButton#CloseInteLayersBtn{
+	border-image: url(:/closeintelayersbtn.png);
+	border-width:0px 0px 0px 0px;
+}
+
+/**********************CollapseBtn**************************************************/
+QPushButton#InteLayersCollapseBtn{
+	border-image: url(:/colles.png);
+	border-width:0px 0px 0px 0px;
+}
+

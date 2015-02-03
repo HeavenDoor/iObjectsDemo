@@ -1,24 +1,25 @@
-#ifndef MAPTAB_H
-#define MAPTAB_H
+#ifndef MAPBASE_H
+#define MAPBASE_H
 
 #include "mapbase_global.h"
 #include "..\\..\\interface\mapbaseinterface.h"
-#include "tabbar.h"
-#include "tabwidget.h"
-#include <QtWidgets/QTabWidget>
-#include <QtWidgets/QWidget>
 
-class MapBase : public QWidget , MapBaseInterface
+#include "mapcontrol.h"
+#include "mapcontroller.h"
+#include "maplayers.h"
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QHBoxLayout>
+
+class MapBase : public QWidget, MapBaseInterface
 {
 	Q_OBJECT
-	Q_PLUGIN_METADATA(IID "{38E64368-2917-4426-8E1B-CC9D72250A25}" FILE "mapbase.json")
+	Q_PLUGIN_METADATA(IID "{B0585DCB-DB60-49AA-9993-053203B1F53A}" FILE "mapbase.json")
 	Q_INTERFACES(MapBaseInterface)
 public:
 	MapBase(QWidget *parent = NULL);
 	~MapBase();
 
 	virtual void test();
-	//virtual QWidget* getWidget();
 
 	virtual QObject* getObject();
 	virtual void setPluginGeometry(const QRect& rect);
@@ -33,21 +34,39 @@ public:
 	virtual int pluginWidth();
 	virtual int pluginHeight();
 
-	virtual void addCentralWidget(QWidget* map, int tabIndex, QString tabName);
-	virtual void setCurrentIndex(int index);
-	virtual void loadSkin();
+	//virtual void loadSkin();
+	virtual QWidget* getWidget();
+	virtual QWidget* getController();
+	virtual QString getStyleSheet();
+public:
 
+	QString getMapUrl() const;
+	QVector<QString> getLayers() const;
 protected:
-	void paintEvent(QPaintEvent*);
-	void resizeEvent(QResizeEvent*);
+	void resizeEvent(QResizeEvent *);
+	void paintEvent(QPaintEvent *);
+signals:
+	//void showLayers(QVector<QString> s);
+
 private slots:
-	void OnChangeDimension(int isTwoDimension);
-	//void OnChangeToThreeDimension();
+ 	void OnSelectClicked();
+ 	void OnPanClicked();
+ 	void OnEntireClicked();
+ 	void OnZoomInClicked();
+ 	void OnZoomOutClicked();
+	void OnChangeLayers(const QString& text);
+private slots:
 private:
+
+	QString m_MapUrl;
+	QVector<QString> m_Layers;
+	QHBoxLayout* m_pMap2DLayout;
+	MapControl* m_pMapControl;
+	MapController* m_pMapController;
+	MapLayers* m_pMapLayers;
 	static const int tabrwidth = 81;
-	TabWidget* m_pTabWidget;
-	TabBar* m_pTabBar;
 	
+
 };
 
-#endif // MAPTAB_H
+#endif // MAPBASE_H

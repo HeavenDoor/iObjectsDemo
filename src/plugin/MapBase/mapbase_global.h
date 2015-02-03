@@ -1,12 +1,12 @@
-#ifndef MAPTAB_GLOBAL_H
-#define MAPTAB_GLOBAL_H
+#ifndef MAPBASE_GLOBAL_H
+#define MAPBASE_GLOBAL_H
 
 #include <QtCore/qglobal.h>
 
-#ifdef MAPTAB_LIB
-# define MAPTAB_EXPORT Q_DECL_EXPORT
+#ifdef MAPBASE_LIB
+# define MAPBASE_EXPORT Q_DECL_EXPORT
 #else
-# define MAPTAB_EXPORT Q_DECL_IMPORT
+# define MAPBASE_EXPORT Q_DECL_IMPORT
 #endif
 
-#endif // MAPTAB_GLOBAL_H
+#endif // MAPBASE_GLOBAL_H

@@ -1,13 +1,13 @@
 #include "stdafx.h"
 #include "intelayers.h"
 
-#include "..\\..\\commom\widgetrect.h"
+#include "..\\commom\\widgetrect.h"
 #include <QtWidgets\QMessageBox>
 #include <QMouseEvent>
 
 InteLayers::InteLayers(QWidget* parent) : QWidget(parent)
 {
-	m_pTabWidget = NULL;
+	//m_pTabWidget = NULL;
 	m_pHead = NULL;
 	setObjectName("InteLayers");
 
@@ -29,11 +29,11 @@ InteLayers::InteLayers(QWidget* parent) : QWidget(parent)
 	connect(m_pCloseBtn, SIGNAL(clicked()), this, SLOT(OnInteLayersCollapse()));
 
 	
-	m_pTabWidget = new TabWidget(this);
-	m_pTabWidget->setObjectName("InteLayersTabWidget");
+	m_pTabWidget = new QWidget(this);
+	m_pTabWidget->setObjectName("InteLayersBody");
 
 	m_pTabWidget->setFixedWidth(216);
-	m_pTabWidget->setFixedHeight(400-43);
+	m_pTabWidget->setFixedHeight(410-43);
 
 
 	m_pVLayout->addWidget(m_pHead);
@@ -45,7 +45,7 @@ InteLayers::InteLayers(QWidget* parent) : QWidget(parent)
 	connect(m_pProAnima, SIGNAL(finished()), this, SLOT(OnAnimationFinished()));
 
 	m_pCollapseBtn = new QPushButton(this);
-	m_pCollapseBtn->setObjectName("CollapseBtn");
+	m_pCollapseBtn->setObjectName("InteLayersCollapseBtn");
 	m_pCollapseBtn->setFixedWidth(32);
 	m_pCollapseBtn->setFixedHeight(32);
 	m_pCollapseBtn->setWindowFlags(Qt::FramelessWindowHint|Qt::Tool);
@@ -55,14 +55,9 @@ InteLayers::InteLayers(QWidget* parent) : QWidget(parent)
 	
 	qApp->installEventFilter(this);
 
-	QFile file(":/intelayers.qss");
-	file.open(QFile::ReadOnly);
-	QString style = QString(file.readAll());
-	this->setStyleSheet(style);
-	file.close();
-
-
-	
+	m_pBody = new QWidget(m_pTabWidget);
+	m_pBody->setFixedHeight(m_pTabWidget->height() - 16);
+	m_pBody->setFixedWidth(m_pTabWidget->width() - 16);
 }
 
 InteLayers::~InteLayers()
@@ -70,28 +65,21 @@ InteLayers::~InteLayers()
 
 }
 
-void InteLayers::addTabPage( QVector<QString> vec )
+void InteLayers::addLayers( QWidget* layers )
 {
-	if (!m_pTabWidget) return;
-	m_pTabWidget->addTabPage(vec);
+	
+	//layers->setGeometry(10,10, width() - 20, height() - 20);
+	//QWidget
+	m_pBody->setGeometry(m_pTabWidget->x() + 6, 5, m_pBody->width(), m_pBody->height());
+	QVBoxLayout* p = new QVBoxLayout(m_pBody);
 
-	QFile file(":/intelayers.qss");
-	file.open(QFile::ReadOnly);
-	QString style = QString(file.readAll());
-	this->setStyleSheet(style);
-	file.close();
+	p->setContentsMargins(0, 0, 0, 0);
+
+	p->setSpacing(0);
+	m_pBody->setLayout(p);
+	p->addWidget(layers);
 }
 
-
-// QWidget* InteLayers::getWidget()
-// {
-// 	return this;
-// }
-
-void InteLayers::test()
-{
-
-}
 bool InteLayers::eventFilter(QObject* obj, QEvent* e)
 {
 	if(e->type() == QEvent::Move)
@@ -120,16 +108,13 @@ void InteLayers::paintEvent( QPaintEvent* e)
 
 void InteLayers::resizeEvent( QResizeEvent* e)
 {
-	if (m_pCollapseBtn)
+	if (m_pCollapseBtn && width() == 0)
 	{
 		QRect re = WidgetRect::widgetGlobalRect(this);
 		m_pCollapseBtn->setGeometry(re.right(), re.top(), m_pCollapseBtn->width(), m_pCollapseBtn->height());
 	}
-	
-	if (m_pCloseBtn && m_pHead)
-	{
-		m_pCloseBtn->setGeometry(m_pHead->width() - m_pCloseBtn->width() - 10, m_pHead->height()/2 - m_pCloseBtn->height()/2 , m_pCloseBtn->width(), m_pCloseBtn->height() );
-	}
+
+
 	QWidget::resizeEvent(e);
 }
 
@@ -142,56 +127,6 @@ void InteLayers::moveEvent( QMoveEvent* e)
 		QRect re = WidgetRect::widgetGlobalRect(this);
 		m_pCollapseBtn->setGeometry(re.right(), re.top(), m_pCollapseBtn->width(), m_pCollapseBtn->height());
 	}
-}
-
-
-
-QObject* InteLayers::getObject()
-{
-	return this;
-}
-
-void InteLayers::setPluginGeometry( const QRect& rect )
-{
-	this->setGeometry(rect);
-}
-
-void InteLayers::setPluginGeometry( int ax, int ay, int aw, int ah )
-{
-	this->setGeometry(ax, ay, aw, ah);
-}
-
-void InteLayers::setPluginParent( QWidget* parentWidget )
-{
-	this->setParent(parentWidget);
-}
-
-void InteLayers::showPlugin()
-{
-	this->show();
-}
-
-void InteLayers::raisePlugin()
-{
-	this->raise();
-}
-
-void InteLayers::resizePlugin(int ax, int ay, int aw, int ah)
-{
-	if (width() == 0)
-	{
-		setGeometry(ax, ay, 0, ah);
-	}
-	else
-	{
-		setGeometry(ax, ay, aw, ah);
-	}
-	if (m_pCollapseBtn)
-	{
-		QRect re = WidgetRect::widgetGlobalRect(this);
-		m_pCollapseBtn->setGeometry(re.right(), re.top(), m_pCollapseBtn->width(), m_pCollapseBtn->height());
-	}
-	
 }
 
 void InteLayers::OnInteLayersCollapse()
@@ -208,8 +143,6 @@ void InteLayers::OnInteLayersCollapse()
 	m_pProAnima->setEasingCurve(QEasingCurve::OutSine);
 	m_pProAnima->start();
 }
-
-
 
 void InteLayers::OnInteLayersExpand()
 {
@@ -246,31 +179,24 @@ void InteLayers::OnAnimationFinished()
 	emit refeshWindow();
 }
 
-void InteLayers::lowerPlugin()
-{
-	lower();
-}
-
-void InteLayers::setPluginWidth( int width )
-{
-	m_width = width;
-	//setFixedWidth(width); // Animation will mot effect if you set this
-}
-
-void InteLayers::setPluginHeight( int height )
-{
-	m_height = height;
-	//setFixedHeight(height);
-}
-
-int InteLayers::pluginWidth()
-{
-	return m_width;
-	return width();
-}
-
-int InteLayers::pluginHeight()
-{
-	return m_height;
-}
+ void InteLayers::setInteLayersWidth( int width )
+ {
+ 	m_width = width;
+ }
+ 
+ void InteLayers::setInteLayersHeight( int height )
+ {
+ 	m_height = height;
+ }
+ 
+ int InteLayers::InteLayersWidth()
+ {
+ 	return m_width;
+ 	return width();
+ }
+ 
+ int InteLayers::InteLayersHeight()
+ {
+ 	return m_height;
+ }
 

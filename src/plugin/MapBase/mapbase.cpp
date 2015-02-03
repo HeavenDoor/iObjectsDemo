@@ -1,45 +1,112 @@
 #include "stdafx.h"
 #include "mapbase.h"
+#include "..\\..\\commom\\sysconfig.h"
 
-
+#include <QDir>
+#include <QStyleOption>
+#include <QPainter>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QApplication>
 
 MapBase::MapBase(QWidget *parent) : QWidget(parent)
 {
 	setObjectName("MapTab");
 
-	m_pTabWidget = new TabWidget(this);
+	m_pMapControl = NULL;
+	m_pMapController = NULL;
+	m_pMapLayers = NULL;
 
-	m_pTabBar = new TabBar(this);
-	m_pTabBar->setFixedHeight(58);
-	m_pTabBar->raise();
-//	m_pTabBar->setFixedWidth(162);
-	m_pTabBar->show();
-	connect(m_pTabBar, SIGNAL(changeDimension(int)), this, SLOT(OnChangeDimension(int)));
-	int j = m_pTabBar->width();
+	setObjectName("Map2DContainer");
+	m_pMap2DLayout = new QHBoxLayout(this);
+
+
+	m_pMapController = new MapController(this);
+	m_pMapController->setFixedHeight(32);
+	m_pMapController->setFixedWidth(32*5);
+	connect(m_pMapController, SIGNAL(selectClicked()), this, SLOT(OnSelectClicked()));
+	connect(m_pMapController, SIGNAL(panClicked()), this, SLOT(OnPanClicked()));
+	connect(m_pMapController, SIGNAL(entireClicked()), this, SLOT(OnEntireClicked()));
+	connect(m_pMapController, SIGNAL(zoominClicked()), this, SLOT(OnZoomInClicked()));
+	connect(m_pMapController, SIGNAL(zoomoutClicked()), this, SLOT(OnZoomOutClicked()));
+
+	m_pMapLayers = new MapLayers(this);
+	connect(m_pMapLayers, SIGNAL(changeLayers(const QString&)), this, SLOT(OnChangeLayers(const QString&)));
+	//m_pMapLayers->setAttribute(Qt::WA_TranslucentBackground);
+
+	m_pMapControl = new MapControl(this);
+	QWidget* map2D = dynamic_cast<QWidget*>(m_pMapControl);
+	m_pMap2DLayout->addWidget(map2D);
+	this->setLayout(m_pMap2DLayout);
+	QString exeFileName = QApplication::applicationFilePath();
+	QFileInfo kk(exeFileName);
+	QString apppath = kk.canonicalPath(); 
+	QString ss = QDir::currentPath();
+	QDir::setCurrent(apppath);
+
+	QFileInfo info("../Map/China/China400.smwu");
+	QString ssb = info.absoluteFilePath();
+	QDir::setCurrent(ss);
+
+	m_MapUrl = SysConfig::getValue("DefaultMap/DefaultMapPath").toString();
+	int flag = m_pMapControl->OpenMap(m_MapUrl);
+
+
+	if (flag != 0)
+	{
+		QMessageBox::warning(NULL, "", QString::number(flag));
+		return;
+	}
+	m_pMapControl->show();
+	m_pMapController->show();
+	m_pMapController->raise();
+
+	m_Layers = m_pMapControl->getLayersList();
+	//m_Layers.push_front(m_MapUrl);
+
+	m_pMapLayers->setGeometry(300,100,220,360);
+	m_pMapLayers->setFixedWidth(220);
+	m_pMapLayers->setFixedHeight(360);
+
+	m_pMapLayers->initLayers(m_pMapControl->getLayersList());
+
+	m_pMapLayers->show();
+	m_pMapLayers->raise();
+
+	QFile file(":/mapbase.qss");
+	file.open(QFile::ReadOnly);
+	QString style = QString(file.readAll());
+	this->setStyleSheet(style);
+	file.close();
 }
 
 MapBase::~MapBase()
 {
-	delete m_pTabWidget;
-	m_pTabWidget = NULL;
-
-	delete m_pTabBar;
-	m_pTabBar = NULL;
-}
+ 	m_Layers.clear();
  
- void MapBase::paintEvent(QPaintEvent* e)
- {
- 	QStyleOption opt;
- 	opt.init(this);
- 	QPainter p(this);
- 	style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
- 	QWidget::paintEvent(e);
- }
+ 	m_pMapControl->Release();
+ 	delete m_pMapControl;
+ 	m_pMapControl = NULL;
+}
 
-// QWidget* MapTab::getWidget()
-// {
-// 	return this;
-// }
+void MapBase::paintEvent(QPaintEvent* e)
+{
+	QStyleOption opt;
+	opt.init(this);
+	QPainter p(this);
+	style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+	QWidget::paintEvent(e);
+}
+
+QWidget* MapBase::getWidget()
+{
+	return this;
+}
+
+
+QWidget* MapBase::getController()
+{
+	return m_pMapLayers;
+}
 
 void MapBase::test()
 {
@@ -48,16 +115,20 @@ void MapBase::test()
 
 void MapBase::resizeEvent( QResizeEvent* e)
 {
-	if (m_pTabWidget)
+	if (m_pMapControl)
 	{
-		m_pTabWidget->setGeometry(0,0,width(), height());
+		m_pMapControl->setGeometry(0, 0, width(), height());
 	}
 
-	if (m_pTabBar)
+	if (m_pMapController)
 	{
-		m_pTabBar->setFixedWidth(m_pTabBar->tabCount()*tabrwidth);
-		m_pTabBar->setGeometry(width() - m_pTabBar->tabCount()*tabrwidth - 100, 25, m_pTabBar->width(), m_pTabBar->height());
+		m_pMapController->setGeometry(20, height() - 100, m_pMapController->width(), m_pMapController->height());
 	}
+
+// 	if (m_pMapLayers)
+// 	{
+// 		m_pMapLayers->setGeometry(300,100,220,360);
+// 	}
 
 	QWidget::resizeEvent(e);
 }
@@ -98,14 +169,6 @@ void MapBase::resizePlugin(int ax, int ay, int aw, int ah)
 	setGeometry(ax, ay, aw, ah);
 }
 
-
-void MapBase::OnChangeDimension( int isTwoDimension )
-{
-	if(!m_pTabWidget) return;
-	m_pTabWidget->resize(width(), height());
-	m_pTabWidget->setCurrentIndex(isTwoDimension);
-}
-
 void MapBase::lowerPlugin()
 {
 	lower();
@@ -132,31 +195,79 @@ int MapBase::pluginHeight()
 	return height();
 }
 
-void MapBase::addCentralWidget( QWidget* map, int tabIndex, QString tabName)
+// void MapBase::loadSkin()
+// {
+// 	QFile file(":/maptab.qss");
+// 	file.open(QFile::ReadOnly);
+// 	QString style = QString(file.readAll());
+// 	this->setStyleSheet(style);
+// 	file.close();
+// }
+
+
+
+void MapBase::OnSelectClicked()
 {
-	if (!m_pTabWidget ||  !m_pTabBar) return;
-	if (m_pTabWidget->count() < tabIndex) tabIndex = m_pTabWidget->count();
-	if (tabIndex < 0) tabIndex = 0;
-	//map->setParent(this);
-	m_pTabBar->insertTabbar(tabIndex, tabName);
-	m_pTabWidget->addCentralWidget(map, tabIndex, tabName);
+	if (m_pMapControl)
+	{
+		m_pMapControl->Select();
+	}
 }
 
-void MapBase::setCurrentIndex( int index )
+void MapBase::OnPanClicked()
 {
-	if (!m_pTabWidget ||  !m_pTabBar) return;
-	if (m_pTabWidget->count() <= index) index = m_pTabWidget->count() - 1;
-	m_pTabWidget->setCurrentIndex(index);
-	m_pTabBar->setCurrentIndex(index);
+	if (m_pMapControl)
+	{
+		m_pMapControl->Pan();
+	}
 }
 
-void MapBase::loadSkin()
+void MapBase::OnEntireClicked()
 {
-	QFile file(":/maptab.qss");
-	file.open(QFile::ReadOnly);
-	QString style = QString(file.readAll());
-
-	//qDebug()<<style;
-	this->setStyleSheet(style);
-	file.close();
+	if (m_pMapControl)
+	{
+		m_pMapControl->ViewEntire();
+	}
 }
+
+void MapBase::OnZoomInClicked()
+{
+	if (m_pMapControl)
+	{
+		m_pMapControl->ZoomIn();
+	}
+}
+
+void MapBase::OnZoomOutClicked()
+{
+	if (m_pMapControl)
+	{
+		m_pMapControl->ZoomOut();
+	}
+}
+
+QString MapBase::getMapUrl() const
+{
+	return m_MapUrl;
+}
+
+QVector<QString> MapBase::getLayers() const
+{
+	return m_Layers;
+}
+
+QString MapBase::getStyleSheet()
+{
+	return this->styleSheet();
+}
+
+void MapBase::OnChangeLayers( const QString& text )
+{
+	if (m_pMapControl)
+	{
+		m_pMapControl->openLayers(text);
+	}
+}
+
+
+

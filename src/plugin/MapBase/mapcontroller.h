@@ -4,13 +4,13 @@
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QToolButton>
-class Map2DController : public QWidget
+class MapController : public QWidget
 {
 	Q_OBJECT
 
 public:
-	Map2DController(QWidget *parent);
-	~Map2DController();
+	MapController(QWidget *parent);
+	~MapController();
 protected:
 	void paintEvent( QPaintEvent * e);
 signals:

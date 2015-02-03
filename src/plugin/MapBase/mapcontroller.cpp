@@ -1,7 +1,9 @@
 #include "stdafx.h"
-#include "map2dcontroller.h"
+#include "mapcontroller.h"
+#include <QStyleOption>
+#include <QPainter>
 
-Map2DController::Map2DController(QWidget *parent) : QWidget(parent)
+MapController::MapController(QWidget *parent) : QWidget(parent)
 {
 	setObjectName("Map2DController");
 	m_pHboxLayout = NULL;
@@ -52,13 +54,13 @@ Map2DController::Map2DController(QWidget *parent) : QWidget(parent)
 	this->setLayout(m_pHboxLayout);
 }
 
-Map2DController::~Map2DController()
+MapController::~MapController()
 {
 
 }
 
 
-void Map2DController::paintEvent( QPaintEvent * e)
+void MapController::paintEvent( QPaintEvent * e)
 {
 	QStyleOption opt;
 	opt.init(this);
