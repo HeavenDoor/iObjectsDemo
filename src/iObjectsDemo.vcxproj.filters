@@ -178,15 +178,21 @@
     <ClCompile Include="code\InteLayers\intelayers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="code\PopupPanel\popuppanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_popuppanel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_popuppanel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="commom\pluginspec.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="interface\intelayersinterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="interface\widgetplugininterface.h">
@@ -248,8 +254,13 @@
     <CustomBuild Include="code\InteLayers\intelayers.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
+    <CustomBuild Include="code\PopupPanel\popuppanel.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\skin.qss" />
+    <None Include="Resources\maptab.qss" />
+    <None Include="Resources\tabbar.qss" />
   </ItemGroup>
 </Project>

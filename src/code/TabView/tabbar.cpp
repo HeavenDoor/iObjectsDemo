@@ -28,101 +28,180 @@ void TabBar::insertTabbar( int index, QString tabName )
 	pBtn->setText(tabName);
 	connect(pBtn, SIGNAL(clicked()), this, SLOT(OnTabButtonClicked()));
 	
+
+	int previndex = -10;
+	if (m_pTabBarList.length() != 0)
+	{
+		previndex = m_pTabBarList.indexOf(m_pPrevBtn);
+	}
+	
+
 	if (index > m_pTabBarList.length())
 	{
 		index = m_pTabBarList.length();
 	}
+
 	if (m_pTabBarList.length() == 0)
 	{
 		setVisible(false);
-		pBtn->setObjectName("MapTabbarHead");
+		//pBtn->setObjectName("MapTabbarHead");
 		pBtn->setProperty("HeadSelectedTabBar", 1);
 	}
+
 	if (m_pTabBarList.length() > 0)
 	{
 		setVisible(true);
 	}
 
-	if (index <= 0 && m_pTabBarList.length() >= 1)
-	{
-		pBtn->setObjectName("MapTabbarHead");		
+	if (index <= 0 && m_pTabBarList.length() >= 1)  // 在头部插入Tab
+	{	
 		pBtn->setProperty("HeadSelectedTabBar", 1);
 		if (m_pTabBarList.length() == 1 )
 		{
-			m_pTabBarList.at(0)->setObjectName("MapTabbarTail");
 			m_pTabBarList.at(0)->setProperty("HeadSelectedTabBar", 5);
 			m_pTabBarList.at(0)->setProperty("TailSelectedTabBar", 0);
 		}
 		else
 		{
-			m_pTabBarList.at(0)->setObjectName("empty");
 			m_pTabBarList.at(0)->setProperty("HeadSelectedTabBar", 5);
 			m_pTabBarList.at(0)->setProperty("SelectedTabBar", 0);
+
+			if (previndex == m_pTabBarList.length() - 1)
+			{
+				m_pPrevBtn->setProperty("TailSelectedTabBar", 0);
+			}
+			else
+			{
+				m_pPrevBtn->setProperty("SelectedTabBar", 0);
+			}
 		}
 		
 	}
-	if(index >= m_pTabBarList.length() && m_pTabBarList.length() >= 1)
+	if(index >= m_pTabBarList.length() && m_pTabBarList.length() >= 1)  // 在尾部插入Tab
 	{
-		m_pTabBarList.at(0)->setObjectName("MapTabbarTail");
-		pBtn->setProperty("TailSelectedTabBar", 0);
+		pBtn->setProperty("TailSelectedTabBar", 1);
 		if (m_pTabBarList.length() == 1 )
 		{
-			m_pTabBarList.at(0)->setObjectName("MapTabbarHead");
 			m_pTabBarList.at(0)->setProperty("TailSelectedTabBar", 5);
-			m_pTabBarList.at(0)->setProperty("HeadSelectedTabBar", 1);
+			m_pTabBarList.at(0)->setProperty("HeadSelectedTabBar", 0);
 		}
 		else
 		{
-			m_pTabBarList.at(m_pTabBarList.length() - 1)->setObjectName("empty");
 			m_pTabBarList.at(m_pTabBarList.length() - 1)->setProperty("TailSelectedTabBar", 5);
 			m_pTabBarList.at(m_pTabBarList.length() - 1)->setProperty("SelectedTabBar", 0);
+
+			if (previndex == 0)
+			{
+				m_pPrevBtn->setProperty("HeadSelectedTabBar", 0);
+			}
+			else
+			{
+				m_pPrevBtn->setProperty("SelectedTabBar", 0);
+			}
 		}
 	}
 	if (m_pTabBarList.length() > 1 && index != 0 && index < m_pTabBarList.length())
 	{
-		pBtn->setProperty("SelectedTabBar", 0);
+		pBtn->setProperty("SelectedTabBar", 1);
+		if (previndex == 0)
+		{
+			m_pPrevBtn->setProperty("HeadSelectedTabBar", 0);
+		}
+		else if (previndex == m_pTabBarList.length() - 1)
+		{
+			m_pPrevBtn->setProperty("TailSelectedTabBar", 0);
+		}
+		else
+		{
+			m_pPrevBtn->setProperty("SelectedTabBar", 0);
+		}
 	}
-	
+	m_pPrevBtn = pBtn;
 	m_pTabBarList.insert(index, pBtn);
 	m_pHlayout->insertWidget(index, pBtn);
-
-
-}
-
-
-void TabBar::setCurrentIndex( int index )
-{
-	if (m_pTabBarList.length() > 1 && index > 0 && index < m_pTabBarList.length() - 1)
-	{
-		for each (QToolButton* pbtn in m_pTabBarList)
-		{
-			if (m_pTabBarList.indexOf(pbtn) == 0 || m_pTabBarList.indexOf(pbtn) == m_pTabBarList.length() - 1)
-			{
-				continue;
-			}
-			pbtn->setProperty("SelectedTabBar", "0");
-		}
-		m_pTabBarList.at(index)->setProperty("SelectedTabBar", "1");
-	}
-
-	if (index <= 0)
-	{
-		index = 0;
-		m_pTabBarList.at(index)->setProperty("HeadSelectedTabBar", "1");
-	}
-	if (index >= m_pTabBarList.length() - 1)
-	{
-		index = m_pTabBarList.length() - 1;
-		m_pTabBarList.at(index)->setProperty("TailSelectedTabBar", "1");
-	}
-
-	m_pPrevBtn = m_pTabBarList.at(index);
 
 	QFile file(":/tabbar.qss");
 	file.open(QFile::ReadOnly);
 	QString style = QString(file.readAll());
 	this->setStyleSheet(style);
 	file.close();
+}
+
+
+void TabBar::setCurrentIndex( int index )
+{
+	if (!m_pPrevBtn)
+	{
+		QMessageBox::warning(NULL, "setCurrentIndex", "prevbtn enpty");
+		return;
+	}
+	int previndex = m_pTabBarList.indexOf(m_pPrevBtn);
+	if (previndex == index) return;
+
+
+
+	if (index <= 0)  // 头
+	{
+		index = 0;
+		m_pTabBarList.at(index)->setProperty("HeadSelectedTabBar", "1");
+
+		if (previndex == m_pTabBarList.length() - 1)  // 尾巴
+		{
+			m_pPrevBtn->setProperty("TailSelectedTabBar", "0");
+		}
+		else // 中间
+		{
+			m_pPrevBtn->setProperty("SelectedTabBar", "0");
+		}
+	}
+
+	if (index >= m_pTabBarList.length() - 1) // 尾巴
+	{
+		index = m_pTabBarList.length() - 1;
+		m_pTabBarList.at(index)->setProperty("TailSelectedTabBar", "1");
+		if (previndex == 0) // 头
+		{
+			m_pPrevBtn->setProperty("HeadSelectedTabBar", "0");
+		}
+		else  // 中间
+		{
+			m_pPrevBtn->setProperty("SelectedTabBar", "0");
+		}
+	}
+
+	if (m_pTabBarList.length() > 1 && index > 0 && index < m_pTabBarList.length() - 1)
+	{
+// 		for each (QToolButton* pbtn in m_pTabBarList)
+// 		{
+// 			if (m_pTabBarList.indexOf(pbtn) == 0 || m_pTabBarList.indexOf(pbtn) == m_pTabBarList.length() - 1)
+// 			{
+// 				continue;
+// 			}
+// 			pbtn->setProperty("SelectedTabBar", "0");
+// 		}
+		m_pTabBarList.at(index)->setProperty("SelectedTabBar", "1");
+
+		if (previndex == 0)
+		{
+			m_pPrevBtn->setProperty("HeadSelectedTabBar", "0");
+		}
+		else if (previndex == m_pTabBarList.length() - 1)
+		{
+			m_pPrevBtn->setProperty("TailSelectedTabBar", "0");
+		}
+		else
+		{
+			m_pPrevBtn->setProperty("SelectedTabBar", "0");
+		}
+	}
+
+	m_pPrevBtn = m_pTabBarList.at(index);
+
+// 	QFile file(":/tabbar.qss");
+// 	file.open(QFile::ReadOnly);
+// 	QString style = QString(file.readAll());
+// 	this->setStyleSheet(style);
+// 	file.close();
 }
 
 
@@ -144,17 +223,22 @@ void TabBar::resizeEvent( QResizeEvent* )
 	}
 }
 
-
 void TabBar::OnTabButtonClicked()
 {
 	QToolButton* pTBtn = static_cast<QToolButton*>(sender());
 	if(!pTBtn) return;
+	if (!m_pPrevBtn)
+	{
+		QMessageBox::warning(NULL, "OnTabButtonClicked", "prevbtn enpty");
+		return;
+	}
 	if (pTBtn == m_pPrevBtn) return;
 	
 
 	int index = m_pTabBarList.indexOf(pTBtn);
-	int previndex = m_pTabBarList.indexOf(m_pPrevBtn);
-
+	setCurrentIndex(index);
+	/*int previndex = m_pTabBarList.indexOf(m_pPrevBtn);
+	
 
 	int a = m_pTabBarList.at(0)->property("HeadSelectedTabBar").toInt();
 	int b = m_pTabBarList.at(1)->property("TailSelectedTabBar").toInt();
@@ -173,18 +257,19 @@ void TabBar::OnTabButtonClicked()
 
 	if (previndex <= 0)
 	{
-		m_pPrevBtn->setProperty("HeadSelectedTabBar", "0");
+		if(m_pPrevBtn) m_pPrevBtn->setProperty("HeadSelectedTabBar", "0");
 	}
 	else if(previndex == m_pTabBarList.length() - 1)
 	{
-		m_pPrevBtn->setProperty("TailSelectedTabBar", "0");
+		if(m_pPrevBtn) m_pPrevBtn->setProperty("TailSelectedTabBar", "0");
 	}
 	else
 	{
-		m_pPrevBtn->setProperty("SelectedTabBar", "0");
-	}
-	m_pPrevBtn = pTBtn;
+		if(m_pPrevBtn) m_pPrevBtn->setProperty("SelectedTabBar", "0");
+	}*/
 
+	m_pPrevBtn = pTBtn;
+	
 	emit changeIndex(index);
 
 	QFile file(":/tabbar.qss");

@@ -36,7 +36,7 @@ public:
 
 	//virtual void loadSkin();
 	virtual QWidget* getWidget();
-	virtual QWidget* getController();
+	virtual QWidget* getMapLayers();
 	virtual QString getStyleSheet();
 public:
 

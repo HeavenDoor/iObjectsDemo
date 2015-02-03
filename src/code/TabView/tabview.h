@@ -1,3 +1,9 @@
+//////////////////////////////////////////////////////////////////////////
+// TabView控件
+// 把插件界面作为Tab页面显示
+//////////////////////////////////////////////////////////////////////////
+
+
 #ifndef TABVIEW_H
 #define TABVIEW_H
 
@@ -13,9 +19,13 @@ public:
 	TabView(QWidget *parent = NULL);
 	~TabView();
 
+	// 添加页面 map： 界面指针  tabIndex：页面顺序 从0开始（< 0 时在最前） tabName：显示在TabBar上的名称
 	void addCentralWidget(QWidget* map, int tabIndex, QString tabName);
-	void setCurrentIndex(int index);
+	// 设置当前选中页面
+	void setCurrentIndex(int index); 
+	// 加载皮肤
 	void loadDefaultSkin();
+	// 加载自定义皮肤  styleSheet：qss字符串
 	void loadCustomStyleSheet(const QString& styleSheet);
 
 protected:
@@ -23,7 +33,6 @@ protected:
 	void resizeEvent(QResizeEvent*);
 private slots:
 	void OnChangeIndex(int index);
-	//void OnChangeToThreeDimension();
 private:
 	static const int tabrwidth = 81;
 	TabWidget* m_pTabWidget;

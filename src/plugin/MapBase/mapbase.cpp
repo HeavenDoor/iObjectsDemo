@@ -103,7 +103,7 @@ QWidget* MapBase::getWidget()
 }
 
 
-QWidget* MapBase::getController()
+QWidget* MapBase::getMapLayers()
 {
 	return m_pMapLayers;
 }

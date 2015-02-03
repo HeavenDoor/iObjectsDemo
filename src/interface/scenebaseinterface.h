@@ -1,5 +1,9 @@
-#ifndef SCENETABINTERFACE_H
-#define SCENETABINTERFACE_H
+//////////////////////////////////////////////////////////////////////////
+// SceneBase插件功能性接口                   
+//////////////////////////////////////////////////////////////////////////
+
+#ifndef SCENEBASEINTERFACE_H
+#define SCENEBASEINTERFACE_H
 
 #include "widgetplugininterface.h"
 #include <QtWidgets/QWidget>

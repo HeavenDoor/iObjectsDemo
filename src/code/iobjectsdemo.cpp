@@ -24,6 +24,7 @@ iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 	m_pInteLayers = NULL;
 	m_pInfoPanel = NULL;
 	m_pTabView = NULL;
+	m_pPopupPanel = NULL;
 
 	initInteLayers();
 	initTabView();
@@ -69,7 +70,10 @@ bool iObjectsDemo::initTabView()
 	m_pTabView->addCentralWidget(e, 3, "ren");
 	QWidget* rr = new QWidget(m_pTabView);
 	rr->setObjectName("rr");
-	m_pTabView->addCentralWidget(rr, 3, "rr");
+	m_pTabView->addCentralWidget(rr, 0, "rr");
+
+// 	m_pTabView->setCurrentIndex(0);
+// 	m_pTabView->loadDefaultSkin();
 	return true;
 }
 
@@ -88,6 +92,14 @@ bool iObjectsDemo::initInteLayers()
 
 bool iObjectsDemo::initControls()
 {
+	m_pPopupPanel = new PopupPanel(this);
+	m_pPopupPanel->setFixedHeight(200);
+	m_pPopupPanel->setFixedWidth(350);
+	m_pPopupPanel->setGeometry(400,200,m_pPopupPanel->width(), m_pPopupPanel->height());
+	m_pPopupPanel->raise();
+	m_pPopupPanel->show();
+
+
 	m_pPopBtn = new QPushButton(this);
 	m_pPopBtn->setObjectName("PopTitleBtn");
 	m_pPopBtn->setFixedWidth(40);
@@ -170,7 +182,7 @@ bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 						m_pTabView->addCentralWidget(m_pMapBase->getWidget(), 0, "sheng");
 						m_pTabView->setCurrentIndex(0);
 						m_pTabView->loadDefaultSkin();
-						m_pInteLayers->addLayers(m_pMapBase->getController());
+						m_pInteLayers->addLayers(m_pMapBase->getMapLayers());
 						setStyleSheet(m_pMapBase->getStyleSheet());
 					}					
 				}
@@ -225,7 +237,6 @@ void iObjectsDemo::resizeEvent(QResizeEvent* e)
 		{
 			m_pInfoPanel->setGeometry(width() - m_pInfoPanel->pluginWidth() - 15 ,height()/2 - m_pInfoPanel->pluginHeight()/2, m_pInfoPanel->pluginWidth(), m_pInfoPanel->pluginHeight());
 		}
-
 	}
 
 	if (m_pTabView)
@@ -243,6 +254,11 @@ void iObjectsDemo::resizeEvent(QResizeEvent* e)
 		m_pPopBtn->setGeometry(width()/2 - m_pPopBtn->width()/2, 0, m_pPopBtn->width(), m_pPopBtn->height());
 	}
 
+	if (m_pPopupPanel)
+	{
+		m_pPopupPanel->setGeometry(400,200,m_pPopupPanel->width(), m_pPopupPanel->height());
+	}
+
 	QWidget::resizeEvent(e);
 }
 
@@ -250,17 +266,6 @@ void iObjectsDemo::OnCloseBtnClicked()
 {
 	this->close();
 }
-
-
-void iObjectsDemo::OnShowLayers( QVector<QString> vec )
-{
-// 	if (m_pInteLayers)
-// 	{
-// 		m_pInteLayers->addTabPage(vec);
-// 		qDebug()<<vec;
-// 	}
-}
-
 
 void iObjectsDemo::OnTitleCollapsed()
 {

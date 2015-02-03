@@ -18,10 +18,6 @@ protected:
 	void paintEvent(QPaintEvent*);
 	void resizeEvent(QResizeEvent*);
 private:
-	QWidget* m_pTwoDimension;
-	QWidget* m_pThreeDimension;
-	QWidget*w;
-
 	QList<QWidget*> m_pTabList;
 };
 

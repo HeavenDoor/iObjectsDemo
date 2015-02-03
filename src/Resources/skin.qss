@@ -244,14 +244,14 @@ QWidget#TwoDimension{
 	margin-bottom:0px;
 }
 
-QWidget#ThreeDimension{
+/*QWidget#ThreeDimension{
 	border-image:url(:/threedimension.png);
 	border-width:2px 2px 2px 2px;
 	margin-left:0px;
 	margin-right:0px;
 	margin-top:0px;
 	margin-bottom:0px;
-}
+}*/
 
 /******************TabBtn*********************************/
 QToolButton[HeadSelectedTabBar = "0"]{
@@ -323,3 +323,12 @@ QPushButton#InteLayersCollapseBtn{
 	border-width:0px 0px 0px 0px;
 }
 
+/**********************PopupPanel**************************************************/
+QWidget#PopupPanel{
+	border-image:url(:/popup.png);
+	border-width: 2px 2px 18px 2px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}

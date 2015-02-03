@@ -21,7 +21,6 @@ protected:
 	void resizeEvent(QResizeEvent*);
 signals:
 	void changeIndex(int index);
-	//void changeToThreeDimension();
 private slots:
 	void OnTabButtonClicked();
 private:
