@@ -28,7 +28,7 @@ MapLayers::MapLayers(QWidget *parent) : QWidget(parent)
 	m_pLayersVLayout = new QVBoxLayout(m_pLayersScroll);
 	m_pLayersVLayout->setContentsMargins(0, 0, 0, 0);
 	m_pLayersVLayout->setSpacing(3);
-	m_pLayersVLayout->setAlignment(Qt::AlignHorizontal_Mask);
+	m_pLayersVLayout->setAlignment(Qt::AlignTop);//AlignHorizontal_Mask
 	m_pLayersScroll->setWidget(m_pLayersContainer);
 
 	//m_pLayersScroll->setObjectName("scroll");

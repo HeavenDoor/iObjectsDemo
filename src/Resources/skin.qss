@@ -324,9 +324,18 @@ QPushButton#InteLayersCollapseBtn{
 }
 
 /**********************PopupPanel**************************************************/
-QWidget#PopupPanel{
-	border-image:url(:/popup.png);
-	border-width: 2px 2px 18px 2px;
+QWidget#PopupBody{
+	border-image:url(:/popupbody.png);
+	border-width: 1px 1px 1px 1px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+QWidget#PopupTail{
+	border-image:url(:/popuptail.png);
+	border-width: 0px 0px 0px 0px;
 	margin-left:0px;
 	margin-right:0px;
 	margin-top:0px;

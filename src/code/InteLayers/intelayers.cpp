@@ -74,7 +74,7 @@ void InteLayers::addLayers( QWidget* layers )
 	QVBoxLayout* p = new QVBoxLayout(m_pBody);
 
 	p->setContentsMargins(0, 0, 0, 0);
-
+	p->setAlignment(Qt::AlignTop);
 	p->setSpacing(0);
 	m_pBody->setLayout(p);
 	p->addWidget(layers);

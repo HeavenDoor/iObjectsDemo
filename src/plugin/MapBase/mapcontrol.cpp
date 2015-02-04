@@ -89,6 +89,10 @@ void UGSTDCALL MapSingleGeometrySelectedCallBack(UGlong pWnd,UGLayer* pLayer,UGi
 void UGSTDCALL GeometrySelectedProcCallBack(UGlong pWnd,UGint nSelectedGeometryCount)
 {
 	MapControl* pQMap = (MapControl*)pWnd;
+	if (pQMap && nSelectedGeometryCount == 1)
+	{
+		pQMap->popupTips();
+	}
 }
 
 MapControl::MapControl( QWidget* parent)
@@ -128,7 +132,7 @@ void MapControl::Init()
 	m_pMapEditorWnd = new UGMapEditorWnd();
 
 	m_pMapEditorWnd->Initialize();
-	m_pMapEditorWnd->SetUserAction(UGDrawParamaters::uaPointModeSelect);
+	m_pMapEditorWnd->SetUserAction(UGDrawParamaters::uaPointModeSelect); //uaPointModeSelectTrue 
 	m_pMapEditorWnd->m_mapWnd.SetAfterMapDrawFunc(MapDrawnCallBack_QMap, (UGlong)this);
 	m_pMapEditorWnd->SetTrackingFunc(TrackingCallBack, (UGlong)this);
 	m_pMapEditorWnd->SetTrackedFunc(TrackedCallBack, (UGlong)this);
@@ -445,7 +449,7 @@ void MapControl::ZoomOut()
 
 void MapControl::Select()
 {
-	m_pMapEditorWnd->SetUserAction(UGDrawParamaters::uaPointModeSelect);
+	m_pMapEditorWnd->SetUserAction(UGDrawParamaters::uaPointModeSelect); // uaPointModeSelectTrue
 }
 
 void MapControl::Release()
@@ -644,4 +648,9 @@ void MapControl::ShowMessureResult(QString messageResult)
 		m_MessageLabel->show();
 	}
 	m_MessageLabel->setText(messageResult);
+}
+
+void MapControl::popupTips()
+{
+	emit showTips();
 }

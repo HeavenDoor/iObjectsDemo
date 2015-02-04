@@ -47,7 +47,7 @@ protected:
 	void paintEvent(QPaintEvent *);
 signals:
 	//void showLayers(QVector<QString> s);
-
+	void showTips();
 private slots:
  	void OnSelectClicked();
  	void OnPanClicked();

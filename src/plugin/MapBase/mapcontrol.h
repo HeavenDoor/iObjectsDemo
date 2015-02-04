@@ -51,7 +51,7 @@ class MapControl : public QWidget
 	Q_OBJECT
 
 public:
-	MapControl(QWidget* parent = 0);
+	MapControl(QWidget* parent = NULL);
 	~MapControl();
     
 	//重写绘制函数
@@ -71,6 +71,8 @@ public:
 	
 	//重写当窗口大小发生改变时函数
 	virtual void resizeEvent ( QResizeEvent* event );
+
+	void popupTips();
 
 public:
 	//打开地图方法
@@ -119,7 +121,7 @@ public:
 signals:
 	//绘制地图信号
 	void UGMapDrawnEvent(MapControl* pQMap, UGGraphics* pGraphics);
-
+	void showTips();
 
 private:	
 	UGMap& GetMap();

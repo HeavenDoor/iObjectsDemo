@@ -55,6 +55,8 @@ iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 		delete m_pPluginloader;
 		m_pPluginloader = NULL;
 	}
+
+	//qApp->installEventFilter(this);
 }
 
 iObjectsDemo::~iObjectsDemo()
@@ -92,12 +94,12 @@ bool iObjectsDemo::initInteLayers()
 
 bool iObjectsDemo::initControls()
 {
-	m_pPopupPanel = new PopupPanel(this);
-	m_pPopupPanel->setFixedHeight(200);
-	m_pPopupPanel->setFixedWidth(350);
-	m_pPopupPanel->setGeometry(400,200,m_pPopupPanel->width(), m_pPopupPanel->height());
-	m_pPopupPanel->raise();
-	m_pPopupPanel->show();
+// 	m_pPopupPanel = new PopupPanel(this);
+// // 	m_pPopupPanel->setFixedHeight(200);
+// // 	m_pPopupPanel->setFixedWidth(350);
+// 	m_pPopupPanel->setGeometry(400,200,m_pPopupPanel->width(), m_pPopupPanel->height());
+// 	m_pPopupPanel->raise();
+// 	m_pPopupPanel->show();
 
 
 	m_pPopBtn = new QPushButton(this);
@@ -179,6 +181,7 @@ bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 				{
 					if (m_pTabView)
 					{
+						connect(m_pMapBase->getObject(), SIGNAL(showTips()), this, SLOT(OnShowMapBaseTips()));
 						m_pTabView->addCentralWidget(m_pMapBase->getWidget(), 0, "sheng");
 						m_pTabView->setCurrentIndex(0);
 						m_pTabView->loadDefaultSkin();
@@ -331,3 +334,53 @@ void iObjectsDemo::moveEvent( QMoveEvent* e)
 	QWidget::moveEvent(e);
 }
 
+void iObjectsDemo::mousePressEvent( QMouseEvent* e)
+{
+	if (e->button() == Qt::LeftButton)
+	{
+		m_PressPoint = e->pos();
+	}
+}
+
+void iObjectsDemo::OnShowMapBaseTips()
+{
+	m_pPopupPanel =new PopupPanel(this);
+	connect(m_pPopupPanel, SIGNAL(closePopupPanel()), this, SLOT(OnClosePopupPanel()));
+	m_pPopupPanel->setFixedHeight(350);
+	m_pPopupPanel->setFixedWidth(500);
+	m_pPopupPanel->setGeometry(m_PressPoint.x() - m_pPopupPanel->width()/2, m_PressPoint.y() - m_pPopupPanel->height(), m_pPopupPanel->width(), m_pPopupPanel->height());
+	m_pPopupPanel->show();
+	m_pPopupPanel->raise();
+}
+
+bool iObjectsDemo::eventFilter(QObject* obj, QEvent* e)
+{
+	if(e->type() == QEvent::MouseButtonPress)
+	{
+		QMouseEvent* en = dynamic_cast<QMouseEvent*>(e);
+		if(!en) return false;
+
+		if (en->buttons() && Qt::LeftButton)
+		{  
+			if (m_pPopupPanel)
+			{
+				delete m_pPopupPanel;
+				m_pPopupPanel = NULL;
+			}
+			m_PressPoint = en->pos();
+		}
+		QPoint point = en->globalPos();
+		QRect rect = WidgetRect::widgetGlobalRect(this);
+
+	}
+	return false;
+}
+
+void iObjectsDemo::OnClosePopupPanel()
+{
+	if (m_pPopupPanel)
+	{
+		delete m_pPopupPanel;
+		m_pPopupPanel = NULL;
+	}
+}

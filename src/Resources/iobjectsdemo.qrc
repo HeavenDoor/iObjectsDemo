@@ -54,6 +54,7 @@
     <file>colles.png</file>
     <file>closeintelayersbtn.png</file>
     <!--PopupPanel-->
-    <file>popup.png</file>
+    <file>popupbody.png</file>
+    <file>popuptail.png</file>
   </qresource>
 </RCC>

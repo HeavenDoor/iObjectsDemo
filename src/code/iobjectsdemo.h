@@ -29,6 +29,8 @@ protected:
 	void paintEvent(QPaintEvent*);
 	void resizeEvent(QResizeEvent*);
 	void moveEvent(QMoveEvent*);
+	void mousePressEvent(QMouseEvent*);
+	bool eventFilter(QObject* obj, QEvent* e);
 signals:
 
 private slots:
@@ -38,6 +40,9 @@ private slots:
 	void OnToolBoxPlugin_SearchBtnClicked();
 	void OnToolBoxPlugin_SettingBtnClicked();
 	void OnInteLayersPlugin_RefeshWindow();
+	void OnShowMapBaseTips();
+	void OnClosePopupPanel();
+	
 private:
 	// ╪сть©ь╪Ч
 	bool initControls();
@@ -62,6 +67,8 @@ private:
 	Pluginloader* m_pPluginloader;
 	QVariantMap m_pluginMap;
 	MapBaseInterface* m_pMapBase;
+
+	QPoint m_PressPoint;
 };
 
 #endif // IOBJECTSDEMO_H

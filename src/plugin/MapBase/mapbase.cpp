@@ -34,6 +34,8 @@ MapBase::MapBase(QWidget *parent) : QWidget(parent)
 	//m_pMapLayers->setAttribute(Qt::WA_TranslucentBackground);
 
 	m_pMapControl = new MapControl(this);
+	connect(m_pMapControl, SIGNAL(showTips()), this, SIGNAL(showTips()));
+
 	QWidget* map2D = dynamic_cast<QWidget*>(m_pMapControl);
 	m_pMap2DLayout->addWidget(map2D);
 	this->setLayout(m_pMap2DLayout);
