@@ -14,6 +14,7 @@ public:
 	TabBar(QWidget *parent);
 	~TabBar();
 	void insertTabbar(int index, QString tabName);
+	void removeTabbar(int index);
 	void setCurrentIndex(int index);
 	int tabCount();
 protected:

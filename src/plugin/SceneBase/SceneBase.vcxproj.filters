@@ -50,5 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="scenebase.json" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

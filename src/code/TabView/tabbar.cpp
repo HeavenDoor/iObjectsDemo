@@ -120,12 +120,68 @@ void TabBar::insertTabbar( int index, QString tabName )
 	m_pTabBarList.insert(index, pBtn);
 	m_pHlayout->insertWidget(index, pBtn);
 
+
+}
+
+
+void TabBar::removeTabbar( int index )
+{
+	if (index < 0 || index >= m_pTabBarList.length()) return;
+	int origlength = m_pTabBarList.length();
+
+	QToolButton* p = m_pTabBarList.at(index);
+	m_pTabBarList.removeAt(index);
+	m_pHlayout->removeWidget(p);
+
+
+
+	if (m_pTabBarList.length() == 1)
+	{
+		setVisible(false);
+		m_pTabBarList.at(0)->setProperty("HeadSelectedTabBar", 1);
+		m_pPrevBtn = m_pTabBarList.at(0);
+	}
+	else
+	{
+		if (index == 0)
+		{
+			m_pPrevBtn = m_pTabBarList.at(0);
+			m_pTabBarList.at(0)->setProperty("HeadSelectedTabBar", 1);
+			m_pTabBarList.at(0)->setProperty("SelectedTabBar", "5");
+			
+		}
+		else if(index = origlength - 1)
+		{
+			m_pPrevBtn = m_pTabBarList.at(0);
+			m_pTabBarList.last()->setProperty("TailSelectedTabBar", 0);
+			m_pTabBarList.last()->setProperty("SelectedTabBar", 0);
+			//m_pTabBarList.at(0)->setProperty("SelectedTabBar", "5");
+			m_pTabBarList.at(0)->setProperty("HeadSelectedTabBar", "1");
+		}
+		else
+		{
+			m_pPrevBtn = m_pTabBarList.at(0);
+
+			m_pTabBarList.at(0)->setProperty("HeadSelectedTabBar", "1");
+		}
+
+		emit changeIndex(0);
+		
+	}
+
+
+
+
+	delete p;
+	p = NULL;
+
 	QFile file(":/tabbar.qss");
 	file.open(QFile::ReadOnly);
 	QString style = QString(file.readAll());
 	this->setStyleSheet(style);
 	file.close();
 }
+
 
 
 void TabBar::setCurrentIndex( int index )

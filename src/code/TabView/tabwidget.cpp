@@ -44,8 +44,16 @@ void TabWidget::addCentralWidget( QWidget* map, int tabIndex, QString tabName )
 	map->setProperty("TabIndex", tabIndex);
 	insertTab(tabIndex, map, tabName);
 	//addTab(map, tabName);
-	m_pTabList.push_back(map);
+	m_pTabList.insert(tabIndex, map);
 // 	QPushButton* pp = new QPushButton(map);
 // 	pp->setText(tabName);
 
+}
+
+int TabWidget::removeCentralWidget( QWidget* widget )
+{
+	int index = m_pTabList.indexOf(widget);
+	removeTab(index);
+	m_pTabList.removeOne(widget);
+	return index;
 }

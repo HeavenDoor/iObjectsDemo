@@ -2,6 +2,9 @@
 #include "popuppanel.h"
 #include "..\\..\\commom\widgetrect.h"
 
+#include <QtWebKitWidgets/QWebPage>
+#include <QtWebKitWidgets/QWebFrame>
+
 PopupPanel::PopupPanel(QWidget *parent, int xPos)	: QWidget(parent),m_Xpos(xPos)
 {
 	m_pPopupBody = NULL;
@@ -23,8 +26,12 @@ PopupPanel::PopupPanel(QWidget *parent, int xPos)	: QWidget(parent),m_Xpos(xPos)
 
 
 	m_pWebView = new QWebView(m_pPopupBody);
+	m_pWebView->setObjectName("PopupWebView");
 	m_pWebView->setUrl(QUrl("http://www.baidu.com"));
-
+	m_pWebView->page()->mainFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
+	m_pWebView->page()->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
+	m_pWebView->page()->setViewportSize(m_pWebView->size());
+	m_pWebView->setZoomFactor(0.5);
 	qApp->installEventFilter(this);
 	
 }
@@ -72,6 +79,7 @@ void PopupPanel::resizeEvent( QResizeEvent * )
 	if (m_pWebView)
 	{
 		m_pWebView->setGeometry(10, 10, m_pPopupBody->width() - 20, m_pPopupBody->height() - 20);
+		m_pWebView->page()->setViewportSize(m_pWebView->size());
 	}
 
 	

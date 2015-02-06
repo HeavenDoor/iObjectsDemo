@@ -66,16 +66,14 @@ iObjectsDemo::~iObjectsDemo()
 
 bool iObjectsDemo::initTabView()
 {
-	m_pTabView = new TabView(this);
+ 	m_pTabView = new TabView(this);
 	QWidget* e = new QWidget(m_pTabView);
 	e->setObjectName("TwoDimension");
 	m_pTabView->addCentralWidget(e, 3, "ren");
-	QWidget* rr = new QWidget(m_pTabView);
-	rr->setObjectName("rr");
-	m_pTabView->addCentralWidget(rr, 0, "rr");
+// 	QWidget* rr = new QWidget(m_pTabView);
+// 	rr->setObjectName("rr");
+// 	m_pTabView->addCentralWidget(rr, 0, "rr");
 
-// 	m_pTabView->setCurrentIndex(0);
-// 	m_pTabView->loadDefaultSkin();
 	return true;
 }
 
@@ -94,14 +92,6 @@ bool iObjectsDemo::initInteLayers()
 
 bool iObjectsDemo::initControls()
 {
-// 	m_pPopupPanel = new PopupPanel(this);
-// // 	m_pPopupPanel->setFixedHeight(200);
-// // 	m_pPopupPanel->setFixedWidth(350);
-// 	m_pPopupPanel->setGeometry(400,200,m_pPopupPanel->width(), m_pPopupPanel->height());
-// 	m_pPopupPanel->raise();
-// 	m_pPopupPanel->show();
-
-
 	m_pPopBtn = new QPushButton(this);
 	m_pPopBtn->setObjectName("PopTitleBtn");
 	m_pPopBtn->setFixedWidth(40);
@@ -148,6 +138,12 @@ bool iObjectsDemo::unLoadPlugins(const QString& pluginName )
 
 	if (pluginName == "MapBase"/*loader->instance()->inherits("MapTabInterface")*/)
 	{
+		if (m_pTabView && m_pMapBase && m_pInteLayers)
+		{
+			m_pInteLayers->removeLayers(m_pMapBase->getMapLayers());
+			m_pTabView->removeCentralWidget(m_pMapBase->getWidget());
+			
+		}
 		bPluginunload = loader->unload();
 		m_pMapBase = NULL;
 	}
@@ -182,8 +178,8 @@ bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 					if (m_pTabView)
 					{
 						connect(m_pMapBase->getObject(), SIGNAL(showTips()), this, SLOT(OnShowMapBaseTips()));
-						m_pTabView->addCentralWidget(m_pMapBase->getWidget(), 0, "sheng");
-						m_pTabView->setCurrentIndex(0);
+						m_pTabView->addCentralWidget(m_pMapBase->getWidget(), 10, "sheng");
+						m_pTabView->setCurrentIndex(10);
 						m_pTabView->loadDefaultSkin();
 						m_pInteLayers->addLayers(m_pMapBase->getMapLayers());
 						setStyleSheet(m_pMapBase->getStyleSheet());

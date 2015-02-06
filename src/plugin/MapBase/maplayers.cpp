@@ -49,7 +49,24 @@ MapLayers::MapLayers(QWidget *parent) : QWidget(parent)
 
 MapLayers::~MapLayers()
 {
+	if(m_pLayersVLayout)
+	{
+		delete m_pLayersVLayout;
+		m_pLayersVLayout = NULL;
+	}
 
+	if(m_pLayersContainer)  // 要先删除m_pLayersContainer 之后删除m_pLayersScroll
+	{
+		delete m_pLayersContainer;
+		m_pLayersContainer = NULL;
+	}
+
+	if(m_pLayersScroll)
+	{
+		delete m_pLayersScroll;
+		m_pLayersScroll = NULL;
+	}
+	
 }
 
 void MapLayers::initLayers( const QVector<QString>& layers )

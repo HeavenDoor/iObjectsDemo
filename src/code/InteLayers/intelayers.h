@@ -23,6 +23,7 @@ public:
 	int InteLayersWidth();
 
 	void addLayers(QWidget* layers);
+	void removeLayers(QWidget* layers);
 signals:
 	void refeshWindow();
 	private slots:

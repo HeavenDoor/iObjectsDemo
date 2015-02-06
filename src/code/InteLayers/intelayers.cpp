@@ -52,12 +52,14 @@ InteLayers::InteLayers(QWidget* parent) : QWidget(parent)
 	m_pCollapseBtn->setAttribute(Qt::WA_TranslucentBackground);
 	m_pCollapseBtn->setVisible(false);
 	connect(m_pCollapseBtn, SIGNAL(clicked()), this, SLOT(OnInteLayersExpand()));
-	
-	qApp->installEventFilter(this);
 
 	m_pBody = new QWidget(m_pTabWidget);
 	m_pBody->setFixedHeight(m_pTabWidget->height() - 16);
 	m_pBody->setFixedWidth(m_pTabWidget->width() - 16);
+	
+	qApp->installEventFilter(this);
+
+	
 }
 
 InteLayers::~InteLayers()
@@ -67,18 +69,26 @@ InteLayers::~InteLayers()
 
 void InteLayers::addLayers( QWidget* layers )
 {
-	
-	//layers->setGeometry(10,10, width() - 20, height() - 20);
-	//QWidget
 	m_pBody->setGeometry(m_pTabWidget->x() + 6, 5, m_pBody->width(), m_pBody->height());
 	QVBoxLayout* p = new QVBoxLayout(m_pBody);
-
+	
 	p->setContentsMargins(0, 0, 0, 0);
 	p->setAlignment(Qt::AlignTop);
 	p->setSpacing(0);
 	m_pBody->setLayout(p);
 	p->addWidget(layers);
 }
+
+
+void InteLayers::removeLayers( QWidget* layers )
+{
+	if(m_pBody)
+	{
+		m_pBody->layout()->removeWidget(layers);
+		delete m_pBody->layout();
+	}
+}
+
 
 bool InteLayers::eventFilter(QObject* obj, QEvent* e)
 {

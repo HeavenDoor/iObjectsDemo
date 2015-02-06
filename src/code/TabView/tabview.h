@@ -21,6 +21,8 @@ public:
 
 	// 添加页面 map： 界面指针  tabIndex：页面顺序 从0开始（< 0 时在最前） tabName：显示在TabBar上的名称
 	void addCentralWidget(QWidget* map, int tabIndex, QString tabName);
+	// 删除页面
+	void removeCentralWidget(QWidget* widget);
 	// 设置当前选中页面
 	void setCurrentIndex(int index); 
 	// 加载皮肤

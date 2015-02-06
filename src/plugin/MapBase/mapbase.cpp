@@ -85,9 +85,22 @@ MapBase::~MapBase()
 {
  	m_Layers.clear();
  
- 	m_pMapControl->Release();
- 	delete m_pMapControl;
- 	m_pMapControl = NULL;
+	if (m_pMapLayers)
+	{
+		delete m_pMapLayers;
+		m_pMapLayers = NULL;
+	}
+	if (m_pMapController)
+	{
+		delete m_pMapController;
+		m_pMapController = NULL;
+	}
+	if (m_pMapControl)
+	{
+		m_pMapControl->Release();
+		delete m_pMapControl;
+		m_pMapControl = NULL;
+	}
 }
 
 void MapBase::paintEvent(QPaintEvent* e)

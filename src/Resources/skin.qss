@@ -341,3 +341,9 @@ QWidget#PopupTail{
 	margin-top:0px;
 	margin-bottom:0px;
 }
+
+QWebView#PopupWebView{
+	border: 1px groove gray; 
+	border-radius: 5px; 
+	background-color: rgba(255, 193, 245, 0%);
+}

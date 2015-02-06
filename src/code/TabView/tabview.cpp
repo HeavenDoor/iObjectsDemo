@@ -81,6 +81,19 @@ void TabView::addCentralWidget( QWidget* map, int tabIndex, QString tabName)
 	m_pTabBar->setGeometry(width() - m_pTabBar->tabCount()*tabrwidth - 100, 25, m_pTabBar->width(), m_pTabBar->height());
 }
 
+
+void TabView::removeCentralWidget( QWidget* widget )
+{
+	if (!m_pTabWidget || !m_pTabBar) return;
+	int index = m_pTabWidget->removeCentralWidget(widget);
+	m_pTabBar->removeTabbar(index);
+	loadDefaultSkin();
+	m_pTabBar->setFixedWidth(m_pTabBar->tabCount()*tabrwidth);
+	m_pTabBar->resize(m_pTabBar->width(), m_pTabBar->height());
+	m_pTabBar->setGeometry(width() - m_pTabBar->tabCount()*tabrwidth - 100, 25, m_pTabBar->width(), m_pTabBar->height());
+}
+
+
 void TabView::setCurrentIndex( int index )
 {
 	if (!m_pTabWidget || !m_pTabBar) return;
