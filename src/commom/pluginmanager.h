@@ -14,6 +14,7 @@ public:
 	bool getPluginValueByName(const QString& name);
 	void setPluginValueByName(const QString& name, const bool& value);
 	QVariantMap getPluginMap();
+	QVariantMap getDefaultPluginMap();
 	void insertPluginItem(const QString& name, const bool& value);
 private:
 	PluginManager(QObject *parent = NULL);

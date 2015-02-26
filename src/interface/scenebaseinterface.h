@@ -12,6 +12,14 @@ class SceneBaseInterface : public WidgetPluginInterface
 {
 public:
 	virtual void test() = 0;
+	// UGSceneEditorWnd对象的指针的获取
+	virtual void* getUGSceneEditorWnd() = 0;
+	// 获得SceneBase插件主界面的指针，作为主界面Tab页面显示
+	virtual QWidget* getWidget() = 0;   
+	// 获得SceneBase插件中SceneLayers控件指针，给主界面做布局处理
+	virtual QWidget* getSceneLayers() = 0;
+	// 获得SceneBase插件SceneController控件指针
+	virtual QWidget* getSceneController() = 0;
 
 };
 

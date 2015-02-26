@@ -10,11 +10,13 @@ PopupPanel::PopupPanel(QWidget *parent, int xPos)	: QWidget(parent),m_Xpos(xPos)
 	m_pPopupBody = NULL;
 	m_pPopupTail = NULL;
 	m_pWebView = NULL;
+	m_pCloseBtn = NULL;
 	setObjectName("PopupPanel");
 // 	setFixedWidth(347);
 // 	setFixedHeight(300);
 	setAttribute(Qt::WA_AlwaysStackOnTop);
-
+	setAttribute(Qt::WA_TranslucentBackground);
+	setWindowFlags(Qt::FramelessWindowHint|Qt::Tool);
 
 	m_pPopupBody = new QWidget(this);
 	m_pPopupBody->setObjectName("PopupBody");
@@ -32,6 +34,14 @@ PopupPanel::PopupPanel(QWidget *parent, int xPos)	: QWidget(parent),m_Xpos(xPos)
 	m_pWebView->page()->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
 	m_pWebView->page()->setViewportSize(m_pWebView->size());
 	m_pWebView->setZoomFactor(0.5);
+
+
+	m_pCloseBtn = new QPushButton(this);
+	connect(m_pCloseBtn, SIGNAL(clicked()), this, SLOT(OnBtnClose()));
+	m_pCloseBtn->setObjectName("PopupPanelClose");
+	m_pCloseBtn->setFixedHeight(18);
+	m_pCloseBtn->setFixedWidth(30);
+
 	qApp->installEventFilter(this);
 	
 }
@@ -82,7 +92,10 @@ void PopupPanel::resizeEvent( QResizeEvent * )
 		m_pWebView->page()->setViewportSize(m_pWebView->size());
 	}
 
-	
+	if (m_pCloseBtn)
+	{
+		m_pCloseBtn->setGeometry(width() - m_pCloseBtn->width() - 1, 1, m_pCloseBtn->width(), m_pCloseBtn->height());
+	}
 }
 
 bool PopupPanel::eventFilter(QObject* obj, QEvent* e)
@@ -99,4 +112,9 @@ bool PopupPanel::eventFilter(QObject* obj, QEvent* e)
 		}
 	}
 	return false;
+}
+
+void PopupPanel::OnBtnClose()
+{
+	close();
 }

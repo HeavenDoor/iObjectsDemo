@@ -17,12 +17,15 @@ protected:
 	bool eventFilter(QObject* obj, QEvent* e);
 signals:
 	void closePopupPanel();
+private slots:
+	void OnBtnClose();
 public:
 	int m_Xpos;
 private:
 	QWidget* m_pPopupBody;
 	QWidget* m_pPopupTail;
 	QWebView* m_pWebView;
+	QPushButton* m_pCloseBtn;
 };
 
 #endif // POPUPPANEL_H

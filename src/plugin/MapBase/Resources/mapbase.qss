@@ -1,4 +1,13 @@
 /******************Main*********************************/
+/*QWidget#Map2DController{
+	border-image:url(:/itemBK.png);
+	border-width:1px 1px 1px 1px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}*/
+
 /**********************itemBK**************************************************/
 QWidget#InteLayersItem{
 	border-image:url(:/itemBK.png);
@@ -27,9 +36,11 @@ QWidget#EmptyWidget{
 	margin-bottom:0px;
 }
 
+
+/*
 QScrollBar:vertical {
     background-color:#C6E2FF;
-	width: 0px;
+	width: 5px;
 }
 
 QScrollBar::handle:vertical {
@@ -53,4 +64,4 @@ QScrollBar::handle:horizontal {
 
 QScrollBar::handle:horizontal:hover {
     background-color:qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 #d69200, stop: 1 #d26106);
-}
+}*/

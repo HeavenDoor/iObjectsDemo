@@ -187,6 +187,15 @@
     <ClCompile Include="GeneratedFiles\Release\moc_popuppanel.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="code\TabView\tabitem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_tabitem.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_tabitem.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -255,6 +264,9 @@
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="code\PopupPanel\popuppanel.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="code\TabView\tabitem.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

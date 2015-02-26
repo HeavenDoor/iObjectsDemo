@@ -15,8 +15,12 @@ public:
 
 	// ToolBox容器中加入Button，objectName： Button的objectName  align： Button在Left还是Right  默认Left
 	QObject* createToolButton(const QString& objectName, Qt::Alignment align = Qt::AlignLeft);
+	void addWidget(QWidget* w);
+	void removeWidget(QWidget* w);
 	// 设置ToolButton 大小
 	void setToolButtonSize(QSize size);
+	// 添加分割线
+	void addLine(Qt::Alignment align = Qt::AlignLeft);
 signals:
 public slots:
 

@@ -9,6 +9,7 @@
 #include "maplayers.h"
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QHBoxLayout>
+#include <QVariantMap>
 
 class MapBase : public QWidget, MapBaseInterface
 {
@@ -35,13 +36,15 @@ public:
 	virtual int pluginHeight();
 
 	//virtual void loadSkin();
+	virtual void* getUGMapEditorWnd();
 	virtual QWidget* getWidget();
 	virtual QWidget* getMapLayers();
+	virtual QWidget* getMapController();
 	virtual QString getStyleSheet();
 public:
 
 	QString getMapUrl() const;
-	QVector<QString> getLayers() const;
+	/*QVector<QString>*/QVector<QVariantList> getLayers() const;
 protected:
 	void resizeEvent(QResizeEvent *);
 	void paintEvent(QPaintEvent *);
@@ -54,12 +57,12 @@ private slots:
  	void OnEntireClicked();
  	void OnZoomInClicked();
  	void OnZoomOutClicked();
-	void OnChangeLayers(const QString& text);
+	void OnChangeLayers(const QString& text, int index);
 private slots:
 private:
 
 	QString m_MapUrl;
-	QVector<QString> m_Layers;
+	/*QVector<QString>*/QVector<QVariantList> m_Layers;
 	QHBoxLayout* m_pMap2DLayout;
 	MapControl* m_pMapControl;
 	MapController* m_pMapController;

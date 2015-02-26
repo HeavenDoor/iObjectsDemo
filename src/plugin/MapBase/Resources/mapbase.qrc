@@ -9,5 +9,7 @@
 
       <file>itemBK.png</file>
       <file>tran.png</file>
+      <file>eye_open.png</file>
+      <file>eye_closed.png</file>
     </qresource>
 </RCC>

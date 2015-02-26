@@ -5,6 +5,7 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QToolButton>
 #include <QVector>
+#include "tabitem.h"
 
 class TabBar : public QWidget
 {
@@ -20,14 +21,20 @@ public:
 protected:
 	void paintEvent(QPaintEvent*);
 	void resizeEvent(QResizeEvent*);
+
+	void	dragEnterEvent(QDragEnterEvent * event) Q_DECL_OVERRIDE;
+	void	dragLeaveEvent(QDragLeaveEvent * event) Q_DECL_OVERRIDE;
+	void dragMoveEvent(QDragMoveEvent *event) Q_DECL_OVERRIDE;
+	void dropEvent(QDropEvent *event) Q_DECL_OVERRIDE;
+	void mousePressEvent(QMouseEvent *event);
 signals:
 	void changeIndex(int index);
 private slots:
 	void OnTabButtonClicked();
 private:
 	QHBoxLayout* m_pHlayout;
-	QToolButton* m_pPrevBtn;
-	QVector<QToolButton*> m_pTabBarList;
+	TabItem* m_pPrevBtn;
+	QVector<TabItem*> m_pTabBarList;
 };
 
 #endif // TABBAR_H

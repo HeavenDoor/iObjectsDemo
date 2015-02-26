@@ -489,15 +489,29 @@ UGString MapControl::QStringToUGString(QString qstring )
 }
 
 
-void MapControl::openLayers( const QString& text )
+void MapControl::openLayers( const QString& text , int index)
 {
-	GetMap().Open(QStringToUGString(text));
+	UGLayers& layers = m_pMapEditorWnd->m_mapWnd.m_Map.m_Layers;
+	UGString name = layers.GetLayerAt(index)->GetCaption();
+	UGMBString strMB;
+	name.ToMBString(strMB);
+	const OgdcAchar * ugchar = strMB.Cstr();
+	OgdcWchar * ugWchar;
+	name.AcharToWchar(ugchar, ugWchar, name.GetLength());
+	std::string drawstring = ugchar;
+	QString strText = QString::fromLocal8Bit(drawstring.c_str());
 
 
-	m_defaultCenter = GetMap().GetCenter();
-	m_defaultScale = GetMap().GetScale();
+	if (strText != text) return;
+	layers.GetLayerAt(index)->SetVisible(!layers.GetLayerAt(index)->IsVisible());
 
-	this->ViewEntire();
+	m_pMapEditorWnd->Refresh();
+	Invalidate();
+	
+// 	m_defaultCenter = GetMap().GetCenter();
+// 	m_defaultScale = GetMap().GetScale();
+
+	//this->ViewEntire();
 }
 
 int MapControl::OpenMap( const QString& mapPath )
@@ -531,7 +545,7 @@ int MapControl::OpenMap( const QString& mapPath )
 	}
 
 	UGint num = m_pWorkspace->m_MapStorages.GetCount();
-	UGString mapName = m_pWorkspace->m_MapStorages.GetNameAt(num - 1);
+	UGString mapName = m_pWorkspace->m_MapStorages.GetNameAt(0);
 
 	if (!pMap->Open(mapName))
 	{
@@ -551,24 +565,59 @@ int MapControl::OpenMap( const QString& mapPath )
 
 
 
-QVector<QString> MapControl::getLayersList()
+QVector<QVariantList> MapControl::getLayersList()
 {
-	QVector<QString> sList;
-	for (int i = 0; i < m_pWorkspace->m_MapStorages.GetCount(); i++)
-	{
-		UGString name = m_pWorkspace->m_MapStorages.GetNameAt(i);
+	QVector<QVariantList> sList;
+	QVariantList layersMap;
+	//GetEditableLayer()
+	
+	
+		UGLayers& layers = m_pMapEditorWnd->m_mapWnd.m_Map.m_Layers;
+		int count = layers.GetTopLevelCount();
+// 		 QVector<ILayer2D*> m_layers;
+		for(int i =0;i<count;i++)
+		{
+			UGString name = layers.GetLayerAt(i)->GetCaption();
+			UGMBString strMB;
+			name.ToMBString(strMB);
+			const OgdcAchar * ugchar = strMB.Cstr();
+			OgdcWchar * ugWchar;
+			name.AcharToWchar(ugchar, ugWchar, name.GetLength());
+			std::string drawstring = ugchar;
+			QString strText = QString::fromLocal8Bit(drawstring.c_str());
+			//sList.push_back(strText);
+			layersMap.insert(0,strText);
+			layersMap.insert(1,layers.GetLayerAt(i)->IsVisible());
+			sList.push_back(layersMap);
+			//layersMap.insert(strText, layers.GetLayerAt(i)->IsVisible());
+			//layersMap.
+		}
+	
 
-		UGMBString strMB;
-		name.ToMBString(strMB);
-		const OgdcAchar * ugchar = strMB.Cstr();
-		OgdcWchar * ugWchar;
-		name.AcharToWchar(ugchar, ugWchar, name.GetLength());
-		std::string drawstring = ugchar;
-		QString strText = QString::fromLocal8Bit(drawstring.c_str());
-		sList.push_back(strText);
-	} 
+		
+// 	UGLayers list = GetMap().m_Layers;
+// 	
+// 
+// 
+// 	UGString ss = m_pWorkspace->m_MapStorages.GetMapAt(0)->GetXML();
+// 
+// 	for (int i = 0; i < m_pWorkspace->m_MapStorages.GetCount(); i++)
+// 	{
+// 		UGString name = m_pWorkspace->m_MapStorages.GetNameAt(i);
+// 
+// 		UGMBString strMB;
+// 		name.ToMBString(strMB);
+// 		const OgdcAchar * ugchar = strMB.Cstr();
+// 		OgdcWchar * ugWchar;
+// 		name.AcharToWchar(ugchar, ugWchar, name.GetLength());
+// 		std::string drawstring = ugchar;
+// 		QString strText = QString::fromLocal8Bit(drawstring.c_str());
+// 		sList.push_back(strText);
+// 	} 
+//	qDebug()<<layersMap;
 	qDebug()<<sList;
 	return sList;
+
 }
 
 
@@ -653,4 +702,9 @@ void MapControl::ShowMessureResult(QString messageResult)
 void MapControl::popupTips()
 {
 	emit showTips();
+}
+
+void* MapControl::getUGMapEditorWnd()
+{
+	return (void*)m_pMapEditorWnd;
 }

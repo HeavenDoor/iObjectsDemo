@@ -13,12 +13,14 @@ class MapBaseInterface : public WidgetPluginInterface
 {
 public:
 	virtual void test() = 0;
+	// UGMapEditorWnd对象的指针的获取
+	virtual void* getUGMapEditorWnd() = 0;
 	// 获得MapBase插件主界面的指针，作为主界面Tab页面显示
 	virtual QWidget* getWidget() = 0;   
 	// 获得MapBase插件中MapLayers控件指针，给主界面做布局处理
 	virtual QWidget* getMapLayers() = 0;
-	// 获得插件样式表，主界面重新加载样式表
-	virtual QString getStyleSheet() = 0;
+	// 获得MapBase插件MapController控件指针
+	virtual QWidget* getMapController() = 0;
 };
 
 

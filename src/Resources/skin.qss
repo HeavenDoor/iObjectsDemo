@@ -175,6 +175,24 @@ QWidget#Map2DContainer{
 }
 
 /******************ToolBox*********************************/
+QWidget#ToolBox{
+	border-image:url(:/sh.png);
+	border-width: 14px 11px 14px 13px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+QWidget#ToolBoxLine{
+	border-image:url(:/line.png);
+	border-width: 0px 2px 0px 2px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
 QPushButton#search:!pressed{
 	border-image: url(:/search.png);
 	border-width:2px 2px 2px 2px;
@@ -206,6 +224,13 @@ QPushButton#set:pressed{
 }*/
 
 /******************TabView*********************************/
+
+QTabWidget#Tabwidget{
+	border: 1px groove gray; 
+	border-radius: 5px; 
+	/*background-color: rgba(255, 193, 245, 0%);*/
+}
+
 /*QWidget#MapTab{
 	border-image:url(:/bk.png);
 	border-width:2px 5px 2px 5px;
@@ -304,7 +329,7 @@ QWidget#InteLayersBody{
 
 QWidget#InteLayersHead{
 	border-image:url(:/head.png);
-	border-width:0px 0px 0px 0px;
+	border-width: 0px 0px 0px 0px;
 	margin-left:0px;
 	margin-right:0px;
 	margin-top:0px;
@@ -320,7 +345,11 @@ QPushButton#CloseInteLayersBtn{
 /**********************CollapseBtn**************************************************/
 QPushButton#InteLayersCollapseBtn{
 	border-image: url(:/colles.png);
-	border-width:0px 0px 0px 0px;
+	border-width: 0px 0px 0px 0px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top:0px;
+	margin-bottom:0px;
 }
 
 /**********************PopupPanel**************************************************/
@@ -347,3 +376,19 @@ QWebView#PopupWebView{
 	border-radius: 5px; 
 	background-color: rgba(255, 193, 245, 0%);
 }
+
+QPushButton#PopupPanelClose:!hover{
+	border-image: url(:/closeTips.png);
+	border-width:0px 0px 0px 0px;
+}
+
+QPushButton#PopupPanelClose:hover{
+	border-image: url(:/closeTipsp.png);
+	border-width:0px 0px 0px 0px;
+}
+
+QPushButton#PopupPanelClose:perssed{
+	border-image: url(:/closeTipsp.png);
+	border-width:0px 0px 0px 0px;
+}
+

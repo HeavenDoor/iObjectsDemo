@@ -9,6 +9,11 @@ InteLayers::InteLayers(QWidget* parent) : QWidget(parent)
 {
 	//m_pTabWidget = NULL;
 	m_pHead = NULL;
+	m_pTitle = NULL;
+	m_pTabWidget = NULL;
+	m_pBody = NULL;
+
+
 	setObjectName("InteLayers");
 
 	m_pVLayout = new QVBoxLayout(this);
@@ -20,6 +25,9 @@ InteLayers::InteLayers(QWidget* parent) : QWidget(parent)
 	m_pHead->setFixedHeight(43);
 	m_pHead->setFixedWidth(216);
 	m_pHead->setGeometry(0,0,216,43);
+
+	m_pTitle = new QLabel(m_pHead);
+
 
 	m_pCloseBtn = new QPushButton(m_pHead);
 	m_pCloseBtn->setObjectName("CloseInteLayersBtn");
@@ -46,8 +54,8 @@ InteLayers::InteLayers(QWidget* parent) : QWidget(parent)
 
 	m_pCollapseBtn = new QPushButton(this);
 	m_pCollapseBtn->setObjectName("InteLayersCollapseBtn");
-	m_pCollapseBtn->setFixedWidth(32);
-	m_pCollapseBtn->setFixedHeight(32);
+	m_pCollapseBtn->setFixedWidth(26);
+	m_pCollapseBtn->setFixedHeight(25);
 	m_pCollapseBtn->setWindowFlags(Qt::FramelessWindowHint|Qt::Tool);
 	m_pCollapseBtn->setAttribute(Qt::WA_TranslucentBackground);
 	m_pCollapseBtn->setVisible(false);
@@ -118,6 +126,15 @@ void InteLayers::paintEvent( QPaintEvent* e)
 
 void InteLayers::resizeEvent( QResizeEvent* e)
 {
+	if (m_pHead)
+	{
+		m_pHead->setGeometry(0,0,m_pHead->width(), m_pHead->height());
+	}
+
+	if (m_pTabWidget)
+	{
+		m_pTabWidget->setGeometry(0, m_pHead->height(), m_pTabWidget->width(), m_pTabWidget->height());
+	}
 	if (m_pCollapseBtn && width() == 0)
 	{
 		QRect re = WidgetRect::widgetGlobalRect(this);
@@ -137,6 +154,7 @@ void InteLayers::moveEvent( QMoveEvent* e)
 		QRect re = WidgetRect::widgetGlobalRect(this);
 		m_pCollapseBtn->setGeometry(re.right(), re.top(), m_pCollapseBtn->width(), m_pCollapseBtn->height());
 	}
+
 }
 
 void InteLayers::OnInteLayersCollapse()
@@ -208,5 +226,24 @@ void InteLayers::OnAnimationFinished()
  int InteLayers::InteLayersHeight()
  {
  	return m_height;
+ }
+
+ void InteLayers::setInteLayersTitle( const QString& title )
+ {
+	 if (m_pTitle && m_pHead)
+	 {
+		 QFont ft;
+		 ft.setPointSize(12);
+		 ft.setWeight(13);
+		 ft.setBold(true);
+		 m_pTitle->setFont(ft);
+
+		 QPalette pa;
+		 pa.setColor(QPalette::WindowText,Qt::white);
+		 m_pTitle->setPalette(pa);
+
+		 m_pTitle->setText(title);
+		 m_pTitle->setGeometry(10, m_pHead->height()/2 - m_pTitle->height()/2, m_pTitle->width(), m_pTitle->height());
+	 }
  }
 

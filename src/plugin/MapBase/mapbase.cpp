@@ -30,7 +30,7 @@ MapBase::MapBase(QWidget *parent) : QWidget(parent)
 	connect(m_pMapController, SIGNAL(zoomoutClicked()), this, SLOT(OnZoomOutClicked()));
 
 	m_pMapLayers = new MapLayers(this);
-	connect(m_pMapLayers, SIGNAL(changeLayers(const QString&)), this, SLOT(OnChangeLayers(const QString&)));
+	connect(m_pMapLayers, SIGNAL(changeLayers(const QString&, int )), this, SLOT(OnChangeLayers(const QString&, int)));
 	//m_pMapLayers->setAttribute(Qt::WA_TranslucentBackground);
 
 	m_pMapControl = new MapControl(this);
@@ -61,7 +61,6 @@ MapBase::MapBase(QWidget *parent) : QWidget(parent)
 	m_pMapControl->show();
 	m_pMapController->show();
 	m_pMapController->raise();
-
 	m_Layers = m_pMapControl->getLayersList();
 	//m_Layers.push_front(m_MapUrl);
 
@@ -69,7 +68,7 @@ MapBase::MapBase(QWidget *parent) : QWidget(parent)
 	m_pMapLayers->setFixedWidth(220);
 	m_pMapLayers->setFixedHeight(360);
 
-	m_pMapLayers->initLayers(m_pMapControl->getLayersList());
+	m_pMapLayers->initLayers(m_Layers);
 
 	m_pMapLayers->show();
 	m_pMapLayers->raise();
@@ -118,6 +117,15 @@ QWidget* MapBase::getWidget()
 }
 
 
+void* MapBase::getUGMapEditorWnd()
+{
+	if (!m_pMapControl) return NULL;
+	{
+	}
+}
+
+
+
 QWidget* MapBase::getMapLayers()
 {
 	return m_pMapLayers;
@@ -135,10 +143,10 @@ void MapBase::resizeEvent( QResizeEvent* e)
 		m_pMapControl->setGeometry(0, 0, width(), height());
 	}
 
-	if (m_pMapController)
-	{
-		m_pMapController->setGeometry(20, height() - 100, m_pMapController->width(), m_pMapController->height());
-	}
+// 	if (m_pMapController)
+// 	{
+// 		m_pMapController->setGeometry(20, height() - 100, m_pMapController->width(), m_pMapController->height());
+// 	}
 
 // 	if (m_pMapLayers)
 // 	{
@@ -266,7 +274,7 @@ QString MapBase::getMapUrl() const
 	return m_MapUrl;
 }
 
-QVector<QString> MapBase::getLayers() const
+/*QVector<QString>*/QVector<QVariantList> MapBase::getLayers() const
 {
 	return m_Layers;
 }
@@ -276,12 +284,17 @@ QString MapBase::getStyleSheet()
 	return this->styleSheet();
 }
 
-void MapBase::OnChangeLayers( const QString& text )
+void MapBase::OnChangeLayers( const QString& text , int index)
 {
 	if (m_pMapControl)
 	{
-		m_pMapControl->openLayers(text);
+		m_pMapControl->openLayers(text, index);
 	}
+}
+
+QWidget* MapBase::getMapController()
+{
+	return m_pMapController;
 }
 
 

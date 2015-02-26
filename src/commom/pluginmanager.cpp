@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "pluginmanager.h"
 #include "sysconfig.h"
+#include "fileutils.h"
 
 PluginManager* PluginManager::m_pManager = NULL;
 
@@ -84,4 +85,17 @@ void PluginManager::insertPluginItem( const QString& name, const bool& value )
 {
 	m_pluginMap.remove(name);
 	m_pluginMap.insert(name, value);
+}
+
+QVariantMap PluginManager::getDefaultPluginMap()
+{
+	QStringList pluginList = FileUtils::getAllFileByExtensionsName("pluginspec", "../plugins");
+	for(int i = 0; i < pluginList.length(); i++)
+	{
+		QString plugiName = pluginList.at(i);
+		bool m = SysConfig::getValue(plugiName).toBool();
+		insertPluginItem(plugiName, SysConfig::getValue(plugiName).toBool());
+	}
+
+	return m_pluginMap;
 }

@@ -12,9 +12,11 @@ class MapLayers : public QWidget
 public:
 	MapLayers(QWidget *parent = NULL);
 	~MapLayers();
-	void initLayers(const QVector<QString>& layers);
+	void initLayers(const /*QVector<QString>*/QVector<QVariantList>& layers);
 signals:
-	void changeLayers(const QString& text);
+	void changeLayers(const QString& text, int index);
+private slots:
+	void OnChangeLayers(const QString& text);
 protected:
 	void paintEvent(QPaintEvent *);
 	void resizeEvent(QResizeEvent *);
@@ -36,6 +38,7 @@ protected:
 	void paintEvent(QPaintEvent *);
 	void mousePressEvent(QMouseEvent *);
 public:
+	QLabel* m_pVisableText;
 	QLabel* m_pLayerText;
 };
 

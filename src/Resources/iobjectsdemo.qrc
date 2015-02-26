@@ -26,6 +26,7 @@
     <file>search.png</file>
     <file>set.png</file>
     <file>setp.png</file>
+    <file>line.png</file>
     <!--InfoPanel-->
     <file>InfoPanel.qml</file>
     <file>Button.qml</file>
@@ -56,5 +57,7 @@
     <!--PopupPanel-->
     <file>popupbody.png</file>
     <file>popuptail.png</file>
+    <file>closeTips.png</file>
+    <file>closeTipsp.png</file>
   </qresource>
 </RCC>

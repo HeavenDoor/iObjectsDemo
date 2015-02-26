@@ -29,6 +29,9 @@ public:
 	virtual void setPluginHeight(int height) = 0;
 	virtual int pluginWidth() = 0;
 	virtual int pluginHeight() = 0;
+
+	// 获得插件样式表，主界面重新加载样式表
+	virtual QString getStyleSheet() = 0;
 };
 
 

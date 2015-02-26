@@ -25,16 +25,17 @@ iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 	m_pInfoPanel = NULL;
 	m_pTabView = NULL;
 	m_pPopupPanel = NULL;
+	m_pPluginloader = NULL;
 
 	initInteLayers();
 	initTabView();
-
-	m_pPluginloader = new Pluginloader(NULL);
-	m_pPluginloader->showModel();
+	initToolBox();
+// 	m_pPluginloader = new Pluginloader(NULL);
+// 	m_pPluginloader->showModel();
 
  	pluginPath = "../plugins";
  
- 	m_pluginMap = PluginManager::instance()->getPluginMap();
+ 	m_pluginMap = PluginManager::instance()->getDefaultPluginMap();
  	QList<QString> pluginList = m_pluginMap.keys();
  
  	qDebug()<<m_pluginMap;
@@ -49,13 +50,6 @@ iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 
 	if (m_pInteLayers) m_pInteLayers->raise();
 	if (m_pInfoPanel) m_pInfoPanel->raise();
-
-	if (m_pPluginloader)
-	{
-		delete m_pPluginloader;
-		m_pPluginloader = NULL;
-	}
-
 	//qApp->installEventFilter(this);
 }
 
@@ -69,7 +63,7 @@ bool iObjectsDemo::initTabView()
  	m_pTabView = new TabView(this);
 	QWidget* e = new QWidget(m_pTabView);
 	e->setObjectName("TwoDimension");
-	m_pTabView->addCentralWidget(e, 3, "ren");
+	m_pTabView->addCentralWidget(e, 3, QStringLiteral("三维"));
 // 	QWidget* rr = new QWidget(m_pTabView);
 // 	rr->setObjectName("rr");
 // 	m_pTabView->addCentralWidget(rr, 0, "rr");
@@ -81,6 +75,7 @@ bool iObjectsDemo::initTabView()
 bool iObjectsDemo::initInteLayers()
 {
 	m_pInteLayers = new InteLayers(this);
+	m_pInteLayers->setInteLayersTitle(QStringLiteral("超图软件公司"));
 	connect(m_pInteLayers, SIGNAL(refeshWindow()), this, SLOT(OnInteLayersPlugin_RefeshWindow()));
 	m_pInteLayers->setInteLayersWidth(216);
 	m_pInteLayers->setInteLayersHeight(410);
@@ -89,6 +84,29 @@ bool iObjectsDemo::initInteLayers()
 	return true;
 }
 
+bool iObjectsDemo::initToolBox()
+{
+	m_pToolBox = new ToolBox(this);
+	m_pToolBox->setFixedHeight(50);
+	//m_pToolBox->setToolButtonSize(QSize(40,40));
+	m_pToolBox->setToolButtonSize(QSize(m_pToolBox->height() - 10,m_pToolBox->height() - 10));
+// 	QObject* obj = m_pToolBox->createToolButton("search");
+// 	if(obj) connect(obj, SIGNAL(clicked()), this, SLOT(OnToolBoxPlugin_SearchBtnClicked()));
+	QObject* obj = m_pToolBox->createToolButton("set");
+	if(obj) connect(obj, SIGNAL(clicked()), this, SLOT(OnToolBoxPlugin_SettingBtnClicked()));
+
+	m_pToolBox->addLine();
+	m_pToolBox->createToolButton("aaa");
+	m_pToolBox->addLine();
+	m_pToolBox->createToolButton("bbb");
+	m_pToolBox->addLine();
+	m_pToolBox->createToolButton("ccc");
+	m_pToolBox->addLine();
+	m_pToolBox->createToolButton("ddd");
+	
+	
+	return true;
+}
 
 bool iObjectsDemo::initControls()
 {
@@ -112,14 +130,6 @@ bool iObjectsDemo::initControls()
 	m_pCloseBtn->setGeometry(width() - 60, 20, m_pCloseBtn->width(), m_pCloseBtn->height());
 	connect(m_pCloseBtn, SIGNAL(clicked()), this, SLOT(OnCloseBtnClicked()));
 
-	m_pToolBox = new ToolBox(this);
-	m_pToolBox->setFixedHeight(50);
-	m_pToolBox->setToolButtonSize(QSize(m_pToolBox->height(),m_pToolBox->height()));
-	QObject* obj = m_pToolBox->createToolButton("search");
-	if(obj) connect(obj, SIGNAL(clicked()), this, SLOT(OnToolBoxPlugin_SearchBtnClicked()));
-	obj = m_pToolBox->createToolButton("set", Qt::AlignRight);
-	if(obj) connect(obj, SIGNAL(clicked()), this, SLOT(OnToolBoxPlugin_SettingBtnClicked()));
-
 	m_pInfoPanel = new InfoPanel(this);
 	m_pInfoPanel->setPluginWidth(280);
 	m_pInfoPanel->setPluginHeight(370);
@@ -141,6 +151,7 @@ bool iObjectsDemo::unLoadPlugins(const QString& pluginName )
 		if (m_pTabView && m_pMapBase && m_pInteLayers)
 		{
 			m_pInteLayers->removeLayers(m_pMapBase->getMapLayers());
+			m_pToolBox->removeWidget(m_pMapBase->getMapController());
 			m_pTabView->removeCentralWidget(m_pMapBase->getWidget());
 			
 		}
@@ -152,6 +163,10 @@ bool iObjectsDemo::unLoadPlugins(const QString& pluginName )
 
 bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 {
+// 	while (true)
+// 	{
+// 
+// 	}
 	bool bPluginLoaded = false;
 
 	QString exeFileName = QApplication::applicationFilePath();
@@ -161,6 +176,7 @@ bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 	QDir::setCurrent(apppath);
 
 	qApp->addLibraryPath(path);
+	QStringList ll = qApp->libraryPaths();
 	QPluginLoader* loader = new QPluginLoader(pluginName, this);  
 	loader->setObjectName(pluginName);
 	QObject* object;
@@ -178,10 +194,11 @@ bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 					if (m_pTabView)
 					{
 						connect(m_pMapBase->getObject(), SIGNAL(showTips()), this, SLOT(OnShowMapBaseTips()));
-						m_pTabView->addCentralWidget(m_pMapBase->getWidget(), 10, "sheng");
-						m_pTabView->setCurrentIndex(10);
+						m_pTabView->addCentralWidget(m_pMapBase->getWidget(), 0, QStringLiteral("二维"));
+						m_pTabView->setCurrentIndex(0);
 						m_pTabView->loadDefaultSkin();
 						m_pInteLayers->addLayers(m_pMapBase->getMapLayers());
+						m_pToolBox->addWidget(m_pMapBase->getMapController());
 						setStyleSheet(m_pMapBase->getStyleSheet());
 					}					
 				}
@@ -288,9 +305,13 @@ void iObjectsDemo::OnToolBoxPlugin_SearchBtnClicked()
 
 void iObjectsDemo::OnToolBoxPlugin_SettingBtnClicked()
 {
-	m_pPluginloader = new Pluginloader(NULL);
-	connect(m_pPluginloader, SIGNAL(reload()), this, SLOT(reloadPlugins()));
+	if (!m_pPluginloader)
+	{
+		m_pPluginloader = new Pluginloader(NULL);
+		connect(m_pPluginloader, SIGNAL(reload()), this, SLOT(reloadPlugins()));
+	}	
 	m_pPluginloader->showModel();
+	m_pPluginloader->raise();
 }
 
 void iObjectsDemo::OnInteLayersPlugin_RefeshWindow()
@@ -334,7 +355,7 @@ void iObjectsDemo::mousePressEvent( QMouseEvent* e)
 {
 	if (e->button() == Qt::LeftButton)
 	{
-		m_PressPoint = e->pos();
+		m_PressPoint = mapToGlobal(e->pos());
 	}
 }
 

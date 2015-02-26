@@ -71,6 +71,7 @@ QObject* ToolBox::createToolButton( const QString& objectName, Qt::Alignment ali
 	else
 	{
 		m_pRightLayout->addWidget(pBtn);
+
 	}
 	return pBtn;
 }
@@ -78,4 +79,34 @@ QObject* ToolBox::createToolButton( const QString& objectName, Qt::Alignment ali
 void ToolBox::setToolButtonSize( QSize size )
 {
 	m_size = size;
+}
+
+void ToolBox::addWidget( QWidget* w )
+{
+	m_pLeftLayout->addWidget(w);
+}
+
+void ToolBox::removeWidget( QWidget* w )
+{
+	m_pLeftLayout->removeWidget(w);
+}
+
+void ToolBox::addLine( Qt::Alignment align /*= Qt::AlignLeft*/ )
+{
+	if (!m_pLeftLayout || !m_pOutLayout || !m_pRightLayout) return;
+
+	QFrame* p = new QFrame(this);
+	p->setObjectName("ToolBoxLine");
+	p->setFixedHeight(height() -  8);
+	p->setFixedWidth(4);
+
+	if (align == Qt::AlignLeft)
+	{
+		m_pLeftLayout->addWidget(p);
+	}
+
+	else
+	{
+		m_pRightLayout->addWidget(p);
+	}
 }

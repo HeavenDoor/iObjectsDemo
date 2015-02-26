@@ -50,6 +50,8 @@ private:
 	bool initTabView(); 
 	// 情报图层需要先于地图插件加载
 	bool initInteLayers(); 
+	// ToolBox需要先于地图插件加载
+	bool initToolBox();
 	// 加载插件 path：插件所在文件夹目录
 	bool loadPlugins(const QString& path, const QString& pluginName);
 	// 卸载插件 

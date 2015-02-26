@@ -73,7 +73,7 @@ public:
 	virtual void resizeEvent ( QResizeEvent* event );
 
 	void popupTips();
-
+	void* getUGMapEditorWnd();
 public:
 	//打开地图方法
 	int OpenMap(const QString& mapPath);
@@ -110,9 +110,10 @@ public:
 
     UGString  QStringToUGString(QString qstring );
 
-	void openLayers(const QString& text);
+	void openLayers(const QString& text, int index);
 public:
-	QVector<QString> getLayersList();
+	/*QVector<QString>*/QVector<QVariantList> getLayersList();
+
 public:
 
 	int m_MessureType;

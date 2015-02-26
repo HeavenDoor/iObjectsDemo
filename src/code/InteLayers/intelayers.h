@@ -10,6 +10,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QToolButton>
 #include <QPropertyAnimation>
+#include <QtWidgets/QLabel>
 
 class InteLayers : public QWidget
 {
@@ -24,6 +25,7 @@ public:
 
 	void addLayers(QWidget* layers);
 	void removeLayers(QWidget* layers);
+	void setInteLayersTitle(const QString& title);
 signals:
 	void refeshWindow();
 	private slots:
@@ -45,6 +47,8 @@ private:
 	QPushButton* m_pCollapseBtn;
 	static const int timespan = 250;
 	QPropertyAnimation *m_pProAnima;
+	QLabel* m_pTitle;
+	
 	int m_width;
 	int m_height;
 };

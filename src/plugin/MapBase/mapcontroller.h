@@ -13,6 +13,7 @@ public:
 	~MapController();
 protected:
 	void paintEvent( QPaintEvent * e);
+	void resizeEvent(QResizeEvent *);
 signals:
 	void selectClicked();
 	void panClicked();
