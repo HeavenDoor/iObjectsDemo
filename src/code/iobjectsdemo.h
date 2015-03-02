@@ -31,6 +31,9 @@ protected:
 	void moveEvent(QMoveEvent*);
 	void mousePressEvent(QMouseEvent*);
 	bool eventFilter(QObject* obj, QEvent* e);
+
+	void dragEnterEvent(QDragEnterEvent *event);
+	void dropEvent(QDropEvent *event);
 signals:
 
 private slots:
@@ -63,6 +66,7 @@ private:
 	ToolBox * m_pToolBox;
 	InfoPanel* m_pInfoPanel;
 	TabView* m_pTabView;
+	TabView* m_pFlowTabView;
 	InteLayers* m_pInteLayers;
 	PopupPanel* m_pPopupPanel;
 	Title* m_pTitle;

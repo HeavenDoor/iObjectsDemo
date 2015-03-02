@@ -29,12 +29,20 @@ public:
 	void loadDefaultSkin();
 	// 加载自定义皮肤  styleSheet：qss字符串
 	void loadCustomStyleSheet(const QString& styleSheet);
-
+signals:
+	void moveTabPage(QWidget* map, QString tabName);
+	void removeTabPage(QWidget* map, QString tabName);
+public slots:
+	void OnMoveTabPage(QWidget* map, QString tabName);
+	void OnReMoveTabPage(QWidget* map, QString tabName);
 protected:
 	void paintEvent(QPaintEvent*);
 	void resizeEvent(QResizeEvent*);
 private slots:
 	void OnChangeIndex(int index);
+	void OnMoveTabPage(int index, QString tabName);
+private:
+	//void removeCentralWidgetEx( QWidget* widget );
 private:
 	static const int tabrwidth = 81;
 	TabWidget* m_pTabWidget;

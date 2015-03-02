@@ -16,7 +16,7 @@ iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 {
 	setObjectName("iObjectsDemo");
 	setGeometry(200,200,1247,766);
-
+	setAcceptDrops(true);
 	m_pTitle = NULL;
 	m_pPopBtn = NULL;
 	m_pToolBox = NULL;
@@ -24,6 +24,7 @@ iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 	m_pInteLayers = NULL;
 	m_pInfoPanel = NULL;
 	m_pTabView = NULL;
+	m_pFlowTabView = NULL;
 	m_pPopupPanel = NULL;
 	m_pPluginloader = NULL;
 
@@ -50,6 +51,8 @@ iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 
 	if (m_pInteLayers) m_pInteLayers->raise();
 	if (m_pInfoPanel) m_pInfoPanel->raise();
+
+	
 	//qApp->installEventFilter(this);
 }
 
@@ -61,13 +64,36 @@ iObjectsDemo::~iObjectsDemo()
 bool iObjectsDemo::initTabView()
 {
  	m_pTabView = new TabView(this);
+	m_pTabView->setProperty("Names", "NoFlow");
 	QWidget* e = new QWidget(m_pTabView);
 	e->setObjectName("TwoDimension");
 	m_pTabView->addCentralWidget(e, 3, QStringLiteral("三维"));
-// 	QWidget* rr = new QWidget(m_pTabView);
-// 	rr->setObjectName("rr");
-// 	m_pTabView->addCentralWidget(rr, 0, "rr");
+	QWidget* rr = new QWidget(m_pTabView);
+	rr->setObjectName("rr");
+	m_pTabView->addCentralWidget(rr, 0, "rr");
 
+	m_pFlowTabView = new TabView(NULL);
+	m_pFlowTabView->setProperty("Names", "FlowUp");
+	m_pFlowTabView->setWindowFlags(Qt::Window);
+	m_pFlowTabView->setGeometry(100,100,800,600);
+
+// 	QWidget* a = new QWidget(m_pFlowTabView);
+// 	a->setObjectName("TwoDimension");
+// 	m_pFlowTabView->addCentralWidget(a, 3, QStringLiteral("成都"));
+// 
+// 	QWidget* b = new QWidget(m_pFlowTabView);
+// 	//a->setObjectName("TwoDimension");
+// 	m_pFlowTabView->addCentralWidget(b, 4, QStringLiteral("四川"));
+	m_pFlowTabView->setCurrentIndex(0);
+	m_pFlowTabView->loadDefaultSkin();
+	m_pFlowTabView->show();
+	m_pFlowTabView->hide();
+	//m_pFlowTabView->raise();
+	connect(m_pTabView, SIGNAL(moveTabPage(QWidget*, QString)), m_pFlowTabView, SLOT(OnMoveTabPage( QWidget*, QString )));
+	connect(m_pFlowTabView, SIGNAL(moveTabPage(QWidget*, QString)), m_pTabView, SLOT(OnMoveTabPage( QWidget*, QString )));
+
+	connect(m_pTabView, SIGNAL(removeTabPage(QWidget*, QString)), m_pFlowTabView, SLOT(OnReMoveTabPage( QWidget*, QString )));
+	connect(m_pFlowTabView, SIGNAL(removeTabPage(QWidget*, QString)), m_pTabView, SLOT(OnReMoveTabPage( QWidget*, QString )));
 	return true;
 }
 
@@ -130,14 +156,14 @@ bool iObjectsDemo::initControls()
 	m_pCloseBtn->setGeometry(width() - 60, 20, m_pCloseBtn->width(), m_pCloseBtn->height());
 	connect(m_pCloseBtn, SIGNAL(clicked()), this, SLOT(OnCloseBtnClicked()));
 
-	m_pInfoPanel = new InfoPanel(this);
-	m_pInfoPanel->setPluginWidth(280);
-	m_pInfoPanel->setPluginHeight(370);
-	//m_pInfoPanel->setGeometry(15, height()/2 - 200, 280, 370);
-	m_pInfoPanel->show();
-	m_pInfoPanel->raise();
-	m_pInfoPanel->setAnimationTimespan(600);
-	m_pInfoPanel->setGeometry(width() - m_pInfoPanel->pluginWidth() - 15 ,height()/2 - m_pInfoPanel->pluginHeight()/2, m_pInfoPanel->pluginWidth(), m_pInfoPanel->pluginHeight());
+	//m_pInfoPanel = new InfoPanel(this);
+	//m_pInfoPanel->setPluginWidth(280);
+	//m_pInfoPanel->setPluginHeight(370);
+	////m_pInfoPanel->setGeometry(15, height()/2 - 200, 280, 370);
+	//m_pInfoPanel->show();
+	//m_pInfoPanel->raise();
+	//m_pInfoPanel->setAnimationTimespan(600);
+	//m_pInfoPanel->setGeometry(width() - m_pInfoPanel->pluginWidth() - 15 ,height()/2 - m_pInfoPanel->pluginHeight()/2, m_pInfoPanel->pluginWidth(), m_pInfoPanel->pluginHeight());
 	return true;
 }
 
@@ -372,24 +398,44 @@ void iObjectsDemo::OnShowMapBaseTips()
 
 bool iObjectsDemo::eventFilter(QObject* obj, QEvent* e)
 {
-	if(e->type() == QEvent::MouseButtonPress)
-	{
-		QMouseEvent* en = dynamic_cast<QMouseEvent*>(e);
-		if(!en) return false;
 
-		if (en->buttons() && Qt::LeftButton)
-		{  
-			if (m_pPopupPanel)
-			{
-				delete m_pPopupPanel;
-				m_pPopupPanel = NULL;
-			}
-			m_PressPoint = en->pos();
-		}
-		QPoint point = en->globalPos();
-		QRect rect = WidgetRect::widgetGlobalRect(this);
+
+	if(e->type() == QEvent::Drop)
+	{
+		int m = 0;
+	}
+
+	if(e->type() == QEvent::DragMove)
+	{
+// 		if (e->mimeData()->hasFormat("application/x-dnditemdata")) 
+// 		{
+// 		}
+		QDragMoveEvent* en = dynamic_cast<QDragMoveEvent*>(e);
+		//if(!en) return false;
+// 
+		QByteArray itemData = en->mimeData()->data("application/x-dnditemdata");
+		QDataStream dataStream(&itemData, QIODevice::ReadOnly);
+
+		QPixmap pixmap;
+		QString offset;
+		dataStream >> pixmap >> offset;
+
+		int m = 0;
+// 		if (en->buttons() && Qt::LeftButton)
+// 		{  
+// 			if (m_pPopupPanel)
+// 			{
+// 				delete m_pPopupPanel;
+// 				m_pPopupPanel = NULL;
+// 			}
+// 			m_PressPoint = en->pos();
+// 		}
+// 		QPoint point = en->globalPos();
+// 		QRect rect = WidgetRect::widgetGlobalRect(this);
 
 	}
+
+
 	return false;
 }
 
@@ -400,4 +446,14 @@ void iObjectsDemo::OnClosePopupPanel()
 		delete m_pPopupPanel;
 		m_pPopupPanel = NULL;
 	}
+}
+
+void iObjectsDemo::dragEnterEvent( QDragEnterEvent *event )
+{
+
+}
+
+void iObjectsDemo::dropEvent( QDropEvent *event )
+{
+
 }

@@ -27,14 +27,26 @@ protected:
 	void dragMoveEvent(QDragMoveEvent *event) Q_DECL_OVERRIDE;
 	void dropEvent(QDropEvent *event) Q_DECL_OVERRIDE;
 	void mousePressEvent(QMouseEvent *event);
+
+
+	void mouseReleaseEvent(QMouseEvent *event);
+
+	bool eventFilter(QObject *, QEvent *);
 signals:
 	void changeIndex(int index);
+	void moveTabPage(int index, QString tabName);
 private slots:
 	void OnTabButtonClicked();
+	void OnactionChanged(Qt::DropAction act);
 private:
 	QHBoxLayout* m_pHlayout;
 	TabItem* m_pPrevBtn;
 	QVector<TabItem*> m_pTabBarList;
+	bool press;
+	bool move;
+	QDrag *m_drag;
+	QByteArray itemData;
+	QPainter *painter;
 };
 
 #endif // TABBAR_H

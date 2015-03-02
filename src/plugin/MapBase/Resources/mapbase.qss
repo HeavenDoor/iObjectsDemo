@@ -37,21 +37,23 @@ QWidget#EmptyWidget{
 }
 
 
-/*
+
 QScrollBar:vertical {
-    background-color:#C6E2FF;
-	width: 5px;
+    background-color:#d26106;
+	width: 23px;
 }
 
 QScrollBar::handle:vertical {
-    background-color:qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 #e3a41e, stop: 1 #d69200);
+    background-color:qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 #686868, stop: 1 #d69200);
     min-height: 100px;
 }
 
 QScrollBar::handle:vertical:hover {
-    background-color:qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 #d69200, stop: 1 #d26106);
+    background-color:qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 #8e8d8d, stop: 1 #d26106);
 }
 
+
+/*
 QScrollBar:horizontal {
     background-color:#C6E2FF;
 	height: 0px;

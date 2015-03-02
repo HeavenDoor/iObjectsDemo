@@ -5,6 +5,8 @@
 TabBar::TabBar(QWidget *parent)	: QWidget(parent)
 {
 	setObjectName("Tabbar");
+	setMouseTracking(true);
+	//this->setAttribute(Qt::WA_PaintOutsidePaintEvent)
 	setAttribute(Qt::WA_TranslucentBackground);
 
 	QPalette pa;
@@ -15,7 +17,16 @@ TabBar::TabBar(QWidget *parent)	: QWidget(parent)
 	m_pHlayout->setContentsMargins(0, 0, 0, 0);
 	m_pHlayout->setSpacing(0);
 
+
+	painter = new QPainter(this);
 	setAcceptDrops(true);
+	press = false;
+	move = false;
+// 	setSelectionBehaviorOnRemove(QTabBar::SelectPreviousTab);
+// 	setMovable(true);
+	qApp->installEventFilter(this);
+
+	
 }
 
 TabBar::~TabBar()
@@ -47,9 +58,10 @@ void TabBar::insertTabbar( int index, QString tabName )
 
 	if (m_pTabBarList.length() == 0)
 	{
-		setVisible(false);
+		//setVisible(false);
 		//pBtn->setObjectName("MapTabbarHead");
-		pBtn->setProperty("HeadSelectedTabBar", 1);
+		//pBtn->setProperty("HeadSelectedTabBar", 1);
+		pBtn->setProperty("SelectedTabBar", 1);
 	}
 
 	if (m_pTabBarList.length() > 0)
@@ -63,6 +75,7 @@ void TabBar::insertTabbar( int index, QString tabName )
 		if (m_pTabBarList.length() == 1 )
 		{
 			m_pTabBarList.at(0)->setProperty("HeadSelectedTabBar", 5);
+			m_pTabBarList.at(0)->setProperty("SelectedTabBar", 5);
 			m_pTabBarList.at(0)->setProperty("TailSelectedTabBar", 0);
 		}
 		else
@@ -73,6 +86,7 @@ void TabBar::insertTabbar( int index, QString tabName )
 			if (previndex == m_pTabBarList.length() - 1)
 			{
 				m_pPrevBtn->setProperty("TailSelectedTabBar", 0);
+				m_pPrevBtn->setProperty("SelectedTabBar", 5);
 			}
 			else
 			{
@@ -87,6 +101,7 @@ void TabBar::insertTabbar( int index, QString tabName )
 		if (m_pTabBarList.length() == 1 )
 		{
 			m_pTabBarList.at(0)->setProperty("TailSelectedTabBar", 5);
+			m_pTabBarList.at(0)->setProperty("SelectedTabBar", 5);
 			m_pTabBarList.at(0)->setProperty("HeadSelectedTabBar", 0);
 		}
 		else
@@ -124,9 +139,12 @@ void TabBar::insertTabbar( int index, QString tabName )
 	m_pTabBarList.insert(index, pBtn);
 	m_pHlayout->insertWidget(index, pBtn);
 
-
+	QFile file(":/tabbar.qss");
+	file.open(QFile::ReadOnly);
+	QString style = QString(file.readAll());
+	this->setStyleSheet(style);
+	file.close();
 }
-
 
 void TabBar::removeTabbar( int index )
 {
@@ -137,12 +155,16 @@ void TabBar::removeTabbar( int index )
 	m_pTabBarList.removeAt(index);
 	m_pHlayout->removeWidget(p);
 
-
+	if (m_pTabBarList.length() == 0)
+	{
+		m_pPrevBtn = NULL;
+		return;
+	}
 
 	if (m_pTabBarList.length() == 1)
 	{
-		setVisible(false);
-		m_pTabBarList.at(0)->setProperty("HeadSelectedTabBar", 1);
+		//setVisible(false);
+		m_pTabBarList.at(0)->setProperty("SelectedTabBar", 1);
 		m_pPrevBtn = m_pTabBarList.at(0);
 	}
 	else
@@ -151,22 +173,22 @@ void TabBar::removeTabbar( int index )
 		{
 			m_pPrevBtn = m_pTabBarList.at(0);
 			m_pTabBarList.at(0)->setProperty("HeadSelectedTabBar", 1);
-			m_pTabBarList.at(0)->setProperty("SelectedTabBar", "5");
+			m_pTabBarList.at(0)->setProperty("SelectedTabBar", 5);
 			
 		}
 		else if(index = origlength - 1)
 		{
 			m_pPrevBtn = m_pTabBarList.at(0);
 			m_pTabBarList.last()->setProperty("TailSelectedTabBar", 0);
-			m_pTabBarList.last()->setProperty("SelectedTabBar", 0);
+			m_pTabBarList.last()->setProperty("SelectedTabBar", 5);
 			//m_pTabBarList.at(0)->setProperty("SelectedTabBar", "5");
-			m_pTabBarList.at(0)->setProperty("HeadSelectedTabBar", "1");
+			m_pTabBarList.at(0)->setProperty("HeadSelectedTabBar", 1);
 		}
 		else
 		{
 			m_pPrevBtn = m_pTabBarList.at(0);
 
-			m_pTabBarList.at(0)->setProperty("HeadSelectedTabBar", "1");
+			m_pTabBarList.at(0)->setProperty("HeadSelectedTabBar", 1);
 		}
 
 		emit changeIndex(0);
@@ -185,8 +207,6 @@ void TabBar::removeTabbar( int index )
 	this->setStyleSheet(style);
 	file.close();
 }
-
-
 
 void TabBar::setCurrentIndex( int index )
 {
@@ -264,16 +284,29 @@ void TabBar::setCurrentIndex( int index )
 // 	file.close();
 }
 
-
 void TabBar::paintEvent(QPaintEvent* e)
 {
+	//QPainter p(this);
+
+// 	QDataStream dataStream(&itemData, QIODevice::ReadOnly);
+// 
+// 	QPixmap pixmap;
+// 	QString offset;
+// 	dataStream >> pixmap >> offset;
+// 
+// 
+// 	//painter.setOpacity(0.5);
+// 
+// 
+// 	p.drawPixmap(0, 0 ,pixmap);
+
 	QStyleOption opt;
 	opt.init(this);
 	QPainter p(this);
 	style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+
 	QWidget::paintEvent(e);
 }
-
 
 void TabBar::resizeEvent( QResizeEvent* )
 {
@@ -347,42 +380,42 @@ int TabBar::tabCount()
 
 void TabBar::dragEnterEvent(QDragEnterEvent *event)
 {
-	if (event->mimeData()->hasFormat("application/x-dnditemdata")) 
-	{
-		if (event->source() == this) 
-		{
-			event->setDropAction(Qt::MoveAction);
-			event->accept();
-		} 
-		else 
-		{
-			event->acceptProposedAction();
-		}
-	} 
-	else 
-	{
-		event->ignore();
-	}
+// 	if (event->mimeData()->hasFormat("application/x-dnditemdata")) 
+// 	{
+// 		if (event->source() == this) 
+// 		{
+// 			event->setDropAction(Qt::MoveAction);
+// 			event->accept();
+// 		} 
+// 		else 
+// 		{
+// 			event->acceptProposedAction();
+// 		}
+// 	} 
+// 	else 
+// 	{
+// 		event->ignore();
+// 	}
 }
 
 void TabBar::dragMoveEvent(QDragMoveEvent *event)
 {
-	if (event->mimeData()->hasFormat("application/x-dnditemdata")) 
-	{
-		if (event->source() == this) 
-		{
-			event->setDropAction(Qt::MoveAction);
-			event->accept();
-		} 
-		else 
-		{
-			event->acceptProposedAction();
-		}
-	} 
-	else 
-	{
-		event->ignore();
-	}
+// 	if (event->mimeData()->hasFormat("application/x-dnditemdata")) 
+// 	{
+// 		if (event->source() == this) 
+// 		{
+// 			event->setDropAction(Qt::MoveAction);
+// 			event->accept();
+// 		} 
+// 		else 
+// 		{
+// 			event->acceptProposedAction();
+// 		}
+// 	} 
+// 	else 
+// 	{
+// 		event->ignore();
+// 	}
 }
 
 void TabBar::dropEvent(QDropEvent *event)
@@ -421,52 +454,164 @@ void TabBar::dropEvent(QDropEvent *event)
 
 void TabBar::mousePressEvent(QMouseEvent *event)
 {
-	TabItem *child = static_cast<TabItem*>(childAt(event->pos()));
-	if (!child)
-		return;
-	QString ss = child->text();
-	
-
- 	QPixmap pixmap = child->getTabItemPixmap();
-// 
-	QByteArray itemData;
-	QDataStream dataStream(&itemData, QIODevice::WriteOnly);
-	dataStream << pixmap << QPoint(event->pos() - child->pos());
-// 	//! [1]
-// 
-// 	//! [2]
-	QMimeData *mimeData = new QMimeData;
-	mimeData->setData("application/x-dnditemdata", itemData);
-	//! [2]
-
-	//! [3]
-	QDrag *drag = new QDrag(this);
- 	drag->setMimeData(mimeData);
- 	drag->setPixmap(pixmap);
-	drag->setHotSpot(event->pos() - child->pos());
-	//! [3]
-
-	QPixmap tempPixmap = pixmap;
-	QPainter painter;
-	painter.begin(&tempPixmap);
-	painter.fillRect(pixmap.rect(), QColor(255,255,255,255));
-	painter.end();
-// 
- 	//child->setPixmap(tempPixmap);
-
-	if (drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction) == Qt::MoveAction) 
-	{
-		child->close();
-	} 
-	else 
-	{
-		child->show();
-		//child->setPixmap(pixmap);
-	}
-	QWidget::mousePressEvent(event);
+ 	/*TabItem *child = static_cast<TabItem*>(childAt(event->pos()));
+ 	if (!child)
+ 		return;
+ 	//QString ss = 
+ 	
+ 
+  	QPixmap pixmap = child->getTabItemPixmap();
+ // 
+ 	QByteArray itemData;
+ 	QDataStream dataStream(&itemData, QIODevice::WriteOnly);
+ 	dataStream << pixmap <<child->text();//<< QPoint(event->pos() - child->pos());
+ 
+ 	QMimeData *mimeData = new QMimeData;
+ 	mimeData->setData("application/x-dnditemdata", itemData);
+ 
+ 	QDrag *drag = new QDrag(this);
+ 	connect(drag, SIGNAL(actionChanged(Qt::DropAction)), this, SLOT(OnactionChanged(Qt::DropAction)));
+  	drag->setMimeData(mimeData);
+  	drag->setPixmap(pixmap);
+ 	drag->setHotSpot(event->pos() - child->pos());
+ 
+//  	QPixmap tempPixmap = pixmap;
+//  	QPainter painter;
+//  	painter.begin(&tempPixmap);
+//  	painter.fillRect(pixmap.rect(), QColor(0,0,0,0));
+//  	painter.end();	
+ 
+ 
+ 	if (drag->exec(Qt::MoveAction)) 
+ 	{
+ 		child->close();
+ 	} 
+ 	else 
+ 	{
+ 		child->show();
+ 	}*/
+ 	QWidget::mousePressEvent(event);
 }
 
 void TabBar::dragLeaveEvent( QDragLeaveEvent * event ) 
 {
+	qDebug()<<"dragLeaveEvent";
+}
 
+void TabBar::mouseReleaseEvent( QMouseEvent *event )
+{
+	int m = 0;
+}
+
+void TabBar::OnactionChanged( Qt::DropAction act )
+{
+	qDebug()<<act;
+}
+
+bool TabBar::eventFilter( QObject * obj, QEvent * event)
+{
+	if(event->type() == QEvent::MouseButtonPress)
+	{
+		QMouseEvent* en = dynamic_cast<QMouseEvent*>(event);
+		if (!en) return false;
+		if (obj->parent() == this)
+		{
+			qDebug()<<obj->objectName();
+			press = true;
+			qDebug()<<"press ";
+			TabItem* item = static_cast<TabItem*>(obj);
+			if (!item) return false;
+
+			int index = m_pTabBarList.indexOf(item);
+
+			QScreen *QSCREEN = QGuiApplication::primaryScreen();
+			QPixmap pixmap = QSCREEN->grabWindow(item->winId());
+			// 
+			
+			QDataStream dataStream(&itemData, QIODevice::WriteOnly);
+			dataStream << pixmap <<item->text() << index;    //<< QPoint(event->pos() - child->pos());
+
+			QMimeData *mimeData = new QMimeData;
+			mimeData->setData("application/x-dnditemdata", itemData);
+
+// 			m_drag = new QDrag(this);
+// 			//connect(m_drag, SIGNAL(actionChanged(Qt::DropAction)), this, SLOT(OnactionChanged(Qt::DropAction)));
+// 			m_drag->setMimeData(mimeData);
+// 			m_drag->setPixmap(pixmap);
+// 			m_drag->setHotSpot(en->pos());// - item->pos()
+// 
+// 			QPixmap tempPixmap = pixmap;
+// 			QPainter painter;
+// 			painter.begin(&tempPixmap);
+// 			painter.fillRect(pixmap.rect(), QColor(0,0,0,0));
+// 			painter.end();	
+// 
+// 			m_drag->exec(Qt::MoveAction);
+		}
+		
+
+	}
+
+	if(event->type() == QEvent::MouseMove)
+	{
+		QMouseEvent* en = dynamic_cast<QMouseEvent*>(event);
+		if (!en) return false;
+		if (press && obj->parent() == this)
+		{
+			move = true;
+			qDebug()<<"move ";
+
+			QDataStream dataStream(&itemData, QIODevice::ReadOnly);
+
+			QPixmap pixmap;
+			QString offset;
+			dataStream >> pixmap >> offset;
+
+			
+			//painter.setOpacity(0.5);
+//			painter->drawPixmap(0, 0 ,QPixmap(":/s.png"));
+			setCursor(QCursor(pixmap));
+		//QPixmap::
+// 			painter->begin(&pixmap);
+// 			painter->fillRect(pixmap.rect(), QColor(0,0,0,255));
+// 			painter->end();	
+
+//			repaint();
+
+		}
+		
+
+	}
+
+	if(event->type() == QEvent::MouseButtonRelease)
+	{
+
+		if (obj->parent() == this)
+		{
+			if (press && move /*&& obj->parent() == this*/)
+			{
+				qDebug()<<"press "<< press;
+
+				QDataStream dataStream(&itemData, QIODevice::ReadOnly);
+				QPixmap pixmap;
+				QString offset;
+				int index;
+				dataStream >> pixmap >> offset >> index;
+
+
+				emit moveTabPage(index, offset);
+
+				press = false;
+				move = false;
+				setCursor(QCursor(Qt::ArrowCursor));
+				return true;
+			}
+
+			press = false;
+			move = false;
+		}
+		qDebug()<<"release ";
+	}
+
+	return false;
 }

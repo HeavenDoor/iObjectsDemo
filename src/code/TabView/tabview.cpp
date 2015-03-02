@@ -10,6 +10,7 @@ TabView::TabView(QWidget *parent) : QWidget(parent)
 	m_pTabWidget = new TabWidget(this);
 
 	m_pTabBar = new TabBar(this);
+	connect(m_pTabBar, SIGNAL(moveTabPage(int, QString)), this, SLOT(OnMoveTabPage(int, QString)));
 	m_pTabBar->setFixedHeight(58);
 	m_pTabBar->raise();
 //	m_pTabBar->setFixedWidth(162);
@@ -93,10 +94,16 @@ void TabView::removeCentralWidget( QWidget* widget )
 	m_pTabBar->setGeometry(width() - m_pTabBar->tabCount()*tabrwidth - 100, 25, m_pTabBar->width(), m_pTabBar->height());
 }
 
+// void TabView::removeCentralWidgetEx( QWidget* widget )
+// {
+// 	if (!m_pTabWidget || !m_pTabBar) return;
+// 	int index = m_pTabWidget->removeCentralWidget(widget);
+// }
 
 void TabView::setCurrentIndex( int index )
 {
 	if (!m_pTabWidget || !m_pTabBar) return;
+	if ( m_pTabWidget->count() == 0 ) return;
 	if (m_pTabWidget->count() <= index) index = m_pTabWidget->count() - 1;
 	m_pTabWidget->setCurrentIndex(index);
 	m_pTabBar->setCurrentIndex(index);
@@ -116,4 +123,36 @@ void TabView::loadDefaultSkin()
 void TabView::loadCustomStyleSheet( const QString& styleSheet )
 {
 	this->setStyleSheet(styleSheet);
+}
+
+
+void TabView::OnMoveTabPage( QWidget* map, QString tabName ) //2
+{
+	QString ss = this->property("Names").toString();
+	qDebug()<< this->property("Names").toString();
+	emit removeTabPage(map, tabName);
+	this->show();
+	this->raise();
+	QRect re = QApplication::desktop()->availableGeometry();
+	this->setGeometry((re.width() - map->width())/2 , re.height() - map->height()/2, map->width(), map->height());
+	addCentralWidget(map,0,tabName);
+	setCurrentIndex(0);
+	loadDefaultSkin();
+}
+
+void TabView::OnMoveTabPage(int index, QString tabName)  //1
+{
+	QString ss = this->property("Names").toString();
+	qDebug()<< this->property("Names").toString();
+	emit moveTabPage(m_pTabWidget->getWidget(index), tabName);
+}
+
+void TabView::OnReMoveTabPage( QWidget* map, QString tabName )
+{
+	QString ss = this->property("Names").toString();
+	qDebug()<< this->property("Names").toString();
+	removeCentralWidget(map);
+	
+	setCurrentIndex(0);
+	loadDefaultSkin();
 }

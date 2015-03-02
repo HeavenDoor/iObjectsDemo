@@ -38,9 +38,9 @@ MapLayers::MapLayers(QWidget *parent) : QWidget(parent)
 // 	vBar->show();
 	//vBar->hide();
 
-// 	QScrollBar* hBar = m_pLayersScroll->horizontalScrollBar();
-// 	hBar->setFixedHeight(1);
-// 	hBar->hide();
+ 	QScrollBar* hBar = m_pLayersScroll->horizontalScrollBar();
+ 	hBar->setFixedHeight(1);
+ 	hBar->hide();
 	m_pLayersScroll->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 	m_pLayersScroll->setWidgetResizable(true);
 

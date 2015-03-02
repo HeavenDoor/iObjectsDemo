@@ -57,3 +57,8 @@ int TabWidget::removeCentralWidget( QWidget* widget )
 	m_pTabList.removeOne(widget);
 	return index;
 }
+
+QWidget* TabWidget::getWidget( int index )
+{
+	return m_pTabList.at(index);
+}
