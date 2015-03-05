@@ -1,12 +1,12 @@
 /******************Main*********************************/
-QWidget#iObjectsDemo{
-	border-image:url(:/mainWidget.png);
+/*QWidget#iObjectsDemo{
+	border-image:url(:/toolboxback.png);
 	border-width:120px 4px 2px 4px;
 	margin-left:0px;
 	margin-right:0px;
 	margin-top:0px;
 	margin-bottom:0px;
-}
+}*/
 
 /******************closebtn*************************************/
 QPushButton#CloseBtn{
@@ -176,8 +176,8 @@ QWidget#Map2DContainer{
 
 /******************ToolBox*********************************/
 QWidget#ToolBox{
-	border-image:url(:/sh.png);
-	border-width: 14px 11px 14px 13px;
+	border-image:url(:/toolboxback.png);
+	border-width: 1px 1px 1px 1px;
 	margin-left:0px;
 	margin-right:0px;
 	margin-top:0px;

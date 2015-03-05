@@ -7,9 +7,16 @@
 #include "mapcontrol.h"
 #include "mapcontroller.h"
 #include "maplayers.h"
+#include "propertypanel.h"
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QHBoxLayout>
 #include <QVariantMap>
+
+#include "qtpropertymanager.h"
+#include "qtvariantproperty.h"
+#include "qttreepropertybrowser.h"
+#include "propertytrigger.h"
+
 
 class MapBase : public QWidget, MapBaseInterface
 {
@@ -57,8 +64,14 @@ private slots:
  	void OnEntireClicked();
  	void OnZoomInClicked();
  	void OnZoomOutClicked();
+	void OnPinBtnClicked();
 	void OnChangeLayers(const QString& text, int index);
-private slots:
+	void OnUGStyleChanged(const UGStyle&s);
+	void valueChanged(QtProperty *property, const QVariant &value);
+	void OnPropertyTriggered();
+private:
+	void addProperty(QtVariantProperty *property, const QString &id);
+	void updateExpandState();
 private:
 
 	QString m_MapUrl;
@@ -68,8 +81,15 @@ private:
 	MapController* m_pMapController;
 	MapLayers* m_pMapLayers;
 	static const int tabrwidth = 81;
-	
+	PropertyPanel* m_pPropertyPanel;
+	PropertyTrigger* m_pPropertyTrigger;
 
+	QtVariantPropertyManager *variantManager;
+	QtTreePropertyBrowser *propertyEditor;
+	QMap<QtProperty *, QString> propertyToId;
+	QMap<QString, QtVariantProperty *> idToProperty;
+	QMap<QString, bool> idToExpanded;
+	UGStyle* currentItem;
 };
 
 #endif // MAPBASE_H

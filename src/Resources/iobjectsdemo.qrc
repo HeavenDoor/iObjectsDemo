@@ -22,6 +22,7 @@
     <!--ToolBox-->
     <file>toolbox.qss</file>
     <file>toolbox.png</file>
+    <file>toolboxback.png</file>
     <file>searchp.png</file>
     <file>search.png</file>
     <file>set.png</file>

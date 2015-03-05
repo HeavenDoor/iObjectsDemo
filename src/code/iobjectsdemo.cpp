@@ -12,12 +12,13 @@
 #include <QtQml/QQmlEngine>
 #include <QtQuick/QtQuick>
 
-iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
+iObjectsDemo::iObjectsDemo(QWidget *parent) : QMainWindow(parent)
 {
 	setObjectName("iObjectsDemo");
 	setGeometry(200,200,1247,766);
 	setAcceptDrops(true);
 	m_pTitle = NULL;
+	m_pCloseBtn = NULL;
 	m_pPopBtn = NULL;
 	m_pToolBox = NULL;
 	m_pMapBase = NULL;
@@ -27,6 +28,7 @@ iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 	m_pFlowTabView = NULL;
 	m_pPopupPanel = NULL;
 	m_pPluginloader = NULL;
+	//dock = NULL;
 
 	initInteLayers();
 	initTabView();
@@ -121,6 +123,18 @@ bool iObjectsDemo::initToolBox()
 	QObject* obj = m_pToolBox->createToolButton("set");
 	if(obj) connect(obj, SIGNAL(clicked()), this, SLOT(OnToolBoxPlugin_SettingBtnClicked()));
 
+
+// 	m_pCloseBtn = new QPushButton(this);
+// 
+// 	obj = m_pToolBox->createToolButton("CloseBtn", Qt::AlignRight);
+// 	obj->setObjectName("CloseBtn");
+// // 	obj->setFixedHeight(48);
+// // 	obj->setFixedWidth(48);
+// 	//m_pCloseBtn->setGeometry(width() - 60, 20, m_pCloseBtn->width(), m_pCloseBtn->height());
+// 	connect(m_pCloseBtn, SIGNAL(clicked()), this, SLOT(OnCloseBtnClicked()));
+
+
+
 	m_pToolBox->addLine();
 	m_pToolBox->createToolButton("aaa");
 	m_pToolBox->addLine();
@@ -149,6 +163,7 @@ bool iObjectsDemo::initControls()
 	m_pTitle->raise();
 	m_pTitle->hide();
 
+
 	m_pCloseBtn = new QPushButton(this);
 	m_pCloseBtn->setObjectName("CloseBtn");
 	m_pCloseBtn->setFixedHeight(48);
@@ -164,6 +179,12 @@ bool iObjectsDemo::initControls()
 	//m_pInfoPanel->raise();
 	//m_pInfoPanel->setAnimationTimespan(600);
 	//m_pInfoPanel->setGeometry(width() - m_pInfoPanel->pluginWidth() - 15 ,height()/2 - m_pInfoPanel->pluginHeight()/2, m_pInfoPanel->pluginWidth(), m_pInfoPanel->pluginHeight());
+	
+// 	dock = new QDockWidget(this);
+// 	addDockWidget(Qt::RightDockWidgetArea, dock);
+// 	QDockWidget* c = new QDockWidget(this);
+// 	addDockWidget(Qt::RightDockWidgetArea, c);
+// 	c->setFixedWidth(150);
 	return true;
 }
 
@@ -283,7 +304,7 @@ void iObjectsDemo::resizeEvent(QResizeEvent* e)
 
 	if (m_pTabView)
 	{
-		m_pTabView->setGeometry(0,0,width(),height());
+		m_pTabView->setGeometry(0, 0, width(), height() - m_pToolBox->height());
 	}
 
 

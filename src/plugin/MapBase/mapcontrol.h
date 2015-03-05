@@ -111,6 +111,12 @@ public:
     UGString  QStringToUGString(QString qstring );
 
 	void openLayers(const QString& text, int index);
+
+	const UGStyle&  getstyle(MapControl* p);
+
+	UGMapEditorWnd* GetUGMapWnd();
+
+	void emitStyleChanged(const UGStyle&s);
 public:
 	/*QVector<QString>*/QVector<QVariantList> getLayersList();
 
@@ -123,7 +129,7 @@ signals:
 	//绘制地图信号
 	void UGMapDrawnEvent(MapControl* pQMap, UGGraphics* pGraphics);
 	void showTips();
-
+	void UGStyleChanged(const UGStyle& s);
 private:	
 	UGMap& GetMap();
 
@@ -151,7 +157,7 @@ private:
 	UGWorkspace* GetWorkspace(); 
 
 	//获取当前
-	UGMapEditorWnd* GetUGMapWnd();
+	//UGMapEditorWnd* GetUGMapWnd();
 
 private:
 	UGC::UGMapEditorWnd* m_pMapEditorWnd;   

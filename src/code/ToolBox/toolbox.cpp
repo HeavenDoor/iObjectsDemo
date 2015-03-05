@@ -4,7 +4,7 @@
 ToolBox::ToolBox(QWidget *parent) : QWidget(parent)
 {
 	this->setObjectName("ToolBox");
-
+	this->setWindowOpacity(1);
 	m_pOutLayout = NULL;
 	m_pLeftLayout = NULL;
 	m_pRightLayout = NULL;
@@ -41,10 +41,10 @@ ToolBox::~ToolBox()
 
 void ToolBox::paintEvent( QPaintEvent* e)
 {
-// 	QStyleOption opt;
-// 	opt.init(this);
-// 	QPainter p(this);
-// 	style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+	QStyleOption opt;
+	opt.init(this);
+	QPainter p(this);
+	style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 	QWidget::paintEvent(e);
 }
 

@@ -11,5 +11,8 @@
       <file>tran.png</file>
       <file>eye_open.png</file>
       <file>eye_closed.png</file>
+      <file>littleboard.png</file>
+      <file>propertypanelhead.png</file>
+      <file>pin.png</file>
     </qresource>
 </RCC>

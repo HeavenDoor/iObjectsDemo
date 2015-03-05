@@ -93,6 +93,19 @@ void UGSTDCALL GeometrySelectedProcCallBack(UGlong pWnd,UGint nSelectedGeometryC
 	{
 		pQMap->popupTips();
 	}
+
+	const UGStyle&s = pQMap->getstyle(pQMap);
+	pQMap->emitStyleChanged(s);
+}
+
+const UGStyle& MapControl::getstyle(MapControl* p)
+{
+	return p->GetUGMapWnd()->GetDefaultStyle();
+}
+
+void MapControl::emitStyleChanged(const UGStyle&s)
+{
+	emit UGStyleChanged(s);
 }
 
 MapControl::MapControl( QWidget* parent)

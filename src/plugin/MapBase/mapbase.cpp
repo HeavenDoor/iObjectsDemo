@@ -15,6 +15,8 @@ MapBase::MapBase(QWidget *parent) : QWidget(parent)
 	m_pMapControl = NULL;
 	m_pMapController = NULL;
 	m_pMapLayers = NULL;
+	m_pPropertyPanel = NULL;
+	m_pPropertyTrigger = NULL;
 
 	setObjectName("Map2DContainer");
 	m_pMap2DLayout = new QHBoxLayout(this);
@@ -35,10 +37,12 @@ MapBase::MapBase(QWidget *parent) : QWidget(parent)
 
 	m_pMapControl = new MapControl(this);
 	connect(m_pMapControl, SIGNAL(showTips()), this, SIGNAL(showTips()));
+	connect(m_pMapControl, SIGNAL(UGStyleChanged(const UGStyle&)), this, SLOT(OnUGStyleChanged(const UGStyle&)));
+
+
 
 	QWidget* map2D = dynamic_cast<QWidget*>(m_pMapControl);
-	m_pMap2DLayout->addWidget(map2D);
-	this->setLayout(m_pMap2DLayout);
+
 	QString exeFileName = QApplication::applicationFilePath();
 	QFileInfo kk(exeFileName);
 	QString apppath = kk.canonicalPath(); 
@@ -73,6 +77,36 @@ MapBase::MapBase(QWidget *parent) : QWidget(parent)
 	m_pMapLayers->show();
 	m_pMapLayers->raise();
 
+
+
+
+	m_pPropertyPanel = new PropertyPanel(this);
+	m_pPropertyPanel->setFixedWidth(216); 
+	m_pPropertyPanel->setPropertyPanelTitle("UGStyle Property");
+	connect(m_pPropertyPanel, SIGNAL(pinBtnClicked()), this, SLOT(OnPinBtnClicked()));
+
+	variantManager = new QtVariantPropertyManager(this);
+	connect(variantManager, SIGNAL(valueChanged(QtProperty *, const QVariant &)), this, SLOT(valueChanged(QtProperty *, const QVariant &)));
+	QtVariantEditorFactory *variantFactory = new QtVariantEditorFactory(this);
+
+	propertyEditor = new QtTreePropertyBrowser(this);
+	propertyEditor->setFactoryForManager(variantManager, variantFactory);
+	propertyEditor->setFixedWidth(216); 
+
+
+	m_pPropertyPanel->setCentralWidget(propertyEditor);
+
+	m_pMap2DLayout->addWidget(map2D);
+	m_pMap2DLayout->addWidget(m_pPropertyPanel);
+	this->setLayout(m_pMap2DLayout);
+
+
+	m_pPropertyTrigger = new PropertyTrigger(this);
+	m_pPropertyTrigger->setText("UGStyle Property");
+	m_pPropertyTrigger->init();
+	m_pPropertyTrigger->setFixedWidth(0);
+	m_pPropertyTrigger->hide();
+	connect(m_pPropertyTrigger, SIGNAL(tirggered()), this, SLOT(OnPropertyTriggered()));
 	QFile file(":/mapbase.qss");
 	file.open(QFile::ReadOnly);
 	QString style = QString(file.readAll());
@@ -100,6 +134,12 @@ MapBase::~MapBase()
 		delete m_pMapControl;
 		m_pMapControl = NULL;
 	}
+
+	if (m_pPropertyPanel)
+	{
+		delete m_pPropertyPanel;
+		m_pPropertyPanel = NULL;
+	}
 }
 
 void MapBase::paintEvent(QPaintEvent* e)
@@ -116,15 +156,12 @@ QWidget* MapBase::getWidget()
 	return this;
 }
 
-
 void* MapBase::getUGMapEditorWnd()
 {
 	if (!m_pMapControl) return NULL;
 	{
 	}
 }
-
-
 
 QWidget* MapBase::getMapLayers()
 {
@@ -138,9 +175,11 @@ void MapBase::test()
 
 void MapBase::resizeEvent( QResizeEvent* e)
 {
-	if (m_pMapControl)
+	if (m_pMapControl && m_pPropertyPanel)
 	{
-		m_pMapControl->setGeometry(0, 0, width(), height());
+		int m = m_pPropertyPanel->width();
+		m_pMapControl->setGeometry(0, 0, width() - m_pPropertyPanel->width(), height());
+		m_pMapControl->setFixedWidth(width() - m_pPropertyPanel->width());
 	}
 
 // 	if (m_pMapController)
@@ -153,9 +192,28 @@ void MapBase::resizeEvent( QResizeEvent* e)
 // 		m_pMapLayers->setGeometry(300,100,220,360);
 // 	}
 
+	if (m_pPropertyPanel)
+	{
+		m_pPropertyPanel->setGeometry(m_pMapControl->width(), 0, m_pPropertyPanel->width(), height());
+	}
+
+	if (m_pPropertyTrigger)
+	{
+		if ( !m_pPropertyTrigger->isVisible())
+		{
+			m_pPropertyTrigger->setGeometry(width(), 20, 0, m_pPropertyTrigger->height());
+		}
+		else
+		{
+			m_pPropertyTrigger->setGeometry(width() - m_pPropertyTrigger->width() - 3, 20, m_pPropertyTrigger->width(), m_pPropertyTrigger->height());
+			m_pPropertyTrigger->show();
+			m_pPropertyTrigger->raise();
+		}
+		
+	}
+
 	QWidget::resizeEvent(e);
 }
-
 
 QObject* MapBase::getObject()
 {
@@ -202,7 +260,6 @@ void MapBase::setPluginWidth( int width )
 	setFixedWidth(width);
 }
 
-
 void MapBase::setPluginHeight( int height )
 {
 	setFixedHeight(height);
@@ -226,8 +283,6 @@ int MapBase::pluginHeight()
 // 	this->setStyleSheet(style);
 // 	file.close();
 // }
-
-
 
 void MapBase::OnSelectClicked()
 {
@@ -296,6 +351,254 @@ QWidget* MapBase::getMapController()
 {
 	return m_pMapController;
 }
+
+void MapBase::OnPinBtnClicked()
+{
+	if (m_pPropertyPanel&& m_pMapControl)
+	{
+		m_pPropertyPanel->setFixedWidth(0);
+		m_pMapControl->setFixedWidth(width());
+		if (m_pPropertyTrigger)
+		{
+			int m = m_pPropertyTrigger->getWidth();
+			m_pPropertyTrigger->setFixedWidth(m_pPropertyTrigger->getWidth());
+			m_pPropertyTrigger->setGeometry(width() - m_pPropertyTrigger->width() - 3, 20, m_pPropertyTrigger->width(), m_pPropertyTrigger->height());
+			m_pPropertyTrigger->show();
+			m_pPropertyTrigger->raise();
+		}
+	}
+}
+
+void MapBase::OnPropertyTriggered()
+{
+	if (m_pPropertyPanel&& m_pMapControl)
+	{
+		m_pPropertyPanel->setFixedWidth(216);
+		m_pMapControl->setFixedWidth(width() - m_pPropertyPanel->width());
+		if (m_pPropertyTrigger)
+		{
+			int m = m_pPropertyTrigger->getWidth();
+			m_pPropertyTrigger->setFixedWidth(0);
+			m_pPropertyTrigger->setGeometry(width(), 20, 0, m_pPropertyTrigger->height());
+			m_pPropertyTrigger->hide();
+			//m_pPropertyTrigger->raise();
+		}
+	}
+}
+
+int QColorToInt(const QColor &color)  
+{  
+	//将Color 从QColor 转换成 int  
+	return   (int)(((unsigned int)color.blue()<< 16) | (unsigned short)(((unsigned short)color.green()<< 8) | color.red()));  
+}  
+QColor IntToQColor(const int &intColor)  
+{  
+	//将Color 从int 转换成 QColor  
+	int red = intColor & 255;  
+	int green = intColor >> 8 & 255;  
+	int blue = intColor >> 16 & 255;  
+	return QColor(red, green, blue);  
+}  
+
+void MapBase::updateExpandState()
+{
+	QList<QtBrowserItem *> list = propertyEditor->topLevelItems();
+	QListIterator<QtBrowserItem *> it(list);
+	while (it.hasNext()) 
+	{
+		QtBrowserItem *item = it.next();
+		QtProperty *prop = item->property();
+		idToExpanded[propertyToId[prop]] = propertyEditor->isExpanded(item);
+	}
+}
+
+void MapBase::addProperty(QtVariantProperty *property, const QString &id)
+{
+	propertyToId[property] = id;
+	idToProperty[id] = property;
+	QtBrowserItem *item = propertyEditor->addProperty(property);
+	if (idToExpanded.contains(id))
+		propertyEditor->setExpanded(item, idToExpanded[id]);
+}
+
+void MapBase::OnUGStyleChanged( const UGStyle&s )
+{
+	//currentItem = &s;
+	//s.SetFillStyle(5);
+	updateExpandState();
+
+	QMap<QtProperty *, QString>::ConstIterator itProp = propertyToId.constBegin();
+	while (itProp != propertyToId.constEnd()) 
+	{
+		delete itProp.key();
+		itProp++;
+	}
+	propertyToId.clear();
+	idToProperty.clear();
+
+
+	//deleteAction->setEnabled(true);
+
+	QtVariantProperty *property;
+
+	property = variantManager->addProperty(QVariant::Int, QLatin1String("MarkerStyle"));
+	property->setAttribute(QLatin1String("minimum"), 0);
+	property->setAttribute(QLatin1String("maximum"), 100);
+	property->setValue(s.GetMarkerStyle());
+	addProperty(property, QLatin1String("MarkerStyle"));
+
+	property = variantManager->addProperty(QVariant::Int, QLatin1String("MarkerAngle"));
+	property->setAttribute(QLatin1String("minimum"), 0);
+	property->setAttribute(QLatin1String("maximum"), 256);
+	property->setValue(s.GetMarkerAngle());
+	addProperty(property, QLatin1String("MarkerAngle"));
+
+	property = variantManager->addProperty(QVariant::Int, QLatin1String("MarkerSize"));
+	property->setAttribute(QLatin1String("minimum"), 0);
+	property->setAttribute(QLatin1String("maximum"), 256);
+	property->setValue(s.GetMarkerSize());
+	addProperty(property, QLatin1String("MarkerSize"));
+
+	property = variantManager->addProperty(QVariant::Int, QLatin1String("MarkerWidth"));
+	property->setAttribute(QLatin1String("minimum"), 0);
+	property->setAttribute(QLatin1String("maximum"), 256);
+	property->setValue(s.GetMarkerWidth());
+	addProperty(property, QLatin1String("MarkerWidth"));
+
+	property = variantManager->addProperty(QVariant::Int, QLatin1String("MarkerHeight"));
+	property->setAttribute(QLatin1String("minimum"), 0);
+	property->setAttribute(QLatin1String("maximum"), 256);
+	property->setValue(s.GetMarkerHeight());
+	addProperty(property, QLatin1String("MarkerHeight"));
+
+	property = variantManager->addProperty(QVariant::Int, QLatin1String("LineStyle"));
+	property->setAttribute(QLatin1String("minimum"), 0);
+	property->setAttribute(QLatin1String("maximum"), 256);
+	property->setValue(s.GetLineStyle());
+	addProperty(property, QLatin1String("LineStyle"));
+
+	property = variantManager->addProperty(QVariant::Color, QLatin1String("LineColor"));
+	property->setValue(IntToQColor(s.GetLineColor()));
+	addProperty(property, QLatin1String("LineColor"));
+
+	property = variantManager->addProperty(QVariant::Int, QLatin1String("LineWidth"));
+	property->setAttribute(QLatin1String("minimum"), 0);
+	property->setAttribute(QLatin1String("maximum"), 256);
+	property->setValue(s.GetLineWidth());
+	addProperty(property, QLatin1String("LineWidth"));
+
+	property = variantManager->addProperty(QVariant::Int, QLatin1String("FillStyle"));
+	property->setAttribute(QLatin1String("minimum"), 0);
+	property->setAttribute(QLatin1String("maximum"), 100);
+	property->setValue(s.GetFillStyle());
+	addProperty(property, QLatin1String("FillStyle"));
+
+	property = variantManager->addProperty(QVariant::Color, QLatin1String("FillBackColor"));
+	property->setValue(IntToQColor(s.GetFillBackColor()));
+	addProperty(property, QLatin1String("FillBackColor"));
+
+	property = variantManager->addProperty(QVariant::Color, QLatin1String("FillForeColor"));
+	property->setValue(IntToQColor(s.GetFillForeColor()));
+	addProperty(property, QLatin1String("FillForeColor"));
+
+
+	property = variantManager->addProperty(QVariant::Bool, QLatin1String("FillBackOpaque"));  // bool
+	property->setValue(s.GetFillBackOpaque());
+	addProperty(property, QLatin1String("FillBackOpaque"));
+
+	property = variantManager->addProperty(QVariant::Char, QLatin1String("FillOpaqueRate"));
+	property->setValue(s.GetFillOpaqueRate());
+	addProperty(property, QStringLiteral("FillOpaqueRate"));
+
+	property = variantManager->addProperty(QVariant::Char, QLatin1String("FillGradientType"));
+	property->setValue(s.GetFillGradientType());
+	addProperty(property, QStringLiteral("FillGradientType"));
+
+	property = variantManager->addProperty(QVariant::Int, QLatin1String("FillAngle"));
+	property->setAttribute(QLatin1String("minimum"), 0);
+	property->setAttribute(QLatin1String("maximum"), 360);
+	property->setValue(s.GetFillAngle());
+	addProperty(property, QLatin1String("FillAngle"));
+
+	property = variantManager->addProperty(QVariant::Int, QLatin1String("FillCenterOffsetX"));
+	property->setAttribute(QLatin1String("minimum"), 0);
+	property->setAttribute(QLatin1String("maximum"), 360);
+	property->setValue(s.GetFillCenterOffsetX());
+	addProperty(property, QLatin1String("FillCenterOffsetX"));
+
+	property = variantManager->addProperty(QVariant::Int, QLatin1String("FillCenterOffsetY"));
+	property->setAttribute(QLatin1String("minimum"), 0);
+	//property->setAttribute(QLatin1String("maximum"), 360);
+	property->setValue(s.GetFillCenterOffsetY());
+	addProperty(property, QLatin1String("FillCenterOffsetY"));
+
+	property = variantManager->addProperty(QVariant::Bool, QLatin1String("SymbolScale"));  // bool
+	property->setValue(s.IsScaleBySymbol());
+	addProperty(property, QLatin1String("SymbolScale"));
+
+	property = variantManager->addProperty(QVariant::Int, QLatin1String("MarkerSymbolLength"));
+	property->setAttribute(QLatin1String("minimum"), 0);
+	property->setValue(s.GetMarkerSymbolLength());
+	addProperty(property, QStringLiteral("MarkerSymbolLength"));
+
+	property = variantManager->addProperty(QVariant::Int, QLatin1String("MarkerSymbolVersion"));
+	property->setAttribute(QLatin1String("minimum"), 0);
+	//property->setAttribute(QLatin1String("maximum"), 360);
+	property->setValue(s.GetMarkerSymbolVersion());
+	addProperty(property, QLatin1String("MarkerSymbolVersion"));
+
+	property = variantManager->addProperty(QVariant::Int, QLatin1String("LineSymbolLength"));
+	property->setAttribute(QLatin1String("minimum"), 0);
+	//property->setAttribute(QLatin1String("maximum"), 360);
+	property->setValue(s.GetLineSymbolLength());
+	addProperty(property, QLatin1String("LineSymbolLength"));
+
+	property = variantManager->addProperty(QVariant::Int, QLatin1String("LineSymbolVersion"));
+	property->setAttribute(QLatin1String("minimum"), 0);
+	//property->setAttribute(QLatin1String("maximum"), 360);
+	property->setValue(s.GetLineSymbolVersion());
+	addProperty(property, QLatin1String("LineSymbolVersion"));
+
+	property = variantManager->addProperty(QVariant::Int, QLatin1String("FillSymbolLength"));
+	property->setAttribute(QLatin1String("minimum"), 0);
+	//property->setAttribute(QLatin1String("maximum"), 360);
+	property->setValue(s.GetFillSymbolLength());
+	addProperty(property, QLatin1String("FillSymbolLength"));
+
+	property = variantManager->addProperty(QVariant::Int, QLatin1String("FillSymbolVersion"));
+	property->setAttribute(QLatin1String("minimum"), 0);
+	//property->setAttribute(QLatin1String("maximum"), 360);
+	property->setValue(s.GetFillSymbolVersion());
+	addProperty(property, QLatin1String("FillSymbolVersion"));
+
+
+
+
+
+	property = variantManager->addProperty(QVariant::Color, tr("FixedColor"));
+	property->setValue(IntToQColor(s.GetFixedColor()));
+	addProperty(property, QLatin1String("FixedColor"));
+
+
+}
+
+void MapBase::valueChanged( QtProperty *property, const QVariant &value )
+{
+	if (!propertyToId.contains(property))
+		return;
+
+// 	if (!currentItem)
+// 		return;
+
+// 	QString id = propertyToId[property];
+// 	if (id == QLatin1String("xpos")) 
+// 	{
+// 		currentItem.SetFillStyle(value.toInt());
+// 	} 
+}
+
+
+
 
 
 

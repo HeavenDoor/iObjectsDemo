@@ -16,7 +16,9 @@
 #include "interface/mapbaseinterface.h"
 #include "interface/scenebaseinterface.h"
 
-class iObjectsDemo : public QWidget
+//#include <QDockWidget>
+
+class iObjectsDemo : public QMainWindow
 {
 	Q_OBJECT
 
@@ -75,6 +77,8 @@ private:
 	MapBaseInterface* m_pMapBase;
 
 	QPoint m_PressPoint;
+
+	//QDockWidget *dock;
 };
 
 #endif // IOBJECTSDEMO_H
