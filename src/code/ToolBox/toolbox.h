@@ -21,6 +21,8 @@ public:
 	void setToolButtonSize(QSize size);
 	// 添加分割线
 	void addLine(Qt::Alignment align = Qt::AlignLeft);
+	// 添加空白区域
+	void addSpacing(int space, Qt::Alignment align = Qt::AlignLeft);
 signals:
 public slots:
 

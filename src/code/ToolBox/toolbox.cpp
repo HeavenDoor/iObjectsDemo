@@ -8,8 +8,8 @@ ToolBox::ToolBox(QWidget *parent) : QWidget(parent)
 	m_pOutLayout = NULL;
 	m_pLeftLayout = NULL;
 	m_pRightLayout = NULL;
-	m_size.setWidth(50);
-	m_size.setHeight(50);
+	m_size.setWidth(32);
+	m_size.setHeight(32);
 
 
 	m_pOutLayout = new QHBoxLayout(this);
@@ -98,7 +98,7 @@ void ToolBox::addLine( Qt::Alignment align /*= Qt::AlignLeft*/ )
 	QFrame* p = new QFrame(this);
 	p->setObjectName("ToolBoxLine");
 	p->setFixedHeight(height() -  8);
-	p->setFixedWidth(4);
+	p->setFixedWidth(2);
 
 	if (align == Qt::AlignLeft)
 	{
@@ -108,5 +108,20 @@ void ToolBox::addLine( Qt::Alignment align /*= Qt::AlignLeft*/ )
 	else
 	{
 		m_pRightLayout->addWidget(p);
+	}
+}
+
+void ToolBox::addSpacing( int space, Qt::Alignment align /*= Qt::AlignLeft*/ )
+{
+	if (!m_pLeftLayout || !m_pOutLayout || !m_pRightLayout) return;
+
+	if (align == Qt::AlignLeft)
+	{
+		m_pLeftLayout->addSpacing(space);
+	}
+
+	else
+	{
+		m_pRightLayout->addSpacing(space);
 	}
 }

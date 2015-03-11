@@ -74,6 +74,8 @@ public:
 
 	void popupTips();
 	void* getUGMapEditorWnd();
+
+	
 public:
 	//打开地图方法
 	int OpenMap(const QString& mapPath);
@@ -117,6 +119,8 @@ public:
 	UGMapEditorWnd* GetUGMapWnd();
 
 	void emitStyleChanged(const UGStyle&s);
+
+	void changeUGstyleValue(const UGStyle& style);
 public:
 	/*QVector<QString>*/QVector<QVariantList> getLayersList();
 
@@ -124,7 +128,7 @@ public:
 
 	int m_MessureType;
 	QLabel* m_MessageLabel;
-
+	UGLayer* m_currentLayer;
 signals:
 	//绘制地图信号
 	void UGMapDrawnEvent(MapControl* pQMap, UGGraphics* pGraphics);
@@ -180,6 +184,8 @@ private:
 	bool m_initialized;
 	
 	QImage* m_pQimage;
+
+	
 };
 
 

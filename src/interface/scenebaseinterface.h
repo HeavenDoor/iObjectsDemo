@@ -20,7 +20,8 @@ public:
 	virtual QWidget* getSceneLayers() = 0;
 	// 获得SceneBase插件SceneController控件指针
 	virtual QWidget* getSceneController() = 0;
-
+	// UGMapEditorWnd对象的指针的设置
+	virtual void setUGMapEditorWnd(void* wnd) = 0;
 };
 
 QT_BEGIN_NAMESPACE

@@ -4,13 +4,16 @@
 TabWidget::TabWidget(QWidget *parent/*, TabBar* tabbar*/) : QTabWidget(parent)
 {
 	//w = NULL;
+//	m_pMainLayout = NULL;
 	setObjectName("Tabwidget");
 	setAttribute(Qt::WA_TranslucentBackground);
 	tabBar()->setFixedHeight(0);
 	tabBar()->setFixedWidth(0);
 	tabBar()->setVisible(false);  // Òþ²Ø×Ô´øtabbar
-	//if(tabbar) setTabBar(tabbar);
 
+	//setStyleSheet("background-color: blue");
+	//if(tabbar) setTabBar(tabbar);
+// 	
 }
 
 TabWidget::~TabWidget()
@@ -45,6 +48,10 @@ void TabWidget::addCentralWidget( QWidget* map, int tabIndex, QString tabName )
 	insertTab(tabIndex, map, tabName);
 	//addTab(map, tabName);
 	m_pTabList.insert(tabIndex, map);
+// 	if (m_pMainLayout)
+// 	{
+// 		m_pMainLayout->addWidget(map);
+// 	}
 // 	QPushButton* pp = new QPushButton(map);
 // 	pp->setText(tabName);
 
@@ -55,6 +62,10 @@ int TabWidget::removeCentralWidget( QWidget* widget )
 	int index = m_pTabList.indexOf(widget);
 	removeTab(index);
 	m_pTabList.removeOne(widget);
+
+// 	if ()
+// 	{
+// 	}
 	return index;
 }
 

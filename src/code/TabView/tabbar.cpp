@@ -13,9 +13,9 @@ TabBar::TabBar(QWidget *parent)	: QWidget(parent)
 	pa.setColor(QPalette::WindowText,Qt::red);
 	
 	m_pPrevBtn = NULL;
-	m_pHlayout = new QHBoxLayout(this);
-	m_pHlayout->setContentsMargins(0, 0, 0, 0);
-	m_pHlayout->setSpacing(0);
+	m_pVlayout = new QVBoxLayout(this);
+	m_pVlayout->setContentsMargins(0, 0, 0, 0);
+	m_pVlayout->setSpacing(0);
 
 
 	painter = new QPainter(this);
@@ -36,19 +36,29 @@ TabBar::~TabBar()
 
 void TabBar::insertTabbar( int index, QString tabName )
 {
-	TabItem* pBtn = new TabItem(this);
+	TabItem* pBtn = new TabItem(tabName, this);
 	pBtn->setAcceptDrops(true);
 	//pBtn->setDragEnabled(true)
-	pBtn->setFixedHeight(this->height());
-	pBtn->setText(tabName);
-	connect(pBtn, SIGNAL(clicked()), this, SLOT(OnTabButtonClicked()));
-	
+	pBtn->setFixedWidth(this->width());
 
-	int previndex = -10;
+	int m = this->width();
+	pBtn->setFixedHeight(81);
+	//pBtn->setText(tabName);
+
+	connect(pBtn, SIGNAL(clicked()), this, SLOT(OnTabButtonClicked()));
+	connect(pBtn, SIGNAL(flowUp()), this, SLOT(OnFlowUp()));
+	pBtn->setSelected();
+	foreach (TabItem* item, m_pTabBarList)
+	{
+		item->setDeselected();
+	}
+/*	int previndex = -10;
 	if (m_pTabBarList.length() != 0)
 	{
 		previndex = m_pTabBarList.indexOf(m_pPrevBtn);
 	}
+
+	//pBtn->sele
 	
 
 	if (index > m_pTabBarList.length())
@@ -134,16 +144,16 @@ void TabBar::insertTabbar( int index, QString tabName )
 		{
 			m_pPrevBtn->setProperty("SelectedTabBar", 0);
 		}
-	}
+	}*/
 	m_pPrevBtn = pBtn;
 	m_pTabBarList.insert(index, pBtn);
-	m_pHlayout->insertWidget(index, pBtn);
+	m_pVlayout->insertWidget(index, pBtn);
 
-	QFile file(":/tabbar.qss");
-	file.open(QFile::ReadOnly);
-	QString style = QString(file.readAll());
-	this->setStyleSheet(style);
-	file.close();
+// 	QFile file(":/tabbar.qss");
+// 	file.open(QFile::ReadOnly);
+// 	QString style = QString(file.readAll());
+// 	this->setStyleSheet(style);
+// 	file.close();
 }
 
 void TabBar::removeTabbar( int index )
@@ -151,9 +161,9 @@ void TabBar::removeTabbar( int index )
 	if (index < 0 || index >= m_pTabBarList.length()) return;
 	int origlength = m_pTabBarList.length();
 
-	QToolButton* p = m_pTabBarList.at(index);
+	TabItem* p = m_pTabBarList.at(index);
 	m_pTabBarList.removeAt(index);
-	m_pHlayout->removeWidget(p);
+	m_pVlayout->removeWidget(p);
 
 	if (m_pTabBarList.length() == 0)
 	{
@@ -164,7 +174,7 @@ void TabBar::removeTabbar( int index )
 	if (m_pTabBarList.length() == 1)
 	{
 		//setVisible(false);
-		m_pTabBarList.at(0)->setProperty("SelectedTabBar", 1);
+		//m_pTabBarList.at(0)->setProperty("SelectedTabBar", 1);
 		m_pPrevBtn = m_pTabBarList.at(0);
 	}
 	else
@@ -172,23 +182,23 @@ void TabBar::removeTabbar( int index )
 		if (index == 0)
 		{
 			m_pPrevBtn = m_pTabBarList.at(0);
-			m_pTabBarList.at(0)->setProperty("HeadSelectedTabBar", 1);
-			m_pTabBarList.at(0)->setProperty("SelectedTabBar", 5);
+// 			m_pTabBarList.at(0)->setProperty("HeadSelectedTabBar", 1);
+// 			m_pTabBarList.at(0)->setProperty("SelectedTabBar", 5);
 			
 		}
 		else if(index = origlength - 1)
 		{
 			m_pPrevBtn = m_pTabBarList.at(0);
-			m_pTabBarList.last()->setProperty("TailSelectedTabBar", 0);
-			m_pTabBarList.last()->setProperty("SelectedTabBar", 5);
-			//m_pTabBarList.at(0)->setProperty("SelectedTabBar", "5");
-			m_pTabBarList.at(0)->setProperty("HeadSelectedTabBar", 1);
+// 			m_pTabBarList.last()->setProperty("TailSelectedTabBar", 0);
+// 			m_pTabBarList.last()->setProperty("SelectedTabBar", 5);
+// 			//m_pTabBarList.at(0)->setProperty("SelectedTabBar", "5");
+// 			m_pTabBarList.at(0)->setProperty("HeadSelectedTabBar", 1);
 		}
 		else
 		{
 			m_pPrevBtn = m_pTabBarList.at(0);
 
-			m_pTabBarList.at(0)->setProperty("HeadSelectedTabBar", 1);
+			//m_pTabBarList.at(0)->setProperty("HeadSelectedTabBar", 1);
 		}
 
 		emit changeIndex(0);
@@ -218,9 +228,19 @@ void TabBar::setCurrentIndex( int index )
 	int previndex = m_pTabBarList.indexOf(m_pPrevBtn);
 	if (previndex == index) return;
 
-
-
-	if (index <= 0)  // ͷ
+	
+	for (int i = 0; i < m_pTabBarList.length(); i++)
+	{
+		if (i == index)
+		{
+			m_pTabBarList.at(index)->setSelected();
+		}
+		else
+		{
+			m_pTabBarList.at(i)->setDeselected();
+		}
+	}
+/*	if (index <= 0)  // ͷ
 	{
 		index = 0;
 		m_pTabBarList.at(index)->setProperty("HeadSelectedTabBar", "1");
@@ -274,7 +294,7 @@ void TabBar::setCurrentIndex( int index )
 			m_pPrevBtn->setProperty("SelectedTabBar", "0");
 		}
 	}
-
+	*/
 	m_pPrevBtn = m_pTabBarList.at(index);
 
 // 	QFile file(":/tabbar.qss");
@@ -312,7 +332,7 @@ void TabBar::resizeEvent( QResizeEvent* )
 {
 	for each (QToolButton* pbtn in m_pTabBarList)
 	{
-		pbtn->setFixedWidth(width()/tabCount());
+		pbtn->setFixedHeight(height()/tabCount());
 	}
 }
 
@@ -529,7 +549,7 @@ bool TabBar::eventFilter( QObject * obj, QEvent * event)
 			// 
 			
 			QDataStream dataStream(&itemData, QIODevice::WriteOnly);
-			dataStream << pixmap <<item->text() << index;    //<< QPoint(event->pos() - child->pos());
+			dataStream << pixmap <<item->getLabelText() << index;    //<< QPoint(event->pos() - child->pos());
 
 			QMimeData *mimeData = new QMimeData;
 			mimeData->setData("application/x-dnditemdata", itemData);
@@ -599,7 +619,7 @@ bool TabBar::eventFilter( QObject * obj, QEvent * event)
 				dataStream >> pixmap >> offset >> index;
 
 
-				emit moveTabPage(index, offset);
+				//emit moveTabPage(index, offset);
 
 				press = false;
 				move = false;
@@ -614,4 +634,13 @@ bool TabBar::eventFilter( QObject * obj, QEvent * event)
 	}
 
 	return false;
+}
+
+
+
+void TabBar::OnFlowUp()
+{
+	TabItem* item = qobject_cast<TabItem*>(sender());
+	if (!item) return;
+	emit moveTabPage(m_pTabBarList.indexOf(item), item->getLabelText());
 }

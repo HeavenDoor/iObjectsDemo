@@ -1,3 +1,6 @@
+UGbyte
+UGbyte
+UGbyte
 #include "stdafx.h"
 #include "mapbase.h"
 #include "..\\..\\commom\\sysconfig.h"
@@ -8,36 +11,50 @@
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QApplication>
 
+using namespace OGDC;
+namespace UGC
+{
+	class UGGraphics;
+	class UGImage;
+	class UGWorkspace;
+	class UGMapEditorWnd;
+	class UGMap;
+	class UGGeoLine;
+}
+using namespace UGC;
+
 MapBase::MapBase(QWidget *parent) : QWidget(parent)
 {
 	setObjectName("MapTab");
-
+//	setStyleSheet("background-color: red");
 	m_pMapControl = NULL;
 	m_pMapController = NULL;
 	m_pMapLayers = NULL;
 	m_pPropertyPanel = NULL;
 	m_pPropertyTrigger = NULL;
 
-	setObjectName("Map2DContainer");
-	m_pMap2DLayout = new QHBoxLayout(this);
+	m_pMap2DLayout = new QHBoxLayout();
+	m_pMap2DLayout->setContentsMargins(0, 0, 0, 0);
+	m_pMap2DLayout->setSpacing(0);
+	m_pMap2DLayout->setAlignment(Qt::AlignHorizontal_Mask);
+
+ 	m_pMapController = new MapController(this);
+ 	m_pMapController->setFixedHeight(32);
+ 	m_pMapController->setFixedWidth(32*5);
+ 	connect(m_pMapController, SIGNAL(selectClicked()), this, SLOT(OnSelectClicked()));
+ 	connect(m_pMapController, SIGNAL(panClicked()), this, SLOT(OnPanClicked()));
+ 	connect(m_pMapController, SIGNAL(entireClicked()), this, SLOT(OnEntireClicked()));
+ 	connect(m_pMapController, SIGNAL(zoominClicked()), this, SLOT(OnZoomInClicked()));
+ 	connect(m_pMapController, SIGNAL(zoomoutClicked()), this, SLOT(OnZoomOutClicked()));
+ 
+ 	m_pMapLayers = new MapLayers(this);
+ 	connect(m_pMapLayers, SIGNAL(changeLayers(const QString&, int )), this, SLOT(OnChangeLayers(const QString&, int)));
 
 
-	m_pMapController = new MapController(this);
-	m_pMapController->setFixedHeight(32);
-	m_pMapController->setFixedWidth(32*5);
-	connect(m_pMapController, SIGNAL(selectClicked()), this, SLOT(OnSelectClicked()));
-	connect(m_pMapController, SIGNAL(panClicked()), this, SLOT(OnPanClicked()));
-	connect(m_pMapController, SIGNAL(entireClicked()), this, SLOT(OnEntireClicked()));
-	connect(m_pMapController, SIGNAL(zoominClicked()), this, SLOT(OnZoomInClicked()));
-	connect(m_pMapController, SIGNAL(zoomoutClicked()), this, SLOT(OnZoomOutClicked()));
-
-	m_pMapLayers = new MapLayers(this);
-	connect(m_pMapLayers, SIGNAL(changeLayers(const QString&, int )), this, SLOT(OnChangeLayers(const QString&, int)));
-	//m_pMapLayers->setAttribute(Qt::WA_TranslucentBackground);
-
-	m_pMapControl = new MapControl(this);
-	connect(m_pMapControl, SIGNAL(showTips()), this, SIGNAL(showTips()));
-	connect(m_pMapControl, SIGNAL(UGStyleChanged(const UGStyle&)), this, SLOT(OnUGStyleChanged(const UGStyle&)));
+	testwidget = new QWidget(this);
+ 	m_pMapControl = new MapControl(this);
+ 	connect(m_pMapControl, SIGNAL(showTips()), this, SIGNAL(showTips()));
+ 	connect(m_pMapControl, SIGNAL(UGStyleChanged(const UGStyle&)), this, SLOT(OnUGStyleChanged(const UGStyle&)));
 
 
 
@@ -53,33 +70,32 @@ MapBase::MapBase(QWidget *parent) : QWidget(parent)
 	QString ssb = info.absoluteFilePath();
 	QDir::setCurrent(ss);
 
-	m_MapUrl = SysConfig::getValue("DefaultMap/DefaultMapPath").toString();
-	int flag = m_pMapControl->OpenMap(m_MapUrl);
+ 	m_MapUrl = SysConfig::getValue("DefaultMap/DefaultMapPath").toString();
+ 	int flag = m_pMapControl->OpenMap(m_MapUrl);
 
 
-	if (flag != 0)
-	{
-		QMessageBox::warning(NULL, "", QString::number(flag));
-		return;
-	}
-	m_pMapControl->show();
-	m_pMapController->show();
-	m_pMapController->raise();
-	m_Layers = m_pMapControl->getLayersList();
-	//m_Layers.push_front(m_MapUrl);
-
-	m_pMapLayers->setGeometry(300,100,220,360);
-	m_pMapLayers->setFixedWidth(220);
-	m_pMapLayers->setFixedHeight(360);
-
-	m_pMapLayers->initLayers(m_Layers);
-
-	m_pMapLayers->show();
-	m_pMapLayers->raise();
-
+ 	if (flag != 0)
+ 	{
+ 		QMessageBox::warning(NULL, "", QString::number(flag));
+ 		return;
+ 	}
+ 	m_pMapControl->show();
+ 	m_pMapController->show();
+ 	m_pMapController->raise();
+ 	m_Layers = m_pMapControl->getLayersList();
+ 
+ 	m_pMapLayers->setGeometry(300,100,220,360);
+ 	m_pMapLayers->setFixedWidth(220);
+ 	m_pMapLayers->setFixedHeight(360);
+ 
+ 	m_pMapLayers->initLayers(m_Layers);
+ 
+ 	m_pMapLayers->show();
+ 	m_pMapLayers->raise();
 
 
 
+	//PropertyBrowser 实现 参见OnPinBtnClicked() 显示，初始化 树形控件 //valueChanged() 通过树形控件修改值 触发事件//////////////////////////////////////////////////////////////////////
 	m_pPropertyPanel = new PropertyPanel(this);
 	m_pPropertyPanel->setFixedWidth(216); 
 	m_pPropertyPanel->setPropertyPanelTitle("UGStyle Property");
@@ -95,7 +111,9 @@ MapBase::MapBase(QWidget *parent) : QWidget(parent)
 
 
 	m_pPropertyPanel->setCentralWidget(propertyEditor);
+	//////////////////////////////////////////////////////////////////////////
 
+//	m_pMap2DLayout->addWidget(testwidget);
 	m_pMap2DLayout->addWidget(map2D);
 	m_pMap2DLayout->addWidget(m_pPropertyPanel);
 	this->setLayout(m_pMap2DLayout);
@@ -103,9 +121,11 @@ MapBase::MapBase(QWidget *parent) : QWidget(parent)
 
 	m_pPropertyTrigger = new PropertyTrigger(this);
 	m_pPropertyTrigger->setText("UGStyle Property");
+
+	m_pPropertyTrigger->setFixedHeight(400);
+	m_pPropertyTrigger->setFixedWidth(320);
+
 	m_pPropertyTrigger->init();
-	m_pPropertyTrigger->setFixedWidth(0);
-	m_pPropertyTrigger->hide();
 	connect(m_pPropertyTrigger, SIGNAL(tirggered()), this, SLOT(OnPropertyTriggered()));
 	QFile file(":/mapbase.qss");
 	file.open(QFile::ReadOnly);
@@ -175,41 +195,31 @@ void MapBase::test()
 
 void MapBase::resizeEvent( QResizeEvent* e)
 {
-	if (m_pMapControl && m_pPropertyPanel)
-	{
-		int m = m_pPropertyPanel->width();
-		m_pMapControl->setGeometry(0, 0, width() - m_pPropertyPanel->width(), height());
-		m_pMapControl->setFixedWidth(width() - m_pPropertyPanel->width());
-	}
-
-// 	if (m_pMapController)
-// 	{
-// 		m_pMapController->setGeometry(20, height() - 100, m_pMapController->width(), m_pMapController->height());
-// 	}
-
-// 	if (m_pMapLayers)
-// 	{
-// 		m_pMapLayers->setGeometry(300,100,220,360);
-// 	}
+	
 
 	if (m_pPropertyPanel)
 	{
-		m_pPropertyPanel->setGeometry(m_pMapControl->width(), 0, m_pPropertyPanel->width(), height());
+		m_pPropertyPanel->setGeometry(width() - m_pPropertyPanel->width(), 0, m_pPropertyPanel->width(), height());
 	}
+
+	if (m_pMapControl && m_pPropertyPanel)
+	{
+		int m = m_pPropertyPanel->width();
+		m_pMapControl->setFixedWidth(width() - m_pPropertyPanel->width());
+		m_pMapControl->setFixedHeight(height() -3);
+		m_pMapControl->setGeometry(0, 0, width() - m_pPropertyPanel->width(), height() - 3);
+		
+	}
+// 	if (testwidget)
+// 	{
+// 		testwidget->setGeometry(0, 0, width() - m_pPropertyPanel->width(), height() - 3);
+// 	}
+
+	
 
 	if (m_pPropertyTrigger)
 	{
-		if ( !m_pPropertyTrigger->isVisible())
-		{
-			m_pPropertyTrigger->setGeometry(width(), 20, 0, m_pPropertyTrigger->height());
-		}
-		else
-		{
-			m_pPropertyTrigger->setGeometry(width() - m_pPropertyTrigger->width() - 3, 20, m_pPropertyTrigger->width(), m_pPropertyTrigger->height());
-			m_pPropertyTrigger->show();
-			m_pPropertyTrigger->raise();
-		}
-		
+		m_pPropertyTrigger->raise();
 	}
 
 	QWidget::resizeEvent(e);
@@ -352,6 +362,11 @@ QWidget* MapBase::getMapController()
 	return m_pMapController;
 }
 
+QWidget* MapBase::getPropertyTrigger()
+{
+	return m_pPropertyTrigger;
+}
+
 void MapBase::OnPinBtnClicked()
 {
 	if (m_pPropertyPanel&& m_pMapControl)
@@ -362,11 +377,12 @@ void MapBase::OnPinBtnClicked()
 		{
 			int m = m_pPropertyTrigger->getWidth();
 			m_pPropertyTrigger->setFixedWidth(m_pPropertyTrigger->getWidth());
-			m_pPropertyTrigger->setGeometry(width() - m_pPropertyTrigger->width() - 3, 20, m_pPropertyTrigger->width(), m_pPropertyTrigger->height());
+			//m_pPropertyTrigger->setGeometry(width() - m_pPropertyTrigger->width() - 3, 20, m_pPropertyTrigger->width(), m_pPropertyTrigger->height());
 			m_pPropertyTrigger->show();
 			m_pPropertyTrigger->raise();
 		}
 	}
+	this->repaint();
 }
 
 void MapBase::OnPropertyTriggered()
@@ -378,12 +394,14 @@ void MapBase::OnPropertyTriggered()
 		if (m_pPropertyTrigger)
 		{
 			int m = m_pPropertyTrigger->getWidth();
-			m_pPropertyTrigger->setFixedWidth(0);
-			m_pPropertyTrigger->setGeometry(width(), 20, 0, m_pPropertyTrigger->height());
+			//m_pPropertyTrigger->setFixedWidth(0);
+			//m_pPropertyTrigger->setGeometry(width(), 20, 0, m_pPropertyTrigger->height());
 			m_pPropertyTrigger->hide();
-			//m_pPropertyTrigger->raise();
+			m_pPropertyTrigger->raise();
 		}
 	}
+
+	this->repaint();
 }
 
 int QColorToInt(const QColor &color)  
@@ -423,7 +441,7 @@ void MapBase::addProperty(QtVariantProperty *property, const QString &id)
 
 void MapBase::OnUGStyleChanged( const UGStyle&s )
 {
-	//currentItem = &s;
+	currentItem = s;
 	//s.SetFillStyle(5);
 	updateExpandState();
 
@@ -536,40 +554,40 @@ void MapBase::OnUGStyleChanged( const UGStyle&s )
 	property->setValue(s.IsScaleBySymbol());
 	addProperty(property, QLatin1String("SymbolScale"));
 
-	property = variantManager->addProperty(QVariant::Int, QLatin1String("MarkerSymbolLength"));
-	property->setAttribute(QLatin1String("minimum"), 0);
-	property->setValue(s.GetMarkerSymbolLength());
-	addProperty(property, QStringLiteral("MarkerSymbolLength"));
+// 	property = variantManager->addProperty(QVariant::Int, QLatin1String("MarkerSymbolLength"));
+// 	property->setAttribute(QLatin1String("minimum"), 0);
+// 	property->setValue(s.GetMarkerSymbolLength());
+// 	addProperty(property, QStringLiteral("MarkerSymbolLength"));
 
-	property = variantManager->addProperty(QVariant::Int, QLatin1String("MarkerSymbolVersion"));
-	property->setAttribute(QLatin1String("minimum"), 0);
-	//property->setAttribute(QLatin1String("maximum"), 360);
-	property->setValue(s.GetMarkerSymbolVersion());
-	addProperty(property, QLatin1String("MarkerSymbolVersion"));
+// 	property = variantManager->addProperty(QVariant::Int, QLatin1String("MarkerSymbolVersion"));
+// 	property->setAttribute(QLatin1String("minimum"), 0);
+// 	//property->setAttribute(QLatin1String("maximum"), 360);
+// 	property->setValue(s.GetMarkerSymbolVersion());
+// 	addProperty(property, QLatin1String("MarkerSymbolVersion"));
 
-	property = variantManager->addProperty(QVariant::Int, QLatin1String("LineSymbolLength"));
-	property->setAttribute(QLatin1String("minimum"), 0);
-	//property->setAttribute(QLatin1String("maximum"), 360);
-	property->setValue(s.GetLineSymbolLength());
-	addProperty(property, QLatin1String("LineSymbolLength"));
+// 	property = variantManager->addProperty(QVariant::Int, QLatin1String("LineSymbolLength"));
+// 	property->setAttribute(QLatin1String("minimum"), 0);
+// 	//property->setAttribute(QLatin1String("maximum"), 360);
+// 	property->setValue(s.GetLineSymbolLength());
+// 	addProperty(property, QLatin1String("LineSymbolLength"));
+// 
+// 	property = variantManager->addProperty(QVariant::Int, QLatin1String("LineSymbolVersion"));
+// 	property->setAttribute(QLatin1String("minimum"), 0);
+// 	//property->setAttribute(QLatin1String("maximum"), 360);
+// 	property->setValue(s.GetLineSymbolVersion());
+// 	addProperty(property, QLatin1String("LineSymbolVersion"));
 
-	property = variantManager->addProperty(QVariant::Int, QLatin1String("LineSymbolVersion"));
-	property->setAttribute(QLatin1String("minimum"), 0);
-	//property->setAttribute(QLatin1String("maximum"), 360);
-	property->setValue(s.GetLineSymbolVersion());
-	addProperty(property, QLatin1String("LineSymbolVersion"));
-
-	property = variantManager->addProperty(QVariant::Int, QLatin1String("FillSymbolLength"));
-	property->setAttribute(QLatin1String("minimum"), 0);
-	//property->setAttribute(QLatin1String("maximum"), 360);
-	property->setValue(s.GetFillSymbolLength());
-	addProperty(property, QLatin1String("FillSymbolLength"));
-
-	property = variantManager->addProperty(QVariant::Int, QLatin1String("FillSymbolVersion"));
-	property->setAttribute(QLatin1String("minimum"), 0);
-	//property->setAttribute(QLatin1String("maximum"), 360);
-	property->setValue(s.GetFillSymbolVersion());
-	addProperty(property, QLatin1String("FillSymbolVersion"));
+// 	property = variantManager->addProperty(QVariant::Int, QLatin1String("FillSymbolLength"));
+// 	property->setAttribute(QLatin1String("minimum"), 0);
+// 	//property->setAttribute(QLatin1String("maximum"), 360);
+// 	property->setValue(s.GetFillSymbolLength());
+// 	addProperty(property, QLatin1String("FillSymbolLength"));
+// 
+// 	property = variantManager->addProperty(QVariant::Int, QLatin1String("FillSymbolVersion"));
+// 	property->setAttribute(QLatin1String("minimum"), 0);
+// 	//property->setAttribute(QLatin1String("maximum"), 360);
+// 	property->setValue(s.GetFillSymbolVersion());
+// 	addProperty(property, QLatin1String("FillSymbolVersion"));
 
 
 
@@ -579,22 +597,123 @@ void MapBase::OnUGStyleChanged( const UGStyle&s )
 	property->setValue(IntToQColor(s.GetFixedColor()));
 	addProperty(property, QLatin1String("FixedColor"));
 
-
+	
 }
 
 void MapBase::valueChanged( QtProperty *property, const QVariant &value )
 {
 	if (!propertyToId.contains(property))
 		return;
+	QString id = propertyToId[property];
+	if (id == QLatin1String("MarkerStyle")) 
+	{
+		currentItem.SetMarkerStyle(value.toInt());
+	} 
+	else if (id == QLatin1String("MarkerAngle"))
+	{
+		currentItem.SetMarkerAngle(value.toInt());
+	}
+	else if (id == QLatin1String("MarkerSize"))
+	{
+		currentItem.SetMarkerSize(value.toInt());
+	}
+	else if (id == QLatin1String("MarkerWidth"))
+	{
+		currentItem.SetMarkerWidth(value.toInt());
+	}
+	else if (id == QLatin1String("MarkerHeight"))
+	{
+		currentItem.SetMarkerHeight(value.toInt());
+	}
 
-// 	if (!currentItem)
-// 		return;
+	else if (id == QLatin1String("LineStyle"))
+	{
+		currentItem.SetLineStyle(value.toInt());
+	}
+	else if (id == QLatin1String("LineColor"))
+	{
+		currentItem.SetLineColor(QColorToInt(value.value<QColor>()));
+	}
+	else if (id == QLatin1String("LineWidth"))
+	{
+		currentItem.SetLineWidth(value.toInt());
+	}
+	else if (id == QLatin1String("FillStyle"))
+	{
+		currentItem.SetFillStyle(value.toInt());
+	}
+	else if (id == QLatin1String("FillBackColor"))
+	{
+		currentItem.SetFillBackColor(QColorToInt(value.value<QColor>()));
+	}
+	else if (id == QLatin1String("FillForeColor"))
+	{
+		currentItem.SetFillForeColor(QColorToInt(value.value<QColor>()));
+	}
+	else if (id == QLatin1String("FillBackOpaque"))
+	{
+		currentItem.SetFillBackOpaque(value.toBool());
+	}
+	else if (id == QLatin1String("FillOpaqueRate"))
+	{
+		
+		currentItem.SetFillOpaqueRate(value.toChar().toLatin1());
+	}
+	else if (id == QLatin1String("FillGradientType"))
+	{
+		currentItem.SetFillGradientType(value.toChar().toLatin1());
+	}
+	else if (id == QLatin1String("FillAngle"))
+	{
+		currentItem.SetFillAngle(value.toInt());
+	}
+	else if (id == QLatin1String("FillCenterOffsetX"))
+	{
+		currentItem.SetFillCenterOffsetX(value.toInt());
+	}
+	else if (id == QLatin1String("FillCenterOffsetY"))
+	{
+		currentItem.SetFillCenterOffsetY(value.toInt());
+	}
+	else if (id == QLatin1String("SymbolScale"))
+	{
+		currentItem.SetScaleBySymbol(value.toBool());
+	}
+	else if (id == QLatin1String("FixedColor"))
+	{
+		currentItem.SetFixedColor(QColorToInt(value.value<QColor>()));
+	}
 
-// 	QString id = propertyToId[property];
-// 	if (id == QLatin1String("xpos")) 
+	if (m_pMapControl)
+	{
+		m_pMapControl->changeUGstyleValue(currentItem);
+	}
+	
+
+// 	else if (id == QLatin1String(""))
 // 	{
-// 		currentItem.SetFillStyle(value.toInt());
-// 	} 
+// 		currentItem.Set(value.toInt());
+// 	}
+// 	else if (id == QLatin1String(""))
+// 	{
+// 		currentItem.Set(value.toInt());
+// 	}
+// 	else if (id == QLatin1String(""))
+// 	{
+// 		currentItem.Set(value.toInt());
+// 	}
+// 
+// 	else if (id == QLatin1String(""))
+// 	{
+// 		currentItem.Set(value.toInt());
+// 	}
+// 
+// 
+// 	else if (id == QLatin1String(""))
+// 	{
+// 		currentItem.Set(value.toInt());
+// 	}
+	
 }
 
 

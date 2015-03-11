@@ -4,8 +4,10 @@
 #include <QtWidgets/QWidget>
 #include <QApplication>
 #include <QtQuickWidgets/QQuickWidget>
+#include <QtWidgets/QGridLayout>
 #include "title.h"
 #include "pluginloader.h"
+#include "tabbarpanel.h"
 #include "ToolBox/toolbox.h"
 #include "InfoPanel/infopanel.h"
 #include "TabView/tabview.h"
@@ -18,7 +20,7 @@
 
 //#include <QDockWidget>
 
-class iObjectsDemo : public QMainWindow
+class iObjectsDemo : public QWidget
 {
 	Q_OBJECT
 
@@ -63,7 +65,7 @@ private:
 	bool unLoadPlugins(const QString& pluginName);
 private:
 	QString pluginPath;
-	QPushButton* m_pCloseBtn;
+	//QPushButton* m_pCloseBtn;
 	QPushButton* m_pPopBtn;
 	ToolBox * m_pToolBox;
 	InfoPanel* m_pInfoPanel;
@@ -75,9 +77,11 @@ private:
 	Pluginloader* m_pPluginloader;
 	QVariantMap m_pluginMap;
 	MapBaseInterface* m_pMapBase;
-
+	SceneBaseInterface* m_pSceneBase;
 	QPoint m_PressPoint;
+	QVBoxLayout* m_pFlowLayout;
 
+	TabBarPanel* m_pTabBarPanel;
 	//QDockWidget *dock;
 };
 

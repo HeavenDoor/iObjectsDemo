@@ -3,6 +3,7 @@
 
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QVBoxLayout>
 #include <QList>
 #include "tabbar.h"
 

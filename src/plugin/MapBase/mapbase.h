@@ -47,6 +47,7 @@ public:
 	virtual QWidget* getWidget();
 	virtual QWidget* getMapLayers();
 	virtual QWidget* getMapController();
+	virtual QWidget* getPropertyTrigger();
 	virtual QString getStyleSheet();
 public:
 
@@ -84,12 +85,18 @@ private:
 	PropertyPanel* m_pPropertyPanel;
 	PropertyTrigger* m_pPropertyTrigger;
 
-	QtVariantPropertyManager *variantManager;
-	QtTreePropertyBrowser *propertyEditor;
+
+	//PropertyBrowser 控件////////////////////////////////////////////////////////////////////////
+	QtVariantPropertyManager *variantManager; // 属性列表管理器  负责属性管理（比如对应基础类型的委托控件）
+	QtTreePropertyBrowser *propertyEditor;    //  属性列表树形控件
 	QMap<QtProperty *, QString> propertyToId;
 	QMap<QString, QtVariantProperty *> idToProperty;
 	QMap<QString, bool> idToExpanded;
-	UGStyle* currentItem;
+	UGStyle currentItem;
+	//////////////////////////////////////////////////////////////////////////
+
+
+	QWidget* testwidget;
 };
 
 #endif // MAPBASE_H

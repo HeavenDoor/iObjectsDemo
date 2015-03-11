@@ -199,6 +199,24 @@
     <ClCompile Include="GeneratedFiles\Debug\moc_qtpropertybrowserutils_p.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="code\tabbarpanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_tabbarpanel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_tabbarpanel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="code\MirrorPanel\mirrorpanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_mirrorpanel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_mirrorpanel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -270,6 +288,12 @@
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="code\TabView\tabitem.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="code\tabbarpanel.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="code\MirrorPanel\mirrorpanel.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

@@ -9,9 +9,12 @@ class TabItem : public QToolButton
 	Q_OBJECT
 
 public:
-	TabItem(QWidget *parent = NULL);
+	TabItem(QString tabName = "", QWidget *parent = NULL);
 	~TabItem();
 	QPixmap getTabItemPixmap();
+	void setSelected();
+	void setDeselected();
+	QString getLabelText();
 protected:
 	void dragEnterEvent(QDragEnterEvent * event) Q_DECL_OVERRIDE;
 	void dragLeaveEvent(QDragLeaveEvent * event) Q_DECL_OVERRIDE;
@@ -20,8 +23,17 @@ protected:
 
 	void mousePressEvent(QMouseEvent * event);
 	void mouseReleaseEvent(QMouseEvent *event);
+
+	void resizeEvent(QResizeEvent *e);
+
+signals:
+	void flowUp();
 private:
-	
+	QString m_text;
+	QGraphicsScene* m_pScene;
+	QGraphicsView* m_pView;
+	QPushButton* m_pFlowBtn;
+	QLabel* m_pTextLabel;
 };
 
 #endif // TABITEM_H

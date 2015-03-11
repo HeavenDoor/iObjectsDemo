@@ -2,7 +2,7 @@
 #define TABBAR_H
 
 #include <QtWidgets/QWidget>
-#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QToolButton>
 #include <QVector>
 #include "tabitem.h"
@@ -38,8 +38,11 @@ signals:
 private slots:
 	void OnTabButtonClicked();
 	void OnactionChanged(Qt::DropAction act);
+
+	void OnFlowUp(); // µ¯³ö
+
 private:
-	QHBoxLayout* m_pHlayout;
+	QVBoxLayout* m_pVlayout;
 	TabItem* m_pPrevBtn;
 	QVector<TabItem*> m_pTabBarList;
 	bool press;

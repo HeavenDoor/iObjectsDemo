@@ -6,7 +6,18 @@
 
 #include "Stream/ugdefs.h"
 #include <QtWidgets/QWidget>
+#include <QtWidgets/QVBoxLayout>
 
+#include <QDesktopWidget>
+#include <QApplication>
+#include <QtGui>
+
+#include "Workspace/UGWorkspace.h"
+#include "Engine/UGDataSources.h"
+#include "Scene/UGRoot3D.h"
+#include "Scene/UGScene3D.h"
+#include "SceneEditor/UGSceneEditorWnd.h"
+#include "Graphics3D/UGRenderTarget.h"
 namespace UGC
 {
 	class UGWorkspace;
@@ -47,10 +58,10 @@ public:
 	virtual QWidget* getSceneLayers();
 	virtual QWidget* getSceneController();
 	virtual QString getStyleSheet();
-
+	virtual void setUGMapEditorWnd(void* wnd);
 
 public:
-	void SetWorkspace(UGWorkspace* pWorkspace);
+	void SetWorkspace(/*UGWorkspace* pW*/void* workspace);
 	virtual void paintEvent(QPaintEvent *event);
 	void InitScene3D();
 	virtual void destroy(bool destroyWindow /* = true */, bool destroySubWindows /* = true */);
@@ -80,6 +91,10 @@ private:
 	UGRoot3D* m_root3D;
 
 	QTimer* m_timer;
+
+	QVBoxLayout* verticalLayout;
+
+	UGScene3D *pScene;
 private:
 
 };

@@ -33,13 +33,25 @@ void PropertyTrigger::init()
 	label->setWordWrap(true);
 	label->setAlignment(Qt::AlignTop);
 	QString s = m_text;
-	label->setText(s);
-	label->adjustSize();
+
 	//label->setStyleSheet("background-color: red");
 
 
 	pScene->addWidget(label); 
 	pView->rotate(90); 
+
+	QFont ft;
+	ft.setPointSize(8);
+	ft.setWeight(13);
+	ft.setBold(true);
+	label->setFont(ft);
+
+	QPalette pa;
+	pa.setColor(QPalette::WindowText,Qt::black);
+	label->setPalette(pa);
+
+	label->setText(s);
+	label->adjustSize();
 
 	int m = label->width();
 	int h = label->height();
@@ -47,7 +59,9 @@ void PropertyTrigger::init()
 	pView->setGeometry(0,0,label->height() + 6, label->width() + 6);
 	pView->setAttribute(Qt::WA_TransparentForMouseEvents);
 	this->setGeometry(100,100,label->height() + 6, label->width() + 6);
-	m_width = this->width();
+	m_width = pView->width();
+	setFixedHeight(pView->height());
+	setFixedWidth(pView->width());
 }
 
 

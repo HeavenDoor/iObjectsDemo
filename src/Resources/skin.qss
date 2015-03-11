@@ -10,7 +10,7 @@
 
 /******************closebtn*************************************/
 QPushButton#CloseBtn{
-	border-image: url(:/close.png);
+	border-image: url(:/closep.png);
 	border-width:2px 2px 2px 2px;
 }
 
@@ -203,13 +203,9 @@ QPushButton#search:pressed{
 }
 
 
-QPushButton#set:!pressed{
-	border-image: url(:/set.png);
-	border-width:2px 2px 2px 2px;
-}
-QPushButton#set:pressed{
-	border-image: url(:/setp.png);
-	border-width:2px 2px 2px 2px;
+QPushButton#set{
+	border-image: url(:/setting.png);
+	border-width:0px 0px 0px 0px;
 }
 
 /******************Map2DController*********************************/
@@ -226,9 +222,15 @@ QPushButton#set:pressed{
 /******************TabView*********************************/
 
 QTabWidget#Tabwidget{
-	border: 1px groove gray; 
-	border-radius: 5px; 
-	/*background-color: rgba(255, 193, 245, 0%);*/
+	border: 0px groove gray; 
+	border-image: url(:/tabview.png);
+	
+}
+
+
+QPushButton#pupupBtn{
+	border-image: url(:/popup.png);
+	border-width: 0px 0px 0px 0px;
 }
 
 /*QWidget#MapTab{
@@ -238,7 +240,7 @@ QTabWidget#Tabwidget{
 	margin-right:0px;
 	margin-top:0px;
 	margin-bottom:0px;
-}*/
+}
 
 QPushButton#search:!pressed{
 	border-image: url(:/search.png);
@@ -257,7 +259,7 @@ QPushButton#set:!pressed{
 QPushButton#set:pressed{
 	border-image: url(:/setp.png);
 	border-width:2px 2px 2px 2px;
-}
+}*/
 
 /******************Tab*********************************/
 QWidget#TwoDimension{

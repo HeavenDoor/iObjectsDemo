@@ -4,6 +4,7 @@
 #include <QWheelEvent>
 #include <QDebug>
 #include <QVector>
+#include <QStyleOption>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QApplication>
 #include "mapcontrol.h"
@@ -89,13 +90,64 @@ void UGSTDCALL MapSingleGeometrySelectedCallBack(UGlong pWnd,UGLayer* pLayer,UGi
 void UGSTDCALL GeometrySelectedProcCallBack(UGlong pWnd,UGint nSelectedGeometryCount)
 {
 	MapControl* pQMap = (MapControl*)pWnd;
-	if (pQMap && nSelectedGeometryCount == 1)
+	UGMapEditorWnd* pMapEditWnd = (UGMapEditorWnd*)pQMap->getUGMapEditorWnd();
+	UGLayers* layers = &pMapEditWnd->m_mapWnd.m_Map.m_Layers;
+	//pMapEditWnd->m_mapWnd.m_Map.m_Layers;
+	UGint layerCount = layers->GetTopLevelCount();
+	UGLayer* pLayer = NULL;
+	for (int i = 0; i < layerCount; i++)
 	{
-		pQMap->popupTips();
+		pLayer = layers->GetLayerAt(i);
+		if(pLayer->m_Selection.GetSize() == nSelectedGeometryCount)
+		{
+			const UGStyle& layerStyle = pLayer->GetStyle();
+			pQMap->m_currentLayer = pLayer;
+			pQMap->emitStyleChanged(layerStyle);
+			break;
+		 }
 	}
+/*
+	//UGLayers layers = pMapEditWnd->m_mapWnd.m_Map.m_Layers;
+	int count = layers->GetTopLevelCount();
+	// 		 QVector<ILayer2D*> m_layers;
+// 	for(int i =0;i<count;i++)
+// 	{
+	
+		pQMap->m_currentLayer = layers->GetLayerAt(0);
+		pQMap->m_currentLayer->SetEditable(true);
+		layers->SetEditableLayer(pLayer);
+		bool k = pQMap->m_currentLayer->IsEditable();
+		pQMap->emitStyleChanged(layers->GetLayerAt(0)->GetStyle());*/
 
-	const UGStyle&s = pQMap->getstyle(pQMap);
-	pQMap->emitStyleChanged(s);
+// 		UGString name = layers.GetLayerAt(i)->GetCaption();
+// 		UGMBString strMB;
+// 		name.ToMBString(strMB);
+// 		const OgdcAchar * ugchar = strMB.Cstr();
+// 		OgdcWchar * ugWchar;
+// 		name.AcharToWchar(ugchar, ugWchar, name.GetLength());
+// 		std::string drawstring = ugchar;
+// 		QString strText = QString::fromLocal8Bit(drawstring.c_str());
+		//sList.push_back(strText);
+
+		//layersMap.insert(strText, layers.GetLayerAt(i)->IsVisible());
+		//layersMap.
+//	}
+
+// 	if (pQMap && nSelectedGeometryCount == 1)
+// 	{
+// 		pQMap->popupTips();
+// 	}
+
+}
+
+void MapControl::changeUGstyleValue(const UGStyle& style)
+{
+	if (m_currentLayer)
+	{
+		bool k = m_currentLayer->IsEditable();
+		m_currentLayer->SetStyle(style);
+		Refresh();
+	}
 }
 
 const UGStyle& MapControl::getstyle(MapControl* p)
@@ -120,8 +172,11 @@ MapControl::MapControl( QWidget* parent)
 	m_initialized = FALSE;
 	m_pQimage = NULL;
 	m_MessageLabel = NULL;
-
+	m_currentLayer = NULL;
 	this->Init();
+// 	setStyleSheet("background-color: green");
+// 	this->setWindowOpacity(0.4);
+// 	setAttribute(Qt::WA_TranslucentBackground);
 }
 
 MapControl::~MapControl()
@@ -152,7 +207,8 @@ void MapControl::Init()
 
 	m_pMapEditorWnd->SetSingleGeometrySelectedFunc(MapSingleGeometrySelectedCallBack, (UGlong)this);
 	m_pMapEditorWnd->SetGeometrySelectedFunc(GeometrySelectedProcCallBack, (UGlong)this);
-
+	//m_pMapEditorWnd->SendGeometrySelectedFunc();
+	
 	m_pWorkspace = new UGWorkspace;
 }
 
@@ -175,6 +231,11 @@ void MapControl::paintEvent( QPaintEvent* event )
 	}
 
 	PaintToQPainter();
+
+	QStyleOption opt;
+	opt.init(this);
+	QPainter p(this);
+	style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }
 
 void MapControl::SetWaitCursor()
@@ -558,7 +619,8 @@ int MapControl::OpenMap( const QString& mapPath )
 	}
 
 	UGint num = m_pWorkspace->m_MapStorages.GetCount();
-	UGString mapName = m_pWorkspace->m_MapStorages.GetNameAt(0);
+	UGString mapName = _U("World@world"); // m_pWorkspace->m_MapStorages.GetNameAt(0);
+	//UGString mapName = m_pWorkspace->m_MapStorages.GetNameAt(0);
 
 	if (!pMap->Open(mapName))
 	{
@@ -583,29 +645,29 @@ QVector<QVariantList> MapControl::getLayersList()
 	QVector<QVariantList> sList;
 	QVariantList layersMap;
 	//GetEditableLayer()
-	
-	
-		UGLayers& layers = m_pMapEditorWnd->m_mapWnd.m_Map.m_Layers;
-		int count = layers.GetTopLevelCount();
-// 		 QVector<ILayer2D*> m_layers;
-		for(int i =0;i<count;i++)
-		{
-			UGString name = layers.GetLayerAt(i)->GetCaption();
-			UGMBString strMB;
-			name.ToMBString(strMB);
-			const OgdcAchar * ugchar = strMB.Cstr();
-			OgdcWchar * ugWchar;
-			name.AcharToWchar(ugchar, ugWchar, name.GetLength());
-			std::string drawstring = ugchar;
-			QString strText = QString::fromLocal8Bit(drawstring.c_str());
-			//sList.push_back(strText);
-			layersMap.insert(0,strText);
-			layersMap.insert(1,layers.GetLayerAt(i)->IsVisible());
-			sList.push_back(layersMap);
-			//layersMap.insert(strText, layers.GetLayerAt(i)->IsVisible());
-			//layersMap.
-		}
-	
+
+
+	UGLayers& layers = m_pMapEditorWnd->m_mapWnd.m_Map.m_Layers;
+	int count = layers.GetTopLevelCount();
+	// 		 QVector<ILayer2D*> m_layers;
+	for(int i =0;i<count;i++)
+	{
+		UGString name = layers.GetLayerAt(i)->GetCaption();
+		UGMBString strMB;
+		name.ToMBString(strMB);
+		const OgdcAchar * ugchar = strMB.Cstr();
+		OgdcWchar * ugWchar;
+		name.AcharToWchar(ugchar, ugWchar, name.GetLength());
+		std::string drawstring = ugchar;
+		QString strText = QString::fromLocal8Bit(drawstring.c_str());
+		//sList.push_back(strText);
+		layersMap.insert(0,strText);
+		layersMap.insert(1,layers.GetLayerAt(i)->IsVisible());
+		sList.push_back(layersMap);
+		//layersMap.insert(strText, layers.GetLayerAt(i)->IsVisible());
+		//layersMap.
+	}
+
 
 		
 // 	UGLayers list = GetMap().m_Layers;

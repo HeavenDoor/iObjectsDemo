@@ -28,6 +28,7 @@
     <file>set.png</file>
     <file>setp.png</file>
     <file>line.png</file>
+    <file>setting.png</file>
     <!--InfoPanel-->
     <file>InfoPanel.qml</file>
     <file>Button.qml</file>
@@ -40,6 +41,7 @@
     <file>t.png</file>
     <file>tp.png</file>
     <!--TabView-->
+    <file>tabview.png</file>
     <file>tabbar.qss</file>
     <file>bk.png</file>
     <file>twodimension.png</file>
@@ -49,6 +51,7 @@
     <file>uptwo.png</file>
     <file>downmaptab.png</file>
     <file>upmaptab.png</file>
+    <file>popup.png</file>
     <!--InteLayers-->
     <file>head.png</file>
     <file>body.png</file>

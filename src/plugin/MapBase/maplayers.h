@@ -5,6 +5,8 @@
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QScrollArea>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QCheckBox>
+
 class MapLayers : public QWidget
 {
 	Q_OBJECT
@@ -34,11 +36,14 @@ public:
 	~EmptyWidget();
 signals:
 	void changeLayers(const QString& text);
+private slots:
+	void OnToggled(bool state);
 protected:
 	void paintEvent(QPaintEvent *);
-	void mousePressEvent(QMouseEvent *);
+	//void mousePressEvent(QMouseEvent *);
 public:
-	QLabel* m_pVisableText;
+	//QLabel* m_pVisableText;
+	QCheckBox* m_pVisible;
 	QLabel* m_pLayerText;
 };
 

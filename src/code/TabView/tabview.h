@@ -29,6 +29,8 @@ public:
 	void loadDefaultSkin();
 	// 加载自定义皮肤  styleSheet：qss字符串
 	void loadCustomStyleSheet(const QString& styleSheet);
+	// 获得TabBar指针
+	QWidget* getTabBar();
 signals:
 	void moveTabPage(QWidget* map, QString tabName);
 	void removeTabPage(QWidget* map, QString tabName);
@@ -44,7 +46,7 @@ private slots:
 private:
 	//void removeCentralWidgetEx( QWidget* widget );
 private:
-	static const int tabrwidth = 81;
+	static const int tabrheight = 81;
 	TabWidget* m_pTabWidget;
 	TabBar* m_pTabBar;
 	

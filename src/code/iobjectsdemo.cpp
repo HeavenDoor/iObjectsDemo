@@ -12,24 +12,29 @@
 #include <QtQml/QQmlEngine>
 #include <QtQuick/QtQuick>
 
-iObjectsDemo::iObjectsDemo(QWidget *parent) : QMainWindow(parent)
+iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 {
 	setObjectName("iObjectsDemo");
 	setGeometry(200,200,1247,766);
 	setAcceptDrops(true);
 	m_pTitle = NULL;
-	m_pCloseBtn = NULL;
+	//m_pCloseBtn = NULL;
 	m_pPopBtn = NULL;
 	m_pToolBox = NULL;
 	m_pMapBase = NULL;
+	m_pSceneBase = NULL;
 	m_pInteLayers = NULL;
 	m_pInfoPanel = NULL;
 	m_pTabView = NULL;
 	m_pFlowTabView = NULL;
 	m_pPopupPanel = NULL;
 	m_pPluginloader = NULL;
+	m_pFlowLayout = NULL;
+	m_pTabBarPanel = NULL;
 	//dock = NULL;
 
+
+//	m_pMainLayout = new QGridLayout();
 	initInteLayers();
 	initTabView();
 	initToolBox();
@@ -54,7 +59,7 @@ iObjectsDemo::iObjectsDemo(QWidget *parent) : QMainWindow(parent)
 	if (m_pInteLayers) m_pInteLayers->raise();
 	if (m_pInfoPanel) m_pInfoPanel->raise();
 
-	
+	//setLayout(m_pMainLayout);
 	//qApp->installEventFilter(this);
 }
 
@@ -67,12 +72,12 @@ bool iObjectsDemo::initTabView()
 {
  	m_pTabView = new TabView(this);
 	m_pTabView->setProperty("Names", "NoFlow");
-	QWidget* e = new QWidget(m_pTabView);
-	e->setObjectName("TwoDimension");
-	m_pTabView->addCentralWidget(e, 3, QStringLiteral("三维"));
-	QWidget* rr = new QWidget(m_pTabView);
-	rr->setObjectName("rr");
-	m_pTabView->addCentralWidget(rr, 0, "rr");
+// 	QWidget* e = new QWidget(m_pTabView);
+// 	e->setObjectName("TwoDimension");
+// 	m_pTabView->addCentralWidget(e, 3, QStringLiteral("成都"));
+// 	QWidget* rr = new QWidget(m_pTabView);
+// 	rr->setObjectName("rr");
+// 	m_pTabView->addCentralWidget(rr, 0, "rr");
 
 	m_pFlowTabView = new TabView(NULL);
 	m_pFlowTabView->setProperty("Names", "FlowUp");
@@ -96,6 +101,13 @@ bool iObjectsDemo::initTabView()
 
 	connect(m_pTabView, SIGNAL(removeTabPage(QWidget*, QString)), m_pFlowTabView, SLOT(OnReMoveTabPage( QWidget*, QString )));
 	connect(m_pFlowTabView, SIGNAL(removeTabPage(QWidget*, QString)), m_pTabView, SLOT(OnReMoveTabPage( QWidget*, QString )));
+
+
+// 	if (m_pMainLayout)
+// 	{
+// 		m_pMainLayout->addWidget(m_pTabView, 0, 0);
+// 		//m_pMainLayout->addWidget(m_pTabView->getTabBar(), 0, 1);
+// 	}
 	return true;
 }
 
@@ -116,34 +128,27 @@ bool iObjectsDemo::initToolBox()
 {
 	m_pToolBox = new ToolBox(this);
 	m_pToolBox->setFixedHeight(50);
+	m_pToolBox->addSpacing(5);
 	//m_pToolBox->setToolButtonSize(QSize(40,40));
-	m_pToolBox->setToolButtonSize(QSize(m_pToolBox->height() - 10,m_pToolBox->height() - 10));
+	m_pToolBox->setToolButtonSize(QSize(32,32)); // m_pToolBox->height() - 10,m_pToolBox->height() - 10
 // 	QObject* obj = m_pToolBox->createToolButton("search");
 // 	if(obj) connect(obj, SIGNAL(clicked()), this, SLOT(OnToolBoxPlugin_SearchBtnClicked()));
 	QObject* obj = m_pToolBox->createToolButton("set");
 	if(obj) connect(obj, SIGNAL(clicked()), this, SLOT(OnToolBoxPlugin_SettingBtnClicked()));
-
-
-// 	m_pCloseBtn = new QPushButton(this);
-// 
-// 	obj = m_pToolBox->createToolButton("CloseBtn", Qt::AlignRight);
-// 	obj->setObjectName("CloseBtn");
-// // 	obj->setFixedHeight(48);
-// // 	obj->setFixedWidth(48);
-// 	//m_pCloseBtn->setGeometry(width() - 60, 20, m_pCloseBtn->width(), m_pCloseBtn->height());
-// 	connect(m_pCloseBtn, SIGNAL(clicked()), this, SLOT(OnCloseBtnClicked()));
-
-
-
 	m_pToolBox->addLine();
-	m_pToolBox->createToolButton("aaa");
-	m_pToolBox->addLine();
-	m_pToolBox->createToolButton("bbb");
-	m_pToolBox->addLine();
-	m_pToolBox->createToolButton("ccc");
-	m_pToolBox->addLine();
-	m_pToolBox->createToolButton("ddd");
-	
+
+	//m_pCloseBtn = new QPushButton(this);
+
+	obj = m_pToolBox->createToolButton("CloseBtn", Qt::AlignRight);
+	obj->setObjectName("CloseBtn");
+	m_pToolBox->addSpacing(5, Qt::AlignRight);
+// 	obj->setFixedHeight(48);
+// 	obj->setFixedWidth(48);
+	//m_pCloseBtn->setGeometry(width() - 60, 20, m_pCloseBtn->width(), m_pCloseBtn->height());
+	connect(obj, SIGNAL(clicked()), this, SLOT(OnCloseBtnClicked()));
+
+
+	//m_pMainLayout->addWidget(m_pToolBox, 0, 1);
 	
 	return true;
 }
@@ -164,12 +169,25 @@ bool iObjectsDemo::initControls()
 	m_pTitle->hide();
 
 
-	m_pCloseBtn = new QPushButton(this);
-	m_pCloseBtn->setObjectName("CloseBtn");
-	m_pCloseBtn->setFixedHeight(48);
-	m_pCloseBtn->setFixedWidth(48);
-	m_pCloseBtn->setGeometry(width() - 60, 20, m_pCloseBtn->width(), m_pCloseBtn->height());
-	connect(m_pCloseBtn, SIGNAL(clicked()), this, SLOT(OnCloseBtnClicked()));
+	m_pTabBarPanel = new TabBarPanel(this);
+	m_pTabBarPanel->setFixedWidth(32);
+	m_pTabBarPanel->addTabBarWidget(m_pTabView->getTabBar());
+	if (m_pMapBase)
+	{
+		m_pTabBarPanel->addTrigerWidget(m_pMapBase->getPropertyTrigger());
+		m_pMapBase->getPropertyTrigger()->hide();
+		//m_pTabBarPanel->addTrigerWidget(new QPushButton("aaa"));
+	}
+	
+	//m_pMainLayout->addWidget(m_pTabBarContainer, 0, 1);
+
+
+// 	m_pCloseBtn = new QPushButton(this);
+// 	m_pCloseBtn->setObjectName("CloseBtn");
+// 	m_pCloseBtn->setFixedHeight(48);
+// 	m_pCloseBtn->setFixedWidth(48);
+// 	m_pCloseBtn->setGeometry(width() - 60, 20, m_pCloseBtn->width(), m_pCloseBtn->height());
+// 	connect(m_pCloseBtn, SIGNAL(clicked()), this, SLOT(OnCloseBtnClicked()));
 
 	//m_pInfoPanel = new InfoPanel(this);
 	//m_pInfoPanel->setPluginWidth(280);
@@ -204,6 +222,17 @@ bool iObjectsDemo::unLoadPlugins(const QString& pluginName )
 		}
 		bPluginunload = loader->unload();
 		m_pMapBase = NULL;
+	}
+	if (pluginName == "SceneBase")
+	{
+		if (m_pTabView && m_pSceneBase)
+		{
+			//m_pInteLayers->removeLayers(m_pMapBase->getMapLayers());
+			//m_pToolBox->removeWidget(m_pMapBase->getMapController());
+			m_pTabView->removeCentralWidget(m_pSceneBase->getWidget());
+		}
+		bPluginunload = loader->unload();
+		m_pSceneBase = NULL;
 	}
 	return bPluginunload;
 }
@@ -251,6 +280,44 @@ bool iObjectsDemo::loadPlugins(const QString& path, const QString& pluginName)
 				}
 			}
 		}
+
+		if (object->inherits("SceneBaseInterface"))
+		{
+			m_pSceneBase = qobject_cast<SceneBaseInterface*>(object) ;  
+			if (m_pSceneBase)  
+			{
+				bPluginLoaded = true;
+				m_pSceneBase->setPluginParent(this);	
+				{
+					if (m_pTabView)
+					{
+// 						connect(m_pMapBase->getObject(), SIGNAL(showTips()), this, SLOT(OnShowMapBaseTips()));
+ 						
+						if (m_pMapBase)
+						{
+							m_pSceneBase->setUGMapEditorWnd(m_pMapBase->getUGMapEditorWnd());
+						}
+// 						QWidget* w = new QWidget(this);
+// 						QVBoxLayout* pLayout;
+// 						pLayout = new QVBoxLayout();
+// 						pLayout->setSpacing(0);
+// 						pLayout->setMargin(0);
+// 						w->setLayout(pLayout);
+// 						m_pSceneBase->setPluginParent(w);
+// 						pLayout->addWidget(m_pSceneBase->getWidget());
+						m_pTabView->addCentralWidget(m_pSceneBase->getWidget(), 1, QStringLiteral("三维"));
+ 						m_pTabView->setCurrentIndex(0);
+ 						m_pTabView->loadDefaultSkin();
+						int m = m_pTabView->width();
+						int n = m_pTabView->height();
+						m_pSceneBase->resizePlugin(0,0,width(), height());
+// 						m_pInteLayers->addLayers(m_pMapBase->getMapLayers());
+// 						m_pToolBox->addWidget(m_pMapBase->getMapController());
+ 						//setStyleSheet(m_pSceneBase->getStyleSheet());
+					}					
+				}
+			}
+		}
 	}  
 	else  
 	{  
@@ -275,11 +342,12 @@ void iObjectsDemo::paintEvent(QPaintEvent* e)
 
 void iObjectsDemo::resizeEvent(QResizeEvent* e)
 {
-	if (m_pCloseBtn)
-	{
-		m_pCloseBtn->setGeometry(width() - 60, 20, m_pCloseBtn->width(), m_pCloseBtn->height());
-	}
+// 	if (m_pCloseBtn)
+// 	{
+// 		m_pCloseBtn->setGeometry(width() - 60, 20, m_pCloseBtn->width(), m_pCloseBtn->height());
+// 	}
 
+	
 	if (m_pToolBox)
 	{
 		m_pToolBox->setGeometry(0, height() - m_pToolBox->height(), width(), m_pToolBox->height());
@@ -302,11 +370,15 @@ void iObjectsDemo::resizeEvent(QResizeEvent* e)
 		}
 	}
 
-	if (m_pTabView)
+	if (m_pTabBarPanel && m_pToolBox)
 	{
-		m_pTabView->setGeometry(0, 0, width(), height() - m_pToolBox->height());
+		m_pTabBarPanel->setGeometry(width() - m_pTabBarPanel->width(), 0 , m_pTabBarPanel->width(), height() - m_pToolBox->height());
 	}
-
+	if (m_pTabView &&m_pTabBarPanel)
+	{
+		m_pTabView->setGeometry(0, 0, width() - m_pTabBarPanel->width(), height() - m_pToolBox->height());
+	}
+	
 
 	if (m_pTitle)
 	{

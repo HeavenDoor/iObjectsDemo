@@ -11,7 +11,11 @@ TabView::TabView(QWidget *parent) : QWidget(parent)
 
 	m_pTabBar = new TabBar(this);
 	connect(m_pTabBar, SIGNAL(moveTabPage(int, QString)), this, SLOT(OnMoveTabPage(int, QString)));
-	m_pTabBar->setFixedHeight(58);
+
+	//m_pTabBar->setFixedHeight(58);
+
+	m_pTabBar->setFixedWidth(32);
+
 	m_pTabBar->raise();
 //	m_pTabBar->setFixedWidth(162);
 	m_pTabBar->show();
@@ -48,8 +52,8 @@ void TabView::resizeEvent( QResizeEvent* e)
 
 	if (m_pTabBar)
 	{
-		m_pTabBar->setFixedWidth(m_pTabBar->tabCount()*tabrwidth);
-		m_pTabBar->setGeometry(width() - m_pTabBar->tabCount()*tabrwidth - 100, 25, m_pTabBar->width(), m_pTabBar->height());
+		m_pTabBar->setFixedHeight(m_pTabBar->tabCount()*tabrheight);
+		//m_pTabBar->setGeometry(width() - m_pTabBar->tabCount()*tabrheight - 250, height() - 50 - m_pTabBar->height(), m_pTabBar->width(), m_pTabBar->height());
 	}
 
 	QWidget::resizeEvent(e);
@@ -77,9 +81,9 @@ void TabView::addCentralWidget( QWidget* map, int tabIndex, QString tabName)
 	m_pTabWidget->addCentralWidget(map, tabIndex, tabName);
 	setCurrentIndex(tabIndex);
 	loadDefaultSkin();
-	m_pTabBar->setFixedWidth(m_pTabBar->tabCount()*tabrwidth);
+	m_pTabBar->setFixedHeight(m_pTabBar->tabCount()*tabrheight);
 	m_pTabBar->resize(m_pTabBar->width(), m_pTabBar->height());
-	m_pTabBar->setGeometry(width() - m_pTabBar->tabCount()*tabrwidth - 100, 25, m_pTabBar->width(), m_pTabBar->height());
+	m_pTabBar->setGeometry(width() - m_pTabBar->tabCount()*tabrheight - 250, height() - 50 - m_pTabBar->height(), m_pTabBar->width(), m_pTabBar->height());
 }
 
 
@@ -89,9 +93,9 @@ void TabView::removeCentralWidget( QWidget* widget )
 	int index = m_pTabWidget->removeCentralWidget(widget);
 	m_pTabBar->removeTabbar(index);
 	loadDefaultSkin();
-	m_pTabBar->setFixedWidth(m_pTabBar->tabCount()*tabrwidth);
+	m_pTabBar->setFixedHeight(m_pTabBar->tabCount()*tabrheight);
 	m_pTabBar->resize(m_pTabBar->width(), m_pTabBar->height());
-	m_pTabBar->setGeometry(width() - m_pTabBar->tabCount()*tabrwidth - 100, 25, m_pTabBar->width(), m_pTabBar->height());
+	//m_pTabBar->setGeometry(width() - m_pTabBar->tabCount()*tabrwidth - 250, height() - 50 - m_pTabBar->height(), m_pTabBar->width(), m_pTabBar->height());
 }
 
 // void TabView::removeCentralWidgetEx( QWidget* widget )
@@ -155,4 +159,9 @@ void TabView::OnReMoveTabPage( QWidget* map, QString tabName )
 	
 	setCurrentIndex(0);
 	loadDefaultSkin();
+}
+
+QWidget* TabView::getTabBar()
+{
+	return m_pTabBar;
 }

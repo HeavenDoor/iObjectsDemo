@@ -85,19 +85,20 @@ void MapLayers::initLayers( const /*QVector<QString>*/QVector<QVariantList>& lay
 		connect(p, SIGNAL(changeLayers(const QString&)), this, SLOT(OnChangeLayers(const QString&)));
 		p->setObjectName("InteLayersItem");
 		p->setFixedWidth(width());
-		p->setFixedHeight(40);
+		p->setFixedHeight(30);
 
-		p->m_pVisableText->setProperty("LayersVisible", li.at(1).toBool());
-		p->m_pVisableText->setFixedWidth(40);
-		if (li.at(1).toBool())
-		{
-			p->m_pVisableText->setPixmap(QPixmap(":/eye_open.png").scaled(15,15));
-		}
-		else
-		{
-			p->m_pVisableText->setPixmap(QPixmap(":/eye_closed.png").scaled(15,15));
-		}
-		p->m_pVisableText->setGeometry(3, p->height()/2 - p->m_pVisableText->height()/2, p->m_pVisableText->width(), p->m_pVisableText->height());
+		p->m_pVisible->setChecked(li.at(1).toBool());
+		p->m_pVisible->setText("");
+		//p->m_pVisible.setFixedWidth(40);
+// 		if (li.at(1).toBool())
+// 		{
+// 			p->m_pVisableText->setPixmap(QPixmap(":/eye_open.png").scaled(15,15));
+// 		}
+// 		else
+// 		{
+// 			p->m_pVisableText->setPixmap(QPixmap(":/eye_closed.png").scaled(15,15));
+// 		}
+		p->m_pVisible->setGeometry(3, p->height()/2 - p->m_pVisible->height()/2, p->m_pVisible->height(), p->m_pVisible->height());
 
 
 		p->m_pLayerText->setText(name);
@@ -106,7 +107,7 @@ void MapLayers::initLayers( const /*QVector<QString>*/QVector<QVariantList>& lay
 		p->m_pLayerText->setPalette(pe);
 
 
-		p->m_pLayerText->setGeometry(3 +  p->m_pVisableText->width(), p->height()/2 - p->m_pLayerText->height()/2, p->m_pLayerText->width(), p->m_pLayerText->height());
+		p->m_pLayerText->setGeometry(3 +  p->m_pVisible->width(), p->height()/2 - p->m_pLayerText->height()/2, p->m_pLayerText->width(), p->m_pLayerText->height());
 
 
 		
@@ -166,18 +167,20 @@ void MapLayers::OnChangeLayers( const QString& text )
 EmptyWidget::EmptyWidget( QWidget *parent /*= NULL*/ ) : QWidget(parent)
 {
 	//setObjectName("EmptyWidget");
-	m_pVisableText = NULL;
+	m_pVisible = NULL;
 	m_pLayerText = NULL;
 	setAttribute(Qt::WA_TranslucentBackground);
 	m_pLayerText = new QLabel(this);
-	m_pVisableText = new QLabel(this);
+	m_pVisible = new QCheckBox(this);
+	m_pVisible->setObjectName("LayersVisible");
+	connect(m_pVisible, SIGNAL(toggled(bool)), this, SLOT(OnToggled(bool)));
 
 }
 
 EmptyWidget::~EmptyWidget()
 {
-	delete m_pVisableText;
-	m_pVisableText = NULL;
+	delete m_pVisible;
+	m_pVisible = NULL;
 	delete m_pLayerText;
 	m_pLayerText = NULL;
 }
@@ -191,20 +194,29 @@ void EmptyWidget::paintEvent( QPaintEvent * e)
 	QWidget::paintEvent(e);
 }
 
-void EmptyWidget::mousePressEvent( QMouseEvent * e)
+// void EmptyWidget::mousePressEvent( QMouseEvent * e)
+// {
+// 	if(!m_pLayerText || !m_pVisible) return;
+// 	
+// 	emit changeLayers(m_pLayerText->text());
+// 
+// // 	if (!m_pVisible->property("LayersVisible").toBool())
+// // 	{
+// // 		m_pVisible->setPixmap(QPixmap(":/eye_open.png").scaled(15,15));
+// // 	}
+// // 	else
+// // 	{
+// // 		m_pVisible->setPixmap(QPixmap(":/eye_closed.png").scaled(15,15));
+// // 	}
+// 	
+// 	m_pVisible->setProperty("LayersVisible", !m_pVisible->isChecked());
+// }
+
+void EmptyWidget::OnToggled( bool state )
 {
-	if(!m_pLayerText || !m_pVisableText) return;
-	
+	if(!m_pLayerText || !m_pVisible) return;
+
 	emit changeLayers(m_pLayerText->text());
 
-	if (!m_pVisableText->property("LayersVisible").toBool())
-	{
-		m_pVisableText->setPixmap(QPixmap(":/eye_open.png").scaled(15,15));
-	}
-	else
-	{
-		m_pVisableText->setPixmap(QPixmap(":/eye_closed.png").scaled(15,15));
-	}
-	
-	m_pVisableText->setProperty("LayersVisible", !m_pVisableText->property("LayersVisible").toBool());
+	//m_pVisible->setProperty("LayersVisible", !m_pVisible->isChecked());
 }

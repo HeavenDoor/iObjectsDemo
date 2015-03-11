@@ -21,6 +21,8 @@ public:
 	virtual QWidget* getMapLayers() = 0;
 	// 获得MapBase插件MapController控件指针
 	virtual QWidget* getMapController() = 0;
+	// 获得MapBase插件PropertyTrigger控件指针
+	virtual QWidget* getPropertyTrigger() = 0;
 };
 
 

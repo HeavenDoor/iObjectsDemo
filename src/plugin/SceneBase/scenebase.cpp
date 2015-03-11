@@ -1,15 +1,6 @@
 #include "scenebase.h"
 
-#include <QDesktopWidget>
-#include <QApplication>
-#include <QtGui>
 
-#include "Workspace/UGWorkspace.h"
-#include "Engine/UGDataSources.h"
-#include "Scene/UGRoot3D.h"
-#include "Scene/UGScene3D.h"
-#include "SceneEditor/UGSceneEditorWnd.h"
-#include "Graphics3D/UGRenderTarget.h"
 
 using namespace UGC;
 
@@ -36,13 +27,23 @@ UGC::UGuint GetMasks(QInputEvent * event)
 
 SceneBase::SceneBase( QWidget *parent /*= NULL*/ ) : QWidget(parent)
 {
+	m_pSceneWnd = NULL;
+	m_pWorkspace = NULL;
+	m_root3D = NULL;
+	m_timer = NULL;
+	verticalLayout = NULL;
+	pScene = NULL;
 
+	verticalLayout = new QVBoxLayout();
+	verticalLayout->setSpacing(0);
+	verticalLayout->setMargin(0);
+	setLayout(verticalLayout);
 }
 
 
 SceneBase::~SceneBase()
 {
-
+	destroy(TRUE,TRUE);
 }
 
 
@@ -92,7 +93,6 @@ void SceneBase::setPluginWidth( int width )
 	setFixedWidth(width);
 }
 
-
 void SceneBase::setPluginHeight( int height )
 {
 	setFixedHeight(height);
@@ -139,12 +139,22 @@ QString SceneBase::getStyleSheet()
 }
 
 
-void SceneBase::SetWorkspace( UGWorkspace* pWorkspace )
+void SceneBase::SetWorkspace( /*UGWorkspace* pW*/void* workspace )
 {
-	m_pWorkspace = pWorkspace;	
+	m_pWorkspace = (UGWorkspace*)workspace;	
 	UGC::Window3D hWnd= (Window3D)this->winId();
 	InitScene3D();
+// 	if(m_pSceneWnd != NULL)
+// 	{
+// 		m_pSceneWnd->OnSize(width(), height());
+// 	}
 }
+
+void SceneBase::setUGMapEditorWnd( void* wnd )
+{
+	SetWorkspace(wnd);
+}
+
 
 void SceneBase::render()
 {
@@ -375,11 +385,19 @@ void SceneBase::mouseDoubleClickEvent( QMouseEvent *event )
 
 void SceneBase::resizeEvent( QResizeEvent *event )
 {
+	
 	if(m_pSceneWnd != NULL)
 	{
+		int m = event->size().width();
+		int n = event->size().height();
 		m_pSceneWnd->OnSize(event->size().width(), event->size().height());
+		if (pScene)
+		{
+			pScene->SetViewHeight(n);
+			pScene->SetViewWidth(m);
+		}
 	}
-
+	//setGeometry(0,0,width(),height() - 50);
 	QWidget::resizeEvent(event);
 }
 
@@ -410,8 +428,8 @@ void SceneBase::InitScene3D()
 		m_root3D =new UGC::UGRoot3D();
 		m_root3D->SetGraphics3DType(UGC::RST_OGRE);
 		m_root3D->Initialize(NULL);
-
-		UGScene3D *pScene = NULL;
+		
+		//UGScene3D *pScene = NULL;
 		UGC::Window3D hWnd= (Window3D)this->winId();
 #if defined _WIN32
 		pScene =m_root3D->CreateScene(hWnd);
@@ -431,7 +449,7 @@ void SceneBase::InitScene3D()
 			m_pSceneWnd->SetUserAction(UGC::suaPanSelect);
 			m_pSceneWnd->SetOpenEditMode(TRUE);
 
-
+			
 			QDesktopWidget *mydesk = QApplication::desktop();
 			pScene->InitializeScene(_U(""),mydesk->physicalDpiX(),mydesk->physicalDpiY());
 
@@ -449,6 +467,13 @@ void SceneBase::InitScene3D()
 		m_timer = new QTimer(this);
 		m_timer->connect(m_timer, SIGNAL(timeout()), this, SLOT(render()));
 		m_timer->start(20);
+		if(m_pSceneWnd != NULL)
+		{
+			m_pSceneWnd->OnSize(width(), height());
+		}
+
+		//m_pSceneWnd->Refresh();
 	}
 }
+
 
