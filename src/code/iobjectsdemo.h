@@ -13,6 +13,7 @@
 #include "TabView/tabview.h"
 #include "InteLayers/intelayers.h"
 #include "PopupPanel/popuppanel.h"
+#include "MirrorPanel/mirrorpanel.h"
 
 #include "interface/widgetplugininterface.h"
 #include "interface/mapbaseinterface.h"
@@ -49,7 +50,7 @@ private slots:
 	void OnInteLayersPlugin_RefeshWindow();
 	void OnShowMapBaseTips();
 	void OnClosePopupPanel();
-	
+	void OnTabViewChange();
 private:
 	// ╪сть©ь╪Ч
 	bool initControls();
@@ -71,6 +72,9 @@ private:
 	InfoPanel* m_pInfoPanel;
 	TabView* m_pTabView;
 	TabView* m_pFlowTabView;
+	MirrorPanel* m_pMirrorPanel;
+
+
 	InteLayers* m_pInteLayers;
 	PopupPanel* m_pPopupPanel;
 	Title* m_pTitle;

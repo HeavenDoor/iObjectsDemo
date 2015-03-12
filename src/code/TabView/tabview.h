@@ -34,6 +34,7 @@ public:
 signals:
 	void moveTabPage(QWidget* map, QString tabName);
 	void removeTabPage(QWidget* map, QString tabName);
+	void tabViewChange();
 public slots:
 	void OnMoveTabPage(QWidget* map, QString tabName);
 	void OnReMoveTabPage(QWidget* map, QString tabName);

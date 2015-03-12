@@ -132,16 +132,21 @@ void TabView::loadCustomStyleSheet( const QString& styleSheet )
 
 void TabView::OnMoveTabPage( QWidget* map, QString tabName ) //2
 {
+	int m = width();
+	int n = height();
+
 	QString ss = this->property("Names").toString();
 	qDebug()<< this->property("Names").toString();
 	emit removeTabPage(map, tabName);
 	this->show();
 	this->raise();
-	QRect re = QApplication::desktop()->availableGeometry();
-	this->setGeometry((re.width() - map->width())/2 , re.height() - map->height()/2, map->width(), map->height());
+	//QRect re = QApplication::desktop()->availableGeometry();
+	//this->setGeometry((re.width() - map->width())/2 , re.height() - map->height()/2, map->width(), map->height());
 	addCentralWidget(map,0,tabName);
 	setCurrentIndex(0);
 	loadDefaultSkin();
+
+	emit tabViewChange();
 }
 
 void TabView::OnMoveTabPage(int index, QString tabName)  //1

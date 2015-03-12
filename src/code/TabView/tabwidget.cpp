@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "tabwidget.h"
+#include "..\commom\widgetrect.h"
 
 TabWidget::TabWidget(QWidget *parent/*, TabBar* tabbar*/) : QTabWidget(parent)
 {
@@ -46,15 +47,7 @@ void TabWidget::addCentralWidget( QWidget* map, int tabIndex, QString tabName )
 	map->setFixedWidth(this->width());
 	map->setProperty("TabIndex", tabIndex);
 	insertTab(tabIndex, map, tabName);
-	//addTab(map, tabName);
 	m_pTabList.insert(tabIndex, map);
-// 	if (m_pMainLayout)
-// 	{
-// 		m_pMainLayout->addWidget(map);
-// 	}
-// 	QPushButton* pp = new QPushButton(map);
-// 	pp->setText(tabName);
-
 }
 
 int TabWidget::removeCentralWidget( QWidget* widget )

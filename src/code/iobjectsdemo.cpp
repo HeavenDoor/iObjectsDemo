@@ -31,7 +31,7 @@ iObjectsDemo::iObjectsDemo(QWidget *parent) : QWidget(parent)
 	m_pPluginloader = NULL;
 	m_pFlowLayout = NULL;
 	m_pTabBarPanel = NULL;
-	//dock = NULL;
+	m_pMirrorPanel = NULL;
 
 
 //	m_pMainLayout = new QGridLayout();
@@ -79,35 +79,35 @@ bool iObjectsDemo::initTabView()
 // 	rr->setObjectName("rr");
 // 	m_pTabView->addCentralWidget(rr, 0, "rr");
 
-	m_pFlowTabView = new TabView(NULL);
-	m_pFlowTabView->setProperty("Names", "FlowUp");
-	m_pFlowTabView->setWindowFlags(Qt::Window);
-	m_pFlowTabView->setGeometry(100,100,800,600);
-
-// 	QWidget* a = new QWidget(m_pFlowTabView);
-// 	a->setObjectName("TwoDimension");
-// 	m_pFlowTabView->addCentralWidget(a, 3, QStringLiteral("³É¶¼"));
+// 	m_pFlowTabView = new TabView(NULL);
+// 	m_pFlowTabView->setProperty("Names", "FlowUp");
+// 	m_pFlowTabView->setWindowFlags(Qt::Window);
+// 	m_pFlowTabView->setGeometry(100,100,800,600);
 // 
-// 	QWidget* b = new QWidget(m_pFlowTabView);
-// 	//a->setObjectName("TwoDimension");
-// 	m_pFlowTabView->addCentralWidget(b, 4, QStringLiteral("ËÄ´¨"));
-	m_pFlowTabView->setCurrentIndex(0);
-	m_pFlowTabView->loadDefaultSkin();
-	m_pFlowTabView->show();
-	m_pFlowTabView->hide();
-	//m_pFlowTabView->raise();
-	connect(m_pTabView, SIGNAL(moveTabPage(QWidget*, QString)), m_pFlowTabView, SLOT(OnMoveTabPage( QWidget*, QString )));
-	connect(m_pFlowTabView, SIGNAL(moveTabPage(QWidget*, QString)), m_pTabView, SLOT(OnMoveTabPage( QWidget*, QString )));
-
-	connect(m_pTabView, SIGNAL(removeTabPage(QWidget*, QString)), m_pFlowTabView, SLOT(OnReMoveTabPage( QWidget*, QString )));
-	connect(m_pFlowTabView, SIGNAL(removeTabPage(QWidget*, QString)), m_pTabView, SLOT(OnReMoveTabPage( QWidget*, QString )));
+// 	m_pFlowTabView->setCurrentIndex(0);
+// 	m_pFlowTabView->loadDefaultSkin();
+// //	m_pFlowTabView->show();
+// 	m_pFlowTabView->hide();
+// 	//m_pFlowTabView->raise();
+	
 
 
-// 	if (m_pMainLayout)
-// 	{
-// 		m_pMainLayout->addWidget(m_pTabView, 0, 0);
-// 		//m_pMainLayout->addWidget(m_pTabView->getTabBar(), 0, 1);
-// 	}
+
+
+
+	m_pMirrorPanel = new MirrorPanel();
+	m_pMirrorPanel->setWindowFlags(Qt::Window);
+	m_pMirrorPanel->setGeometry(200,200,800,600);
+	m_pMirrorPanel->show();
+
+	connect(m_pTabView, SIGNAL(moveTabPage(QWidget*, QString)), m_pMirrorPanel->getTabView(), SLOT(OnMoveTabPage( QWidget*, QString )));
+	connect(m_pMirrorPanel->getTabView(), SIGNAL(moveTabPage(QWidget*, QString)), m_pTabView, SLOT(OnMoveTabPage( QWidget*, QString )));
+
+	connect(m_pTabView, SIGNAL(removeTabPage(QWidget*, QString)), m_pMirrorPanel->getTabView(), SLOT(OnReMoveTabPage( QWidget*, QString )));
+	connect(m_pMirrorPanel->getTabView(), SIGNAL(removeTabPage(QWidget*, QString)), m_pTabView, SLOT(OnReMoveTabPage( QWidget*, QString )));
+
+	connect(m_pTabView, SIGNAL(tabViewChange()), this, SLOT(OnTabViewChange()));
+	connect(m_pMirrorPanel, SIGNAL(tabViewChange()), this, SLOT(OnTabViewChange()));
 	return true;
 }
 
@@ -549,4 +549,12 @@ void iObjectsDemo::dragEnterEvent( QDragEnterEvent *event )
 void iObjectsDemo::dropEvent( QDropEvent *event )
 {
 
+}
+
+void iObjectsDemo::OnTabViewChange()
+{
+	if (m_pInteLayers)
+	{
+		m_pInteLayers->raise();
+	}
 }
